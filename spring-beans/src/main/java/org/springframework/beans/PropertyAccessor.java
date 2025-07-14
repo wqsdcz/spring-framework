@@ -22,6 +22,8 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.lang.Nullable;
 
 /**
+ * 定义可访问命名属性的通用接口（如对象的 Bean 属性或字段），作为 {@link BeanWrapper} 的基础接口。
+ *
  * Common interface for classes that can access named properties
  * (such as bean properties of an object or fields in an object)
  * Serves as base interface for {@link BeanWrapper}.

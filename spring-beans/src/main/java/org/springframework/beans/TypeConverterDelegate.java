@@ -41,6 +41,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * 用于将属性值转换为目标类型的内部帮助器类。
  * Internal helper class for converting property values to target types.
  *
  * <p>Works on a given {@link PropertyEditorRegistrySupport} instance.
@@ -136,6 +137,10 @@ class TypeConverterDelegate {
 	}
 
 	/**
+	 * 将指定属性的值转换为所需的类型（如果需要，从字符串转换）。
+	 * 1、requiredType 有值，找到了自定义的 PropertyEditor。
+	 * 2、requiredType 有值，没有找到自定义的 PropertyEditor，但指定了ConversionService。
+	 * 3、requiredType 有值，
 	 * Convert the value to the required type (if necessary from a String),
 	 * for the specified property.
 	 * @param propertyName name of the property
@@ -153,11 +158,13 @@ class TypeConverterDelegate {
 			@Nullable Class<T> requiredType, @Nullable TypeDescriptor typeDescriptor) throws IllegalArgumentException {
 
 		// Custom editor for this type?
+		// 查询给定类型的自定义编辑器。
 		PropertyEditor editor = this.propertyEditorRegistry.findCustomEditor(requiredType, propertyName);
 
 		ConversionFailedException conversionAttemptEx = null;
 
 		// No custom editor but custom ConversionService specified?
+		// 没有自定义编辑器，但是指定了自定义的 ConversionService
 		ConversionService conversionService = this.propertyEditorRegistry.getConversionService();
 		if (editor == null && conversionService != null && newValue != null && typeDescriptor != null) {
 			TypeDescriptor sourceTypeDesc = TypeDescriptor.forObject(newValue);
@@ -273,6 +280,7 @@ class TypeConverterDelegate {
 					throw conversionAttemptEx;
 				}
 				else if (conversionService != null && typeDescriptor != null) {
+					// 以前没有尝试过ConversionService，可能找到了自定义编辑器，但是编辑器无法生成所需的类型……
 					// ConversionService not tried before, probably custom editor found
 					// but editor couldn't produce the required type...
 					TypeDescriptor sourceTypeDesc = TypeDescriptor.forObject(newValue);

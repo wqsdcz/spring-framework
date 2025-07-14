@@ -20,6 +20,10 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.Nullable;
 
 /**
+ * 定义属性访问器（PropertyAccessor）配置方法的接口，同时继承用于管理属性编辑器（PropertyEditor）的PropertyEditorRegistry接口。
+ *
+ * <p>该接口是{@link BeanWrapper}的基础接口。
+ *
  * Interface that encapsulates configuration methods for a PropertyAccessor.
  * Also extends the PropertyEditorRegistry interface, which defines methods
  * for PropertyEditor management.
@@ -34,6 +38,8 @@ import org.springframework.lang.Nullable;
 public interface ConfigurablePropertyAccessor extends PropertyAccessor, PropertyEditorRegistry, TypeConverter {
 
 	/**
+	 * 指定用于属性值转换的 Spring 3.0 ConversionService，作为 JavaBeans PropertyEditors 的替代方案。
+	 *
 	 * Specify a Spring 3.0 ConversionService to use for converting
 	 * property values, as an alternative to JavaBeans PropertyEditors.
 	 */
@@ -52,12 +58,18 @@ public interface ConfigurablePropertyAccessor extends PropertyAccessor, Property
 	void setExtractOldValueForEditor(boolean extractOldValueForEditor);
 
 	/**
+	 * 用于指定在使用属性编辑器处理 属性的新值时，是否提取该属性的旧值。
+	 *
 	 * Return whether to extract the old property value when applying a
 	 * property editor to a new value for a property.
 	 */
 	boolean isExtractOldValueForEditor();
 
 	/**
+	 * 设置此实例是否应尝试对包含 {@code null} 值的嵌套路径进行"自动扩展"。
+	 * <p>若设为 {@code true}，遇到为 {@code null} 的路径位置时，将使用默认对象值进行填充并继续遍历，而不会抛出 {@link NullValueInNestedPathException} 异常。
+	 * <p>在普通 PropertyAccessor 实例上，默认值为 {@code false}。
+	 *
 	 * Set whether this instance should attempt to "auto-grow" a
 	 * nested path that contains a {@code null} value.
 	 * <p>If {@code true}, a {@code null} path location will be populated

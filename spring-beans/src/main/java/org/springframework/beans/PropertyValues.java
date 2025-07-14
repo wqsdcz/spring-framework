@@ -19,6 +19,8 @@ package org.springframework.beans;
 import org.springframework.lang.Nullable;
 
 /**
+ * 一个包含一个或多个 {@link PropertyValue} 对象的持有器，通常用于封装对特定目标 bean 的更新操作。
+ *
  * Holder containing one or more {@link PropertyValue} objects,
  * typically comprising one update for a specific target bean.
  *

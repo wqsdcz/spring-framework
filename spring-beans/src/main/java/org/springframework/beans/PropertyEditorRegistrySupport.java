@@ -99,13 +99,13 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	private boolean configValueEditorsActive = false;
 
 	@Nullable
-	private Map<Class<?>, PropertyEditor> defaultEditors;
+	private Map<Class<?>, PropertyEditor> defaultEditors; // 默认的 PropertyEditor 集合。
 
 	@Nullable
-	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors;
+	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors; // 覆盖默认的 PropertyEditor 集合。
 
 	@Nullable
-	private Map<Class<?>, PropertyEditor> customEditors;
+	private Map<Class<?>, PropertyEditor> customEditors; // 定制的 PropertyEditor 集合。
 
 	@Nullable
 	private Map<String, CustomEditorHolder> customEditorsForPath;

@@ -17,6 +17,10 @@
 package org.springframework.beans;
 
 /**
+ * PropertyEditor的注册器
+ * 用于向 {@link org.springframework.beans.PropertyEditorRegistry PropertyEditor注册表} 注册自定义 {@link java.beans.PropertyEditor 属性编辑器}的策略接口。
+ * <p>当需要在多种不同场景下使用同一组属性编辑器时，该接口特别有用： 编写对应的注册器即可在每种情况下重复使用。
+ *
  * Interface for strategies that register custom
  * {@link java.beans.PropertyEditor property editors} with a
  * {@link org.springframework.beans.PropertyEditorRegistry property editor registry}.
@@ -33,6 +37,12 @@ package org.springframework.beans;
 public interface PropertyEditorRegistrar {
 
 	/**
+	 * 向指定的 {@code PropertyEditorRegistry} 注册自定义的 {@link java.beans.PropertyEditor 属性编辑器}。
+	 * <p>传入的注册表通常是 {@link BeanWrapper} 或 {@link org.springframework.validation.DataBinder 数据绑定器}。
+	 * <p>预期实现类将在每次调用此方法时创建全新的 {@code PropertyEditors} 实例（因为 {@code PropertyEditors} 不是线程安全的）。
+	 *
+	 * @param registry 用于注册自定义 {@code PropertyEditors} 的 {@code PropertyEditorRegistry}
+	 *
 	 * Register custom {@link java.beans.PropertyEditor PropertyEditors} with
 	 * the given {@code PropertyEditorRegistry}.
 	 * <p>The passed-in registry will usually be a {@link BeanWrapper} or a

@@ -24,6 +24,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 将类标记为符合spring驱动配置的条件。
+ *
+ * <p>通常用于AspectJ {@code AnnotationBeanConfigurerAspect}。
+ *
  * Marks a class as being eligible for Spring-driven configuration.
  *
  * <p>Typically used with the AspectJ {@code AnnotationBeanConfigurerAspect}.

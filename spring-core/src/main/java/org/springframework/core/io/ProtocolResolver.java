@@ -19,6 +19,9 @@ package org.springframework.core.io;
 import org.springframework.lang.Nullable;
 
 /**
+ * 针对特定协议的资源句柄的解决策略。
+ * <p>用作 {@link DefaultResourceLoader} 的一个SPI，使得能够针对自定义协议进行处理，而无需对加载器实现（或应用程序上下文实现）进行子类化。
+ *
  * A resolution strategy for protocol-specific resource handles.
  *
  * <p>Used as an SPI for {@link DefaultResourceLoader}, allowing for

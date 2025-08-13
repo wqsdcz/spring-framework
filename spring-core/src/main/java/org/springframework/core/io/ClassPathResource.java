@@ -28,6 +28,10 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p> 用于类路径资源的{@link Resource}实现类。它会使用给定的 {@link ClassLoader} 或给定的 {@link Class} 来加载资源。<p/>
+ * <p> 如果类路径资源位于文件系统中，则支持以 {@code java.io.File} 的形式进行解析，但对于 JAR 中的资源则不支持这种解析方式。
+ * 始终支持以 URL 的形式进行解析。<p/>
+ *
  * {@link Resource} implementation for class path resources. Uses either a
  * given {@link ClassLoader} or a given {@link Class} for loading resources.
  *

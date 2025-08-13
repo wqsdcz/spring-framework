@@ -26,6 +26,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>用于 {@link Resource} 描述符的 {@link java.beans.PropertyEditor Editor}实现类，
+ * 用于自动将 {@code String} 形式的路径（例如 {@code file:C:/myfile.txt} 或 {@code classpath:myfile.txt}）转换为 {@code Resource} 属性，
+ * 而非使用 {@code String} 形式的路径属性。<p/>
+ * <p>路径中可能包含 {@code ${...}} 占位符，这些占位符将根据 {@link org.springframework.core.env.Environment} 属性进行解析：
+ * 例如 {@code ${user.dir}}。默认情况下，无法解析的占位符将被忽略。<p/>
+ * <p>委托 {@link ResourceLoader} 来完成繁重的工作。默认情况下，使用的是 {@link DefaultResourceLoader}。<p/>
+ *
  * {@link java.beans.PropertyEditor Editor} for {@link Resource}
  * descriptors, to automatically convert {@code String} locations
  * e.g. {@code file:C:/myfile.txt} or {@code classpath:myfile.txt} to

@@ -20,6 +20,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * 将普通资源路径解释为相对于给定的{@code java.lang.Class}的相对路径的{@link ResourceLoader}实现类。
+ * <p>
  * {@link ResourceLoader} implementation that interprets plain resource paths
  * as relative to a given {@code java.lang.Class}.
  *

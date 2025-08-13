@@ -17,6 +17,9 @@
 package org.springframework.core.io;
 
 /**
+ * 用于从外部“上下文”（例如从 {@link javax.servlet.ServletContext} ）加载的资源的扩展接口，
+ * 此外还可以从普通的类路径路径或相对文件系统路径（未指定明确的前缀，因此相对于本地 {@link ResourceLoader} 的上下文）加载。
+ *
  * Extended interface for a resource that is loaded from an enclosing
  * 'context', e.g. from a {@link javax.servlet.ServletContext} but also
  * from plain classpath paths or relative file system paths (specified

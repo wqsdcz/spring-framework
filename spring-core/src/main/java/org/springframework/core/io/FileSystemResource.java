@@ -34,6 +34,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>用于 {@code java.io.File} 对象的 {@link Resource} 实现类。
+ * 支持以 {@code File} 形式的解析，也支持 {@code URL} 的形式的解析。
+ * 实现了扩展的 {@link WritableResource} 接口。<p/>
+ * <p>注意：自 Spring 框架 5.0 版本起，此 {@link Resource} 实现使用 NIO.2 API 进行读写交互。
+ * 然而，与 {@link PathResource} 不同的是，它主要管理一个 {@code java.io.File} 对象的引用。<p/>
+ *
  * {@link Resource} implementation for {@code java.io.File} handles.
  * Supports resolution as a {@code File} and also as a {@code URL}.
  * Implements the extended {@link WritableResource} interface.

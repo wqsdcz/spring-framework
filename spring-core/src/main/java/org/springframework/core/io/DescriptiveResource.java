@@ -23,6 +23,9 @@ import java.io.InputStream;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>简单的 {@link Resource} 实现，它保存着资源描述信息，但并不指向实际可读取的资源。<p/>
+ * <p>若某个 API 需要一个 {@code Resource} 参数，但实际并不一定需要进行读取操作，则可将其用作占位符。<p/>
+ *
  * Simple {@link Resource} implementation that holds a resource description
  * but does not point to an actually readable resource.
  *

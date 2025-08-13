@@ -23,6 +23,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * <p>给定的 {@link InputStream} 的 {@link Resource} 实现。</p>
+ * <p>只有在没有其他特定的 {@code Resource} 实现适用的情况下才应使用此实现。特别是，应优先选择 {@link ByteArrayResource} 或任何可能的基于文件的 {@code Resource} 实现。</p>
+ * <p>与其他 {@code Resource} 实现不同，这是对一个 <i>已打开</i> 的资源的描述符——因此从 {@link #isOpen()} 方法返回 {@code true}。
+ * 如果需要将资源描述符保存在某个地方，或者需要多次从流中读取内容，则不应使用 {@code InputStreamResource}。</p>
+ *
  * {@link Resource} implementation for a given {@link InputStream}.
  * <p>Should only be used if no other specific {@code Resource} implementation
  * is applicable. In particular, prefer {@link ByteArrayResource} or any of the

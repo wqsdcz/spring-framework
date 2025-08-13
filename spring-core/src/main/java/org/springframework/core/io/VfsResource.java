@@ -26,6 +26,9 @@ import org.springframework.core.NestedIOException;
 import org.springframework.util.Assert;
 
 /**
+ * <p>基于 JBoss VFS 的 {@link Resource} 实现。<p/>
+ * <p>自 Spring 4.0 版本起，此类在 JBoss AS 6 及更高版本中支持 VFS 3.x（包为 {@code org.jboss.vfs}），并且特别适用于 JBoss AS 7 和 WildFly 8+。<p/>
+ *
  * JBoss VFS based {@link Resource} implementation.
  *
  * <p>As of Spring 4.0, this class supports VFS 3.x on JBoss AS 6+

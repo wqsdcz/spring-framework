@@ -30,6 +30,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
 /**
+ * <p>这是 {@link UrlResource} 的子类，它假定进行文件解析，并实现了 {@link WritableResource} 接口以实现这一功能。
+ * 这种资源变体还会缓存通过 {@link #getFile()} 获取的已解析的 {@link File} 对象。<p/>
+ * <p>这个类是通过 {@link DefaultResourceLoader} 来解析“file：...”类型的 URL 地址，允许对其进行向下转型为 {@link WritableResource}。<p/>
+ * <p>或者，如果需要直接创建 {@link java.io.File} 实例，则可以考虑使用 {@link FileSystemResource}。
+ * 对于 NIO 的 {@link java.nio.file.Path}，则可以考虑使用 {@link PathResource}。<p/>
+ *
  * Subclass of {@link UrlResource} which assumes file resolution, to the degree
  * of implementing the {@link WritableResource} interface for it. This resource
  * variant also caches resolved {@link File} handles from {@link #getFile()}.

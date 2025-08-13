@@ -22,6 +22,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
 /**
+ * resource接口的增强型接口，支持写入操作。提供用于获取输出流的{@link #getOutputStream() 访问方法}。
+ *
  * Extended interface for a resource that supports writing to it.
  * Provides an {@link #getOutputStream() OutputStream accessor}.
  *

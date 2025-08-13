@@ -35,6 +35,10 @@ import java.nio.file.StandardOpenOption;
 import org.springframework.util.Assert;
 
 /**
+ * <p>用于 {@code java.nio.file.Path}句柄的{@link Resource}实现类。
+ * 支持以 {@code File} 形式的解析，也支持 {@code URL} 的形式的解析。
+ * 实现了扩展的 {@link WritableResource} 接口。</p>
+ *
  * {@link Resource} implementation for {@code java.nio.file.Path} handles.
  * Supports resolution as File, and also as URL.
  * Implements the extended {@link WritableResource} interface.

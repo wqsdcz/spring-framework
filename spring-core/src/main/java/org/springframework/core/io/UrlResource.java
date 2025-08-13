@@ -32,6 +32,9 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>用于 {@code java.net.URL} 定位器的 {@link Resource} 实现，<p/>
+ * <p>支持以 {@code URL} 的形式进行解析，同时对于 {@code "file:"} 协议的情况，也支持以 {@code File} 的形式进行解析。<p/>
+ *
  * {@link Resource} implementation for {@code java.net.URL} locators.
  * Supports resolution as a {@code URL} and also as a {@code File} in
  * case of the {@code "file:"} protocol.

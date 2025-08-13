@@ -25,6 +25,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * <p>用于给定字节数组的{@link Resource}实现类。<p/>
+ * <p>根据给定的字节数组创建一个 {@link ByteArrayInputStream}。<p/>
+ * <p>适用于从任何给定的字节数组加载内容，而无需使用一次性的 {@link InputStreamResource}。
+ * 特别适用于从本地内容创建邮件附件，因为 JavaMail 需要能够多次读取该流。<p/>
+ *
  * {@link Resource} implementation for a given byte array.
  * <p>Creates a {@link ByteArrayInputStream} for the given byte array.
  *

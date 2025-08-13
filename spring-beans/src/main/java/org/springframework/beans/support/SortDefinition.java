@@ -18,6 +18,7 @@ package org.springframework.beans.support;
 
 /**
  * Definition for sorting bean instances by a property.
+ * 通过属性对 Bean 实例进行排序的定义。
  *
  * @author Juergen Hoeller
  * @since 26.05.2003

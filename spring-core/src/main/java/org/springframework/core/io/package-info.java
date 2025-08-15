@@ -32,9 +32,9 @@ import org.springframework.lang.NonNullFields;
  *
  * 资源的加载
  * ResourceLoader
- * DefaultResourceLoader
- * ClassRelativeResourceLoader
- * FileSystemResourceLoader
+ * DefaultResourceLoader       url字符串 -> UrlResource、 "classpath:"开头的字符串 -> ClassPathResource、 其他字符串 -> ClassPathContextResource
+ * ClassRelativeResourceLoader 其他字符串 -> ClassRelativeContextResource
+ * FileSystemResourceLoader    其他字符串 -> FileSystemContextResource
  *
  * PropertyEditor实现
  * ResourceEditor

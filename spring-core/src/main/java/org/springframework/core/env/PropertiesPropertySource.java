@@ -20,6 +20,12 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * <p>{@link PropertySource} 的实现类，用于从{@link java.util.Properties} 对象中提取属性。<p/>
+ *
+ * <p>请注意：虽然 {@code Properties} 对象在技术上属于 {@code <Object, Object>} 类型的 {@link java.util.Hashtable Hashtable}，
+ * 可能包含 非{@code String} 的键或值，但本实现仅限于访问 基于{@code String}的键和值，
+ * 其访问方式与 {@link Properties#getProperty} 和 {@link Properties#setProperty} 方法保持一致。<p/>
+ *
  * {@link PropertySource} implementation that extracts properties from a
  * {@link java.util.Properties} object.
  *

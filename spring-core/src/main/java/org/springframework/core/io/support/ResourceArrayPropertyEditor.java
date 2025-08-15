@@ -34,6 +34,15 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * <p>用于将{@code String}形式的位置模式（例如 {@code "file:C:/my*.txt"} 或 {@code "classpath*:myfile.txt"}）自动地转换为
+ * {@code Resource} 数组属性 的 {@link org.springframework.core.io.Resource} 数组的编辑器，
+ * 该编辑器也可将【位置模式】的集合或数组合并转换为单一资源数组。<p/>
+ *
+ * <p>路径可包含 {@code ${...}} 占位符，这些占位符将解析为 {@link org.springframework.core.env.Environment} 环境属性：
+ * 例如 {@code ${user.dir}}。默认情况下无法解析的占位符将被忽略。<p/>
+ *
+ * <p>具体解析过程委托给 {@link ResourcePatternResolver}，默认使用 {@link PathMatchingResourcePatternResolver} 实现。<p/>
+ *
  * Editor for {@link org.springframework.core.io.Resource} arrays, to
  * automatically convert {@code String} location patterns
  * (e.g. {@code "file:C:/my*.txt"} or {@code "classpath*:myfile.txt"})

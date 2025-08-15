@@ -25,6 +25,8 @@ import org.springframework.core.io.VfsUtils;
 import org.springframework.lang.Nullable;
 
 /**
+ * 用于访问 {@link VfsUtils} 的方法的伪类，其目的在于避免{@link VfsUtils}的方法被完全公开暴露于外界。
+ *
  * Artificial class used for accessing the {@link VfsUtils} methods
  * without exposing them to the entire world.
  *

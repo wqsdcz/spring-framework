@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 用于加载通过[名称]、[扩展名]和[当前区域设置]指定的本地化资源的Helper类。
+ *
  * Helper class for loading a localized resource,
  * specified through name, extension and current locale.
  *
@@ -34,6 +36,7 @@ import org.springframework.util.Assert;
 public class LocalizedResourceHelper {
 
 	/** The default separator to use in-between file name parts: an underscore. */
+	/** 在文件的名部分之间使用的默认分隔符：下划线。*/
 	public static final String DEFAULT_SEPARATOR = "_";
 
 
@@ -60,6 +63,8 @@ public class LocalizedResourceHelper {
 	}
 
 	/**
+	 * 设置文件的名各部分之间的分隔符。
+	 * 默认是下划线 ("_")。
 	 * Set the separator to use in-between file name parts.
 	 * Default is an underscore ("_").
 	 */
@@ -69,6 +74,17 @@ public class LocalizedResourceHelper {
 
 
 	/**
+	 * <p>为给定【名称】、【扩展名】及【区域设置】查找最具体的本地化资源：<p/>
+	 *
+	 * <p>文件将按以下优先级顺序搜索（类似 {@code java.util.ResourceBundle} 的搜索机制）：
+	 * <ul>
+	 *     <li>[名称]_[语言]_[国家/地区]_[变体][扩展名]
+	 *     <li>[名称]_[语言]_[国家/地区][扩展名]
+	 *     <li>[名称]_[语言][扩展名]
+	 *     <li>[名称][扩展名]
+	 * </ul>
+	 * <p>若未找到任何具体文件，将返回默认位置的资源描述符。<p/>
+	 *
 	 * Find the most specific localized resource for the given name,
 	 * extension and locale:
 	 * <p>The file will be searched with locations in the following order,

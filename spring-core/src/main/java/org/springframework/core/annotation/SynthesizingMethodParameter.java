@@ -25,6 +25,7 @@ import java.lang.reflect.Parameter;
 import org.springframework.core.MethodParameter;
 
 /**
+ * {@link MethodParameter} 的变体，它整合了通过{@link AliasFor @AliasFor}声明属性别名的注释。
  * A {@link MethodParameter} variant which synthesizes annotations that
  * declare attribute aliases via {@link AliasFor @AliasFor}.
  *

@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * <p>由 {@link Map} 支持的 {@link AnnotationAttributeExtractor} 策略的实现类。<p/>
  * Implementation of the {@link AnnotationAttributeExtractor} strategy that
  * is backed by a {@link Map}.
  *

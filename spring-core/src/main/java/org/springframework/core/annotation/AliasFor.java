@@ -24,6 +24,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>{@code @AliasFor} 是一个用于声明注解属性别名的注解。<p/>
+ * <h3>使用场景</h3>
+ * <ul>
+ * <li><strong>注解内的显式别名</strong>：在某个注解中，可以在其的两个属性上声明 {@code @AliasFor}，表明它们是彼此可互换的别名。</li>
+ * <li><strong>元注解属性的显式别名</strong>：若 {@code @AliasFor} 的 {@link #annotation} 属性指向声明该注解之外的另一个注解，
+ * 则 {@link #attribute} 会被解释为元注解中属性的别名（即显式的元注解属性覆写）。这能实现对注解层级中特定属性覆写的精细控制。
+ * 实际上通过 {@code @AliasFor} 甚至可以为元注解的 {@code value} 属性声明别名。</li>
+ * <li><strong>注解内的隐式别名</strong>：如果注解中的一个或多个属性被声明为同一元注解属性的覆写（直接或传递性覆写），
+ * 这些属性将构成一组<em>隐式</em>别名，其行为类似于注解内的显式别名。</li>
+ * </ul>
+ *
+ * <h3>使用要求</h3>
+ * <p>与 Java 中的任何注解一样，仅仅存在 {@code @AliasFor} 注解本身并不会强制执行别名规则。
+ * 要强制执行别名规则，必须通过 {@link AnnotationUtils} 中的实用方法来加载注解。
+ * 在幕后，Spring 会通过动态代理来“合成”一个注解，从而透明地为带有 {@code @AliasFor} 注解的注解属性执行“属性别名”规则。
+ * 同样， {@link AnnotatedElementUtils} 在使用 {@code @AliasFor} 于注解层次结构中时支持显式的元注解属性覆盖。
+ * 通常您无需自己手动合成注解，因为 Spring 在查找 Spring 管理的组件中的注解时会自动为您完成这一操作，且操作是透明的。<p/>
+ *
+ *
  * {@code @AliasFor} is an annotation that is used to declare aliases for
  * annotation attributes.
  *
@@ -187,6 +206,10 @@ import java.lang.annotation.Target;
 public @interface AliasFor {
 
 	/**
+	 * <p>属性 {@link #attribute} 的别名。<p/>
+	 *
+	 * <p>当未声明属性 {@link #annotation} 时，用于替代属性 {@link #attribute} &mdash; 例如： 使用 {@code @AliasFor("value")} 替代 {@code @AliasFor(attribute = "value")}。</p>
+	 *
 	 * Alias for {@link #attribute}.
 	 * <p>Intended to be used instead of {@link #attribute} when {@link #annotation}
 	 * is not declared &mdash; for example: {@code @AliasFor("value")} instead of
@@ -196,6 +219,7 @@ public @interface AliasFor {
 	String value() default "";
 
 	/**
+	 * <em>此</em>属性作为别名的目标属性名称。
 	 * The name of the attribute that <em>this</em> attribute is an alias for.
 	 * @see #value
 	 */
@@ -203,6 +227,9 @@ public @interface AliasFor {
 	String attribute() default "";
 
 	/**
+	 * <p>声明该被别名化 {@link #attribute} 的注解类型。<p/>
+	 * <p>默认为 {@link Annotation}，即被别名化的属性与<em>此</em>属性声明在同一注解中。<p/>
+	 *
 	 * The type of annotation in which the aliased {@link #attribute} is declared.
 	 * <p>Defaults to {@link Annotation}, implying that the aliased attribute is
 	 * declared in the same annotation as <em>this</em> attribute.

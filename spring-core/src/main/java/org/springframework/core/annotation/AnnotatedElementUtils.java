@@ -36,6 +36,40 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * <p>用于在 {@link AnnotatedElement AnnotatedElements} 上查找注解、元注解及可重复注解的通用工具方法。<p/>
+ *
+ * <p>{@code AnnotatedElementUtils} 定义了 Spring 元注解编程模型的公共 API，支持<em>注解属性覆写</em>。
+ * 若无需属性覆写功能，建议改用 {@link AnnotationUtils}。<p/>
+ *
+ * <p>请注意：此类的特性在 JDK 自省机制中并未提供。<p/>
+ *
+ * <h3>注解属性覆写</h3>
+ * <p>{@code getMergedAnnotationAttributes()}、{@code getMergedAnnotation()}、{@code getAllMergedAnnotations()}、
+ * {@code getMergedRepeatableAnnotations()}、{@code findMergedAnnotationAttributes()}、{@code findMergedAnnotation()}、
+ * {@code findAllMergedAnnotations()} 及 {@code findMergedRepeatableAnnotations()} 等所有变体方法，
+ * 均支持<em>组合注解</em>中带<em>属性覆写</em>的元注解处理。<p/>
+ *
+ * <h3>Find 与 Get 语义</h3>
+ * <p>本类方法遵循 <em>find</em> 或 <em>get</em> 两种搜索算法，具体策略详见各方法文档。<p/>
+ * <p><strong>Get 语义</strong>：仅搜索注解元素上<em>存在</em>的注解（即本地声明或 {@linkplain java.lang.annotation.Inherited 继承}），
+ * 或其注解层次结构<em>之上</em>声明的注解。<p/>
+ * <p>
+ * <strong>Find 语义</strong>：覆盖全部 Get 语义功能，并额外支持：
+ * <ul>
+ *     <li>类元素：搜索接口上的注解
+ *     <li>类元素：搜索父类上的注解
+ *     <li>方法元素：解析桥接方法
+ *     <li>方法元素：搜索接口方法上的注解
+ *     <li>方法元素：搜索父类方法上的注解
+ * </ul>
+ * <p/>
+ *
+ * <h3>{@code @Inherited} 支持</h3>
+ * <p><em>Get 语义</em>方法遵守 Java {@link java.lang.annotation.Inherited @Inherited} 规范，
+ * 但<strong>本地声明注解</strong>（含自定义组合注解）优先于继承注解。<p/>
+ * <p>相反，<em>Find 语义</em>方法完全忽略 {@code @Inherited}——因其通过<strong>手动遍历类型与方法层次结构</strong>自动支持注解继承，
+ * 无需依赖 {@code @Inherited}。<p/>
+ *
  * General utility methods for finding annotations, meta-annotations, and
  * repeatable annotations on {@link AnnotatedElement AnnotatedElements}.
  *

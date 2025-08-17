@@ -49,6 +49,29 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>用于处理注解的通用工具方法，包括元注解、桥接方法（编译器为泛型声明生成）及父类方法（支持可选的<em>注解继承</em>）。<p/>
+ * <p>请注意：此类大部分功能在JDK自省机制中并未提供。<p/>
+ * <p>对于运行时保留的应用注解（如事务控制、权限校验或服务暴露），请始终使用本类的查找方法
+ * （例如 {@link #findAnnotation(Method, Class)} 或 {@link #getAnnotation(Method, Class)}），而非JDK原生注解查找方法。
+ * 您仍可显式选择：仅在给定类级别执行<em>get</em>查找（{@link #getAnnotation(Method, Class)}），
+ * 或在方法整个继承层次中执行<em>find</em>查找（{@link #findAnnotation(Method, Class)}）。<p/>
+ *
+ * <h2>术语定义</h2>
+ * <em>直接存在</em>、<em>间接存在</em>和<em>存在</em>的术语含义与Java 8中{@link AnnotatedElement}类级Javadoc定义一致。
+ * <p>当注解声明为元素上<em>存在</em>的其他注解的元注解时，该注解在元素上属于<em>元存在</em>。
+ * 若注解{@code A}在另一注解上<em>直接存在</em>或<em>元存在</em>，则{@code A}在该注解上<em>元存在</em>。 <p/>
+ *
+ * <h2>元注解支持</h2>
+ * <p>本类大多数{@code find*()}方法及部分{@code get*()}方法支持查找作为元注解使用的注解。详情参阅各类方法Javadoc。
+ * 对于<em>组合注解</em>中<em>属性覆写</em>的元注解精细控制，建议改用{@link AnnotatedElementUtils}的专用方法。 <p/>
+ *
+ * <h2>属性别名</h2>
+ * <p>本类所有返回注解、注解数组或{@link AnnotationAttributes}的公共方法，均自动支持通过{@link AliasFor @AliasFor}配置的属性别名。
+ * 详见各类{@code synthesizeAnnotation*(..)}方法。<p/>
+ *
+ * <h2>查找范围</h2>
+ * <p>本类方法使用的搜索算法在找到首个指定类型注解后即停止搜索。因此，同类型的其他注解将被忽略且不会发出警告。<p/>
+ *
  * General utility methods for working with annotations, handling meta-annotations,
  * bridge methods (which the compiler generates for generic declarations) as well
  * as super methods (for optional <em>annotation inheritance</em>).
@@ -65,7 +88,7 @@ import org.springframework.util.StringUtils;
  * and a <em>find</em> lookup in the entire inheritance hierarchy of the given
  * method ({@link #findAnnotation(Method, Class)}).
  *
- * <h3>Terminology</h3>
+ * <h2>Terminology</h2>
  * The terms <em>directly present</em>, <em>indirectly present</em>, and
  * <em>present</em> have the same meanings as defined in the class-level
  * javadoc for {@link AnnotatedElement} (in Java 8).
@@ -76,20 +99,20 @@ import org.springframework.util.StringUtils;
  * on another annotation if {@code A} is either <em>directly present</em> or
  * <em>meta-present</em> on the other annotation.
  *
- * <h3>Meta-annotation Support</h3>
+ * <h2>Meta-annotation Support</h2>
  * <p>Most {@code find*()} methods and some {@code get*()} methods in this class
  * provide support for finding annotations used as meta-annotations. Consult the
  * javadoc for each method in this class for details. For fine-grained support for
  * meta-annotations with <em>attribute overrides</em> in <em>composed annotations</em>,
  * consider using {@link AnnotatedElementUtils}'s more specific methods instead.
  *
- * <h3>Attribute Aliases</h3>
+ * <h2>Attribute Aliases</h2>
  * <p>All public methods in this class that return annotations, arrays of
  * annotations, or {@link AnnotationAttributes} transparently support attribute
  * aliases configured via {@link AliasFor @AliasFor}. Consult the various
  * {@code synthesizeAnnotation*(..)} methods for details.
  *
- * <h3>Search Scope</h3>
+ * <h2>Search Scope</h2>
  * <p>The search algorithms used by methods in this class stop searching for
  * an annotation once the first annotation of the specified type has been
  * found. As a consequence, additional annotations of the specified type will
@@ -1498,6 +1521,13 @@ public abstract class AnnotationUtils {
 	}
 
 	/**
+	 * <em>合成</em>注解：通过将[提供的注解]包装在动态代理中，对标记了 {@link AliasFor @AliasFor} 的注解属性自动强制执行<em>属性别名</em>语义。
+	 * @param annotation 待合成的注解
+	 * @return 合成后的注解（当输入注解<em>可合成</em>时）；若输入为 {@code null} 则返回 {@code null}；否则原样返回输入注解
+	 * @throws AnnotationConfigurationException 检测到无效的 {@code @AliasFor} 配置
+	 * @since 4.2
+	 * @see #synthesizeAnnotation(Annotation, AnnotatedElement)
+	 *
 	 * <em>Synthesize</em> an annotation from the supplied {@code annotation}
 	 * by wrapping it in a dynamic proxy that transparently enforces
 	 * <em>attribute alias</em> semantics for annotation attributes that are
@@ -1733,6 +1763,15 @@ public abstract class AnnotationUtils {
 	}
 
 	/**
+	 * <p>判断指定 {@code annotationType} 的注解是否<em>可合成</em>（即需封装在动态代理中，以提供标准JDK注解之上的功能）。<p/>
+	 *
+	 * <p>具体而言，当注解声明了通过 {@link AliasFor @AliasFor} 配置为<em>别名对</em>的属性，或其使用的嵌套注解声明了此类<em>别名对</em>时，
+	 * 该注解即为<em>可合成的</em>。<p/>
+	 *
+	 * @since 4.2
+	 * @see SynthesizedAnnotation
+	 * @see SynthesizedAnnotationInvocationHandler
+	 *
 	 * Determine if annotations of the supplied {@code annotationType} are
 	 * <em>synthesizable</em> (i.e. in need of being wrapped in a dynamic
 	 * proxy that provides functionality above that of a standard JDK
@@ -2102,18 +2141,39 @@ public abstract class AnnotationUtils {
 	 */
 	private static final class AliasDescriptor {
 
+		/**
+		 * 属性（源头的）
+		 */
 		private final Method sourceAttribute;
 
+		/**
+		 * 注解类型（源头的）
+		 */
 		private final Class<? extends Annotation> sourceAnnotationType;
 
+		/**
+		 * 属性名称（源头的）
+		 */
 		private final String sourceAttributeName;
 
+		/**
+		 * 属性（被别名的）
+		 */
 		private final Method aliasedAttribute;
 
+		/**
+		 * 注解类型（被别名的）
+		 */
 		private final Class<? extends Annotation> aliasedAnnotationType;
 
+		/**
+		 *  属性名称（被别名的）
+		 */
 		private final String aliasedAttributeName;
 
+		/**
+		 * 是否是别名对
+		 */
 		private final boolean isAliasPair;
 
 		/**
@@ -2146,14 +2206,17 @@ public abstract class AnnotationUtils {
 
 		@SuppressWarnings("unchecked")
 		private AliasDescriptor(Method sourceAttribute, AliasFor aliasFor) {
+			// 获取【注解属性】所在的【注解类型】
 			Class<?> declaringClass = sourceAttribute.getDeclaringClass();
 
 			this.sourceAttribute = sourceAttribute;
 			this.sourceAnnotationType = (Class<? extends Annotation>) declaringClass;
 			this.sourceAttributeName = sourceAttribute.getName();
 
+			// 如果@AliasFor的annotation属性为默认值，那么被别名化的注解类型为当前类型，反之为annotation属性指定的类型。
 			this.aliasedAnnotationType = (Annotation.class == aliasFor.annotation() ?
 					this.sourceAnnotationType : aliasFor.annotation());
+			// 如果@AliasFor的value属性或attribute属性没有值，那么被别名化的属性名为当前属性的名称，反之为value属性或attribute属性指定的名称。
 			this.aliasedAttributeName = getAliasedAttributeName(aliasFor, sourceAttribute);
 			if (this.aliasedAnnotationType == this.sourceAnnotationType &&
 					this.aliasedAttributeName.equals(this.sourceAttributeName)) {
@@ -2163,6 +2226,7 @@ public abstract class AnnotationUtils {
 				throw new AnnotationConfigurationException(msg);
 			}
 			try {
+				// 通过 aliasedAnnotationType 和 aliasedAttributeName 获取 被别名的属性。
 				this.aliasedAttribute = this.aliasedAnnotationType.getDeclaredMethod(this.aliasedAttributeName);
 			}
 			catch (NoSuchMethodException ex) {
@@ -2173,6 +2237,7 @@ public abstract class AnnotationUtils {
 				throw new AnnotationConfigurationException(msg, ex);
 			}
 
+			// 如果 sourceAnnotationType == aliasedAnnotationType，则为属性对。
 			this.isAliasPair = (this.sourceAnnotationType == this.aliasedAnnotationType);
 		}
 
@@ -2241,6 +2306,9 @@ public abstract class AnnotationUtils {
 		}
 
 		/**
+		 * 根据提供的描述符验证此描述符。
+		 * <p>此方法仅验证两个描述符的默认值的配置，因为在创建描述符时验证描述符的其他方面。
+		 *
 		 * Validate this descriptor against the supplied descriptor.
 		 * <p>This method only validates the configuration of default values
 		 * for the two descriptors, since other aspects of the descriptors
@@ -2281,6 +2349,10 @@ public abstract class AnnotationUtils {
 			return false;
 		}
 
+		/**
+		 * 获取属性的别名集
+		 * @return
+		 */
 		public List<String> getAttributeAliasNames() {
 			// Explicit alias pair?
 			if (this.isAliasPair) {
@@ -2298,6 +2370,10 @@ public abstract class AnnotationUtils {
 			return aliases;
 		}
 
+		/**
+		 * 获取注解的其他属性的描述符
+		 * @return
+		 */
 		private List<AliasDescriptor> getOtherDescriptors() {
 			List<AliasDescriptor> otherDescriptors = new ArrayList<>();
 			for (Method currentAttribute : getAttributeMethods(this.sourceAnnotationType)) {
@@ -2311,6 +2387,10 @@ public abstract class AnnotationUtils {
 			return otherDescriptors;
 		}
 
+		/**
+		 * 获取被别名的属性的名称
+		 * @return
+		 */
 		@Nullable
 		public String getAttributeOverrideName(Class<? extends Annotation> metaAnnotationType) {
 			// Search the attribute override hierarchy, starting with the current attribute
@@ -2324,6 +2404,10 @@ public abstract class AnnotationUtils {
 			return null;
 		}
 
+		/**
+		 * 获取被别名的属性的描述符
+		 * @return
+		 */
 		@Nullable
 		private AliasDescriptor getAttributeOverrideDescriptor() {
 			if (this.isAliasPair) {

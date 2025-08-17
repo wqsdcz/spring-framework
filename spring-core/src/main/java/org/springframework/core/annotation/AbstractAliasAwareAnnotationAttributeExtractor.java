@@ -26,6 +26,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * <p>{@link AnnotationAttributeExtractor}实现的抽象基类，
+ * 隐式地为{@link AliasFor @AliasFor}标注的属性施加属性别名语义。<p/>
+ *
  * Abstract base class for {@link AnnotationAttributeExtractor} implementations
  * that transparently enforce attribute alias semantics for annotation
  * attributes that are annotated with {@link AliasFor @AliasFor}.

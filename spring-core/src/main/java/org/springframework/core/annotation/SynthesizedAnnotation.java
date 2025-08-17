@@ -17,6 +17,8 @@
 package org.springframework.core.annotation;
 
 /**
+ * <p>被合成注解代理实现的标记接口。<p/>
+ * <p>用于检测注解是否已经合成。<p/>
  * Marker interface implemented by synthesized annotation proxies.
  *
  * <p>Used to detect whether an annotation has already been synthesized.

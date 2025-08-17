@@ -31,6 +31,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * {@link InvocationHandler}对应Spring的{@link Annotation}
+ * <em>合成的</em>（即，包装在动态代理中）具有附加功能。
  * {@link InvocationHandler} for an {@link Annotation} that Spring has
  * <em>synthesized</em> (i.e., wrapped in a dynamic proxy) with additional
  * functionality.

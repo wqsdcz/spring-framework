@@ -27,6 +27,11 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>{@link LinkedHashMap} 的子类，代表注解属性的<em>键-值</em>对，通过 {@link AnnotationUtils}、
+ * {@link AnnotatedElementUtils} 和 Spring中基于反射和ASM的{@link org.springframework.core.type.AnnotationMetadata}实现类。<p/>
+ *
+ * <p>提供‘伪具体化’以避免调用代码中嘈杂的Map泛型，以及以类型安全的方式查找注释属性的方便方法。<p/>
+ *
  * {@link LinkedHashMap} subclass representing annotation attribute
  * <em>key-value</em> pairs as read by {@link AnnotationUtils},
  * {@link AnnotatedElementUtils}, and Spring's reflection- and ASM-based

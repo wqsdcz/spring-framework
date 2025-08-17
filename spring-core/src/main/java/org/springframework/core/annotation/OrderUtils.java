@@ -24,6 +24,9 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 /**
+ * 用于根据类型声明确定对象顺序的通用实用程序。
+ * 处理Spring的{@link Order}注释以及{@link javax.annotation.Priority}。
+ *
  * General utility for determining the order of an object based on its type declaration.
  * Handles Spring's {@link Order} annotation as well as {@link javax.annotation.Priority}.
  *

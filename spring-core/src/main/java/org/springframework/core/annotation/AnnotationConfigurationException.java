@@ -19,6 +19,7 @@ package org.springframework.core.annotation;
 import org.springframework.core.NestedRuntimeException;
 
 /**
+ * 如果注解配置不当，由{@link AnnotationUtils}和<em>合成注解</em>抛出。
  * Thrown by {@link AnnotationUtils} and <em>synthesized annotations</em>
  * if an annotation is improperly configured.
  *

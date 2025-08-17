@@ -18,11 +18,13 @@ package org.springframework.core.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ * <p>由 {@link Annotation} 支持的 {@link AnnotationAttributeExtractor} 策略的实现类。<p/>
  * Default implementation of the {@link AnnotationAttributeExtractor} strategy
  * that is backed by an {@link Annotation}.
  *

@@ -25,6 +25,22 @@ import java.lang.annotation.Target;
 import org.springframework.core.Ordered;
 
 /**
+ * <p>{@code @Order}定义了被注释组件的排序顺序。<p/>
+ *
+ * <p>{@link #value} 属性为可选参数，表示遵循 {@link Ordered} 接口定义的顺序值。
+ * 数值越小优先级越高，默认值为 {@code Ordered.LOWEST_PRECEDENCE}（表示最低优先级，低于任何显式指定的顺序值）。<p/>
+ *
+ * <p><b>注意：</b>
+ * 自 Spring 4.0 起，基于注解的排序已支持 Spring 中的多种组件，甚至在集合注入场景中也会考虑目标组件的顺序值（可从目标类或其 {@code @Bean} 方法获取）。
+ * 尽管这些顺序值会影响注入点的优先级，但请注意它们不影响单例启动顺序——该顺序是由依赖关系和 {@code @DependsOn} 声明确定的正交关注点（影响运行时确定的依赖关系图）。<p/>
+ *
+ * <p>自 Spring 4.1 起，标准注解 {@link javax.annotation.Priority} 可在排序场景中直接替代本注解。
+ * 需注意当需要选取单个元素时，{@code @Priority} 可能具有额外语义（参见 {@link AnnotationAwareOrderComparator#getPriority}）。<p/>
+ *
+ * <p>此外，也可通过 {@link Ordered} 接口按实例确定顺序值，从而允许使用配置决定的实例值替代硬编码到特定类的值。<p/>
+ *
+ * <p>关于无序对象的排序语义细节，请参阅 {@link org.springframework.core.OrderComparator OrderComparator} 的 Javadoc。<p/>
+ *
  * {@code @Order} defines the sort order for an annotated component.
  *
  * <p>The {@link #value} is optional and represents an order value as defined in the

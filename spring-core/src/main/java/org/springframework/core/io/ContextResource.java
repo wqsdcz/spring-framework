@@ -17,8 +17,10 @@
 package org.springframework.core.io;
 
 /**
- * 用于从外部“上下文”（例如从 {@link javax.servlet.ServletContext} ）加载的资源的扩展接口，
- * 此外还可以从普通的类路径路径或相对文件系统路径（未指定明确的前缀，因此相对于本地 {@link ResourceLoader} 的上下文）加载。
+ * org.springframework.core.io.ContextResource 是 Spring 框架中用于在特定上下文环境中定位资源的核心接口，专为封闭上下文（如 Web 容器、类路径相对路径）设计。
+ *
+ * 从封闭上下文中加载资源的扩展接口，例如从{@link javax.servlet.ServletContext}加载，
+ * 也可从普通类路径或相对文件系统路径加载（无显式前缀的路径将相对于本地{@link ResourceLoader}的上下文进行解析）
  *
  * Extended interface for a resource that is loaded from an enclosing
  * 'context', e.g. from a {@link javax.servlet.ServletContext} but also

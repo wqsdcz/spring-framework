@@ -22,6 +22,8 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>{@link PropertySourceFactory}的默认实现，将每个资源包装在{@link ResourcePropertySource}中。<p/>
+ *
  * The default implementation for {@link PropertySourceFactory},
  * wrapping every resource in a {@link ResourcePropertySource}.
  *

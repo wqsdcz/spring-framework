@@ -21,6 +21,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
 /**
+ * 用于确定给定URL是否是可以通过{@link ResourcePatternResolver}加载的资源位置的实用程序类。
+ *
+ * 如果{@link #isUrl(String)}方法返回{@code false}，调用者通常会认为位置是一个相对路径。
+ *
  * Utility class for determining whether a given URL is a resource
  * location that can be loaded via a {@link ResourcePatternResolver}.
  *

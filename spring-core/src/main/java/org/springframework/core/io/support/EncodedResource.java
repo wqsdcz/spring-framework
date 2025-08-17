@@ -29,6 +29,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * <p>用于封装 {@link Resource} 描述符及其指定编码（或 {@code Charset}）的持有者对象，该编码将用于资源读取操作。<p/>
+ *
+ * <p>作为支持按特定编码读取内容操作的参数使用， 通常通过 {@code java.io.Reader} 实现读取。<p/>
+ *
  * Holder that combines a {@link Resource} descriptor with a specific encoding
  * or {@code Charset} to be used for reading from the resource.
  *

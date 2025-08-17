@@ -20,6 +20,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 /**
+ * <p>{@link Resource} 实现的区域，通过在 {@link Resource} 内的某个{@code position} 以及表示该区域长度的字节数{@code count}来具体化呈现。<p/>
+ *
  * Region of a {@link Resource} implementation, materialized by a {@code position}
  * within the {@link Resource} and a byte {@code count} for the length of that region.
  *

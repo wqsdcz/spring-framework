@@ -22,6 +22,20 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
+ * <p>用于将位置模式（例如Ant风格路径模式）解析为Resource对象的策略接口。<p/>
+ *
+ * <p>此接口是 {@link org.springframework.core.io.ResourceLoader} 的扩展。
+ * 传入的ResourceLoader（例如:通过 {@link org.springframework.context.ResourceLoaderAware} 在上下文中传递的 {@link org.springframework.context.ApplicationContext}）
+ * 可被检测是否也实现了此扩展接口。 <p/>
+ *
+ * <p>{@link PathMatchingResourcePatternResolver} 是可在ApplicationContext之外使用的独立实现，
+ * 也被 {@link ResourceArrayPropertyEditor} 用于注入Resource数组类型的bean属性。 <p/>
+ *
+ * <p>可适配任意类型的位置模式（例如 "/WEB-INF/*-context.xml"）： 输入模式需与策略实现相匹配，本接口仅规定转换方法而非特定模式格式。 <p/>
+ *
+ * <p>此接口还提出新的资源前缀 "classpath*:"， 用于匹配类路径中所有同名资源。
+ * 请注意： 此场景要求资源路径必须是不包含占位符的纯路径（如 "/beans.xml"）—— 因为JAR文件或类目录中可能存在多个同名文件。<p/>
+ *
  * Strategy interface for resolving a location pattern (for example,
  * an Ant-style path pattern) into Resource objects.
  *
@@ -54,6 +68,11 @@ import org.springframework.core.io.ResourceLoader;
 public interface ResourcePatternResolver extends ResourceLoader {
 
 	/**
+	 * <p>类路径资源匹配的伪URL前缀："classpath*:"
+	 * 该前缀与ResourceLoader的普通类路径URL前缀的区别在于：
+	 * 它能检索给定名称（例如"/beans.xml"）对应的全部匹配资源，
+	 * 例如在所有已部署JAR文件的根目录下进行检索。<p/>
+	 *
 	 * Pseudo URL prefix for all matching resources from the class path: "classpath*:"
 	 * This differs from ResourceLoader's classpath URL prefix in that it
 	 * retrieves all matching resources for a given name (e.g. "/beans.xml"),

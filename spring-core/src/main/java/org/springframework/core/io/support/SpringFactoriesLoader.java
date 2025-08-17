@@ -40,6 +40,15 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>框架内部通用的工厂加载机制。<p/>
+ *
+ * <p>{@code SpringFactoriesLoader} 通过{@linkplain #loadFactories 加载}并实例化指定类型（来自类路径下多个JAR文件中可能存在的{@value #FACTORIES_RESOURCE_LOCATION}文件）的工厂。
+ * {@code spring.factories}文件必须采用{@link Properties}格式，其中键为接口或抽象类的完全限定名，值为逗号分隔的实现类名称列表。例如：
+ * <pre class="code">
+ *     example.MyService=example.MyServiceImpl1,example.MyServiceImpl2
+ * </pre>
+ * 其中 {@code example.MyService} 是接口名，{@code MyServiceImpl1} 和 {@code MyServiceImpl2}是两个实现。
+ *
  * General purpose factory loading mechanism for internal use within the framework.
  *
  * <p>{@code SpringFactoriesLoader} {@linkplain #loadFactories loads} and instantiates

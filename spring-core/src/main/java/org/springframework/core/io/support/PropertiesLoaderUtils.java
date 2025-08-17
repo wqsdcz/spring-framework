@@ -33,6 +33,11 @@ import org.springframework.util.PropertiesPersister;
 import org.springframework.util.ResourceUtils;
 
 /**
+ *
+ * <p>提供便捷的工具方法，用于加载 {@code java.util.Properties} 并实现对输入流的标准化处理。<p/>
+ *
+ * <p>如需更灵活的属性加载配置（包括自定义编码选项），请考虑使用 PropertiesLoaderSupport 类。<p/>
+ *
  * Convenient utility methods for loading of {@code java.util.Properties},
  * performing standard handling of input streams.
  *

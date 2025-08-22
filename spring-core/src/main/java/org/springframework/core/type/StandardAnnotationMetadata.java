@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * {@link AnnotationMetadata}实现，使用标准反射来内省给定的{@code类}。
  * {@link AnnotationMetadata} implementation that uses standard reflection
  * to introspect a given {@link Class}.
  *

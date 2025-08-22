@@ -24,6 +24,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * 用于限制对特定资源的并发访问的支持类。
+ * <p>此类设计用作基类，子类可在其工作流程的适当环节调用 {@link #beforeAccess()} 和 {@link #afterAccess()} 方法。
+ * 请注意， {@code afterAccess} 通常应在 finally 块中调用！
+ * <p>此支持类的默认并发限制为 -1（即“无限制并发”）。子类可以重写此默认值；请查看您所使用的具体类的文档说明。
+ *
+ *
  * Support class for throttling concurrent access to a specific resource.
  *
  * <p>Designed for use as a base class, with the subclass invoking

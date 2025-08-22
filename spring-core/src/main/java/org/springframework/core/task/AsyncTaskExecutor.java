@@ -20,6 +20,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
+ * <p>为异步 {@link TaskExecutor} 实现提供了扩展接口，提供了带有启动超时参数的重载 {@link #execute(Runnable, long)} 变体以及对 {@link java.util.concurrent.Callable} 的支持。
+ * <p>注意： {@link java.util.concurrent.Executors} 类包含一组方法，可在执行某些其他类似闭包的对象（例如 {@link java.security.PrivilegedAction}）之前将其转换为 {@link Callable}。
+ * <p>实现此接口还表明，{@link #execute(Runnable)} 方法不会在其调用者的线程中执行其 Runnable，而是会在其他线程中异步执行。
+ *
  * Extended interface for asynchronous {@link TaskExecutor} implementations,
  * offering an overloaded {@link #execute(Runnable, long)} variant with a start
  * timeout parameter as well support for {@link java.util.concurrent.Callable}.

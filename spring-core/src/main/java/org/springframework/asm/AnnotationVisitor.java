@@ -30,6 +30,9 @@
 package org.springframework.asm;
 
 /**
+ * 访问器访问Java注释。这个类的方法必须按照以下顺序调用：
+ * (<tt>visit</tt> | <tt>visitEnum</tt> | <tt>visitAnnotation</tt> | <tt>visitArray</tt>)* <tt>visitEnd</tt>。
+ *
  * A visitor to visit a Java annotation. The methods of this class must be
  * called in the following order: ( <tt>visit</tt> | <tt>visitEnum</tt> |
  * <tt>visitAnnotation</tt> | <tt>visitArray</tt> )* <tt>visitEnd</tt>.
@@ -40,12 +43,16 @@ package org.springframework.asm;
 public abstract class AnnotationVisitor {
 
     /**
+	 * 此访问器实现的ASM API版本。该字段的值必须是{@link Opcodes#ASM4}、{@link Opcodes#ASM5}或{@link Opcodes#ASM6}中的一个。
+	 *
      * The ASM API version implemented by this visitor. The value of this field
      * must be one of {@link Opcodes#ASM4}, {@link Opcodes#ASM5} or {@link Opcodes#ASM6}.
      */
     protected final int api;
 
     /**
+	 * 此访问者必须将其方法调用委托给的注释访问者。
+	 * 该访问者可以为 null 。
      * The annotation visitor to which this visitor must delegate method calls.
      * May be null.
      */
@@ -81,6 +88,7 @@ public abstract class AnnotationVisitor {
     }
 
     /**
+	 * 访问注释的原型值。
      * Visits a primitive value of the annotation.
      * 
      * @param name

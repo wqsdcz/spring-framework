@@ -25,6 +25,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;
 
 /**
+ * <p>一个公共的Spring注解，用于声明在给定包下的【参数】和【返回值】默认不可为{@code null}。
+ * <p>利用JSR-305元注解，标识了Java代码中的空值约束，为支持JSR-305的通用工具提供了支持。同时供Kotlin推断Spring API的空值约束。
+ * <p>应在包级别使用{@link NonNullApi}，并结合{@link Nullable}注解（参数和返回值级别）一起使用。
+ *
  * A common Spring annotation to declare that parameters and return values
  * are to be considered as non-nullable by default for a given package.
  *

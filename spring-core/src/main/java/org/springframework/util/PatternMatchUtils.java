@@ -19,6 +19,7 @@ package org.springframework.util;
 import org.springframework.lang.Nullable;
 
 /**
+ * 用于简单模式匹配的实用方法，特别是针对 Spring 通常的“xxx*”、“*xxx”和“*xxx*”这种模式样式的方法。
  * Utility methods for simple pattern matching, in particular for
  * Spring's typical "xxx*", "*xxx" and "*xxx*" pattern styles.
  *

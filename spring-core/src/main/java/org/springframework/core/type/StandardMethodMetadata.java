@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * {@link ClassMetadata}实现，使用标准反射来内省给定的{@code 方法}。
  * {@link MethodMetadata} implementation that uses standard reflection
  * to introspect a given {@code Method}.
  *

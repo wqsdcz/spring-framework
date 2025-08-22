@@ -23,6 +23,9 @@ import org.springframework.objenesis.strategy.StdInstantiatorStrategy;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 /**
+ * <p>Spring 特有的 {@link ObjenesisStd} / {@link ObjenesisBase} 的变体，
+ * 该变体提供了一个以{@code Class}为键（而不是类名）的缓存，并且允许选择性地使用该缓存。</p>
+ *
  * Spring-specific variant of {@link ObjenesisStd} / {@link ObjenesisBase},
  * providing a cache based on {@code Class} keys instead of class names,
  * and allowing for selective use of the cache.

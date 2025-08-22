@@ -25,6 +25,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierNickname;
 
 /**
+ * 【方法参数、方法返回值、字段】
+ * <p>一个公共的Spring注解，用于声明被标注的元素不可为{@code null}。
+ * <p>利用JSR-305元注解，标识了Java代码中的空值约束，为支持JSR-305的通用工具提供了支持。同时供Kotlin推断Spring API的空值约束。
+ * <p>应在参数、返回值及字段级别使用。若方法重写行为与父类不同时需重复父类的{@code @NonNull}注解，否则无需重复标注。
+ * <p>可以通过 {@code @NonNullApi}（作用范围：参数+返回值）和/或 {@code @NonNullFields}（作用范围：字段）设置默认非空行为，
+ * 避免在整个代码库中过多的使用{@code @NonNull}注解。
+ *
  * A common Spring annotation to declare that annotated elements cannot be {@code null}.
  *
  * <p>Leverages JSR-305 meta-annotations to indicate nullability in Java to common

@@ -19,6 +19,12 @@ package org.springframework.core.task;
 import java.util.concurrent.Executor;
 
 /**
+ * <p>一个简单的任务执行器接口，是{@link Runnable}的执行过程的抽象。
+ * <p>其实现类可以使用各种的执行策略上所有可能的顺序，例如：同步、异步、使用线程池及其他。
+ * <p>等价于 JDK 1.5 的{@link java.util.concurrent.Executor}接口。
+ * 在 Spring 3.0 中对其进行了扩展，以便客户端可以声明对执行器的依赖，并接收任何 TaskExecutor 实现。
+ * 该接口与标准的 Executor 接口保持分离，主要是为了在 Spring 2.x 中与 JDK 1.4 的兼容性考虑。
+ *
  * Simple task executor interface that abstracts the execution
  * of a {@link Runnable}.
  *

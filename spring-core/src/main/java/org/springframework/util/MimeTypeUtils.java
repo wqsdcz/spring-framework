@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType.SpecificityComparator;
 
 /**
+ * 各种{@link MimeType}工具方法。
  * Miscellaneous {@link MimeType} utility methods.
  *
  * @author Arjen Poutsma

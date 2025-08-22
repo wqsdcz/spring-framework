@@ -976,14 +976,15 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * A handler for a specific property.
+	 * 特定属性的处理器
 	 */
 	protected abstract static class PropertyHandler {
 
-		private final Class<?> propertyType;
+		private final Class<?> propertyType; // 属性的类型
 
-		private final boolean readable;
+		private final boolean readable; // 属性是否可读
 
-		private final boolean writable;
+		private final boolean writable; // 属性是否可写
 
 		public PropertyHandler(Class<?> propertyType, boolean readable, boolean writable) {
 			this.propertyType = propertyType;
@@ -1034,6 +1035,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Holder class used to store property tokens.
+	 * 用于存储属性标记的持有者类。
 	 */
 	protected static class PropertyTokenHolder {
 

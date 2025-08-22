@@ -22,6 +22,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MultiValueMap;
 
 /**
+ * 定义对特定类型（{@link AnnotationMetadata 类}或{@link MethodMetadata 方法}）注解的访问机制。
+ * 在这种形式下，不一定需要类加载。
+ *
  * Defines access to the annotations of a specific type ({@link AnnotationMetadata class}
  * or {@link MethodMetadata method}), in a form that does not necessarily require the
  * class-loading.
@@ -39,6 +42,12 @@ import org.springframework.util.MultiValueMap;
 public interface AnnotatedTypeMetadata {
 
 	/**
+	 * <p>判断底层元素是否定义了给定类型的注解或元注解。<p/>
+	 * <p>若本方法返回 {@code true}，则 {@link #getAnnotationAttributes} 必返回非空 Map。<p/>
+	 *
+	 * @param annotationName 待查找注解的全限定类名
+	 * @return 存在匹配注解时返回 true
+	 * <p/>
 	 * Determine whether the underlying element has an annotation or meta-annotation
 	 * of the given type defined.
 	 * <p>If this method returns {@code true}, then
@@ -50,6 +59,8 @@ public interface AnnotatedTypeMetadata {
 	boolean isAnnotated(String annotationName);
 
 	/**
+	 * 获取给定类型的注解的属性（若存在），无论该注解是直接标注于底层元素还是通过元注解继承，且自动处理组合注解中的属性覆写。
+	 *
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.
@@ -63,6 +74,11 @@ public interface AnnotatedTypeMetadata {
 	Map<String, Object> getAnnotationAttributes(String annotationName);
 
 	/**
+	 * 获取给定类型的注解的属性（若存在），无论该注解是直接标注于底层元素还是通过元注解继承，且自动处理组合注解中的属性覆写。
+	 * @param annotationName 待查找注解的全限定类名
+	 * @param classValuesAsString 是否将类引用转为字符串类名（以避免类加载），而非需预先加载的 Class 引用
+	 * @return 属性映射集（键为属性名如"value"，值为处理后的属性值），当且仅当注解不存在时返回 {@code null}
+	 *
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.
@@ -79,6 +95,13 @@ public interface AnnotatedTypeMetadata {
 	Map<String, Object> getAnnotationAttributes(String annotationName, boolean classValuesAsString);
 
 	/**
+	 * 获取【给定类型】的【所有注解】的【全部属性】（如果有的话，即如果该注解已定义在基础元素上，无论是作为直接注解还是元注解）。
+	 * 请注意，此变体不考虑属性覆盖情况。
+	 *
+	 * @param annotationName 需要查找的注解类型的完整限定类名
+	 * @return 一个包含属性的多映射，其中属性名称作为键（例如“value”），而定义的属性值则作为 Map 值。如果未定义匹配的注解，则此返回值将为 {@code null}。
+	 * @see #getAllAnnotationAttributes(String， boolean)
+	 *
 	 * Retrieve all attributes of all annotations of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation).
 	 * Note that this variant does <i>not</i> take attribute overrides into account.

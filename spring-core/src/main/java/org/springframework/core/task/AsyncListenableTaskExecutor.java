@@ -23,6 +23,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 /**
  * Extension of the {@link AsyncTaskExecutor} interface, adding the capability to submit
  * tasks for {@link ListenableFuture}s.
+ * 扩展了{@link AsyncTaskExecutor}接口，增加了为{@link ListenableFuture}提交任务的功能。
  *
  * @author Arjen Poutsma
  * @since 4.0

@@ -21,6 +21,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
+ * 用于Base64编码、解码的简单工具类。
+ * 以一种便捷的方式，对 Java 8 中的 {@link java.util.Base64} 进行了适配。
+ *
  * A simple utility class for Base64 encoding and decoding.
  *
  * <p>Adapts to Java 8's {@link java.util.Base64} in a convenience fashion.

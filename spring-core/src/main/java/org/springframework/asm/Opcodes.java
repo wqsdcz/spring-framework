@@ -30,6 +30,12 @@
 package org.springframework.asm;
 
 /**
+ * 定义了 JVM 操作码、访问标志和数组类型代码。
+ * 此接口并未定义所有的 JVM 操作码，因为有些操作码会自动处理。
+ * 例如，当可能时，xLOAD 和 xSTORE 操作码会自动被替换为 xLOAD_n 和 xSTORE_n 操作码。
+ * 因此，此接口中并未定义 xLOAD_n 和 xSTORE_n 操作码。
+ * 同样地，对于 LDC、当必要时会自动替换为 LDC_W 或 LDC2_W，WIDE、GOTO_W 和 JSR_W 也是如此。
+ *
  * Defines the JVM opcodes, access flags and array type codes. This interface
  * does not define all the JVM opcodes because some opcodes are automatically
  * handled. For example, the xLOAD and xSTORE opcodes are automatically replaced

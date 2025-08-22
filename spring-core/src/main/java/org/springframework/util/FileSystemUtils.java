@@ -31,6 +31,8 @@ import org.springframework.lang.Nullable;
 import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 
 /**
+ * 用于处理文件系统的工具方法。
+ * 递归删除、递归拷贝。
  * Utility methods for working with the file system.
  *
  * @author Rob Harrop

@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 表明被注释的元素使用了来自"sun.misc"包中的某个API。
  * Indicates that the annotated element uses an API from the {@code sun.misc}
  * package.
  *

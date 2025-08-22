@@ -24,6 +24,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * {@link ClassMetadata}实现，使用标准反射来内省给定的{@code类}。
+ *
  * {@link ClassMetadata} implementation that uses standard reflection
  * to introspect a given {@code Class}.
  *
@@ -36,6 +38,7 @@ public class StandardClassMetadata implements ClassMetadata {
 
 
 	/**
+	 * 为给定的类创建一个新的StandardClassMetadata包装器。
 	 * Create a new StandardClassMetadata wrapper for the given Class.
 	 * @param introspectedClass the Class to introspect
 	 */

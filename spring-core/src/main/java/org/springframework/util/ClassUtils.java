@@ -42,6 +42,8 @@ import java.util.Set;
 import org.springframework.lang.Nullable;
 
 /**
+ * 各种{@code java.lang.Class}工具方法。
+ * 主要用于框架内部使用。
  * Miscellaneous {@code java.lang.Class} utility methods.
  * Mainly for internal use within the framework.
  *

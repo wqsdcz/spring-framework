@@ -17,11 +17,11 @@
 package org.springframework.cglib;
 
 /**
- * Empty class used to ensure that the {@code org.springframework.cglib}
- * package is processed during javadoc generation.
+ * <p>一个空Class，用于确保javadoc生成期间{@code org.springframework.cglib}包被处理。</p>
+ * <p>关于{@code org.springframework.cglib}的更多详细请参阅{<a href="package-summary.html">package-level javadocs</a></p>
  *
- * <p>See <a href="package-summary.html">package-level javadocs</a> for more
- * information on {@code org.springframework.cglib}.
+ * <p>See  for more
+ * information on
  *
  * @author Chris Beams
  * @since 3.2

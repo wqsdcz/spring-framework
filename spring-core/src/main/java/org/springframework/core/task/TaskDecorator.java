@@ -17,6 +17,12 @@
 package org.springframework.core.task;
 
 /**
+ * <p>这是一个回调接口，用于将装饰器应用于即将执行的任何 {@link Runnable} 。
+ * <p>请注意，这样的装饰器不一定应用于用户提供的 {@code Runnable}/{@code Callable} ，而是应用于实际的执行回调（它可能是一个围绕用户提供的任务的包装器）。
+ * <p>主要用途是围绕任务的调用设置一些执行上下文，或者为任务执行提供一些监控/统计信息。
+ * <p><b>注意：</b> 在 {@code TaskDecorator} 实现中，异常处理可能有限。
+ * 特别是对于基于 {@code Future} 的操作，暴露的 {@code Runnable} 将是一个包装器，不会传播其 {@code run} 方法中的任何异常。
+ *
  * A callback interface for a decorator to be applied to any {@link Runnable}
  * about to be executed.
  *

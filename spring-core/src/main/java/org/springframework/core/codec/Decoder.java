@@ -29,6 +29,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 
 /**
+ * <p>将 {@link DataBuffer} 输入流 解码为 {@code <T>} 类型元素输出流的策略。<p/>
+ *
  * Strategy for decoding a {@link DataBuffer} input stream into an output stream
  * of elements of type {@code <T>}.
  *
@@ -40,6 +42,11 @@ import org.springframework.util.MimeType;
 public interface Decoder<T> {
 
 	/**
+	 * 判断该解码器是否支持给定的目标元素类型及源流 MIME 类型。
+	 * @param elementType 输出流的目标元素类型
+	 * @param mimeType 待解码流的 MIME 类型（未指定时可传 {@code null}）
+	 * @return {@code true} 支持，{@code false} 不支持
+	 *
 	 * Whether the decoder supports the given target element type and the MIME
 	 * type of the source stream.
 	 * @param elementType the target element type for the output stream
@@ -50,6 +57,14 @@ public interface Decoder<T> {
 	boolean canDecode(ResolvableType elementType, @Nullable MimeType mimeType);
 
 	/**
+	 * 将 {@link DataBuffer} 输入流解码为 {@code T} 类型 {@code Flux} 流。
+	 *
+	 * @param inputStream 待解码的 {@code DataBuffer} 输入流
+	 * @param elementType 输出流的元素预期类型（必须预先通过 {@link #canDecode} 校验并返回 {@code true}）
+	 * @param mimeType 输入流的 MIME 类型（可选）
+	 * @param hints 解码操作的附加配置信息
+	 * @return 包含已解码元素的输出流
+	 *
 	 * Decode a {@link DataBuffer} input stream into a Flux of {@code T}.
 	 * @param inputStream the {@code DataBuffer} input stream to decode
 	 * @param elementType the expected type of elements in the output stream;
@@ -63,6 +78,14 @@ public interface Decoder<T> {
 			@Nullable MimeType mimeType, @Nullable Map<String, Object> hints);
 
 	/**
+	 * 将 {@link DataBuffer} 输入流解码为 {@code T} 类型 {@code Mono} 流。
+	 *
+	 * @param inputStream 待解码的 {@code DataBuffer} 输入流
+	 * @param elementType 输出流的元素预期类型（必须预先通过 {@link #canDecode} 校验并返回 {@code true}）
+	 * @param mimeType 输入流的 MIME 类型（可选）
+	 * @param hints 解码操作的附加配置信息
+	 * @return 包含已解码元素的输出流
+	 *
 	 * Decode a {@link DataBuffer} input stream into a Mono of {@code T}.
 	 * @param inputStream the {@code DataBuffer} input stream to decode
 	 * @param elementType the expected type of elements in the output stream;
@@ -76,6 +99,7 @@ public interface Decoder<T> {
 			@Nullable MimeType mimeType, @Nullable Map<String, Object> hints);
 
 	/**
+	 * 返回此解码器支持的MIME类型列表。
 	 * Return the list of MIME types this decoder supports.
 	 */
 	List<MimeType> getDecodableMimeTypes();

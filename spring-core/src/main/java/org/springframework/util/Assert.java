@@ -23,31 +23,18 @@ import java.util.function.Supplier;
 import org.springframework.lang.Nullable;
 
 /**
- * Assertion utility class that assists in validating arguments.
- *
- * <p>Useful for identifying programmer errors early and clearly at runtime.
- *
- * <p>For example, if the contract of a public method states it does not
- * allow {@code null} arguments, {@code Assert} can be used to validate that
- * contract. Doing this clearly indicates a contract violation when it
- * occurs and protects the class's invariants.
- *
- * <p>Typically used to validate method arguments rather than configuration
- * properties, to check for cases that are usually programmer errors rather
- * than configuration errors. In contrast to configuration initialization
- * code, there is usually no point in falling back to defaults in such methods.
- *
- * <p>This class is similar to JUnit's assertion library. If an argument value is
- * deemed invalid, an {@link IllegalArgumentException} is thrown (typically).
- * For example:
- *
+ * <p>断言工具类，用于验证参数。<p/>
+ * <p>有助于在运行时及早、清晰地识别程序员错误。<p/>
+ * <p>例如，如果一个公共方法的约定声明它不允许传入{@code null}值参数，那么就可以使用{@code Assert}来验证这一约定。
+ * 这样做能够明确地在出现违反约定的情况时发出警告，并保护类的不变性。<p/>
+ * <p>通常用于验证方法参数而非配置属性，以检查那些通常是程序员错误而非配置错误的情况。与配置初始化代码不同，在此类方法中通常没有必要回退到默认值。<p/>
+ * <p>这个类与 JUnit 的断言库类似。如果某个参数值被认为是无效的，就会抛出一个 {@link IllegalArgumentException} 异常（通常情况下）。例如： <p/>
  * <pre class="code">
  * Assert.notNull(clazz, "The class must not be null");
- * Assert.isTrue(i > 0, "The value must be greater than zero");</pre>
- *
- * <p>Mainly for internal use within the framework; consider
- * <a href="https://commons.apache.org/proper/commons-lang/">Apache's Commons Lang</a>
- * for a more comprehensive suite of {@code String} utilities.
+ * Assert.isTrue(i > 0, "The value must be greater than zero");
+ * </pre>
+ * <p>主要用于框架内部使用；如需更全面的 {@code String} 工具集，
+ * 请考虑使用<a href="https://commons.apache.org/proper/commons-lang/">Apache 的 Commons Lang</a>。<p/>
  *
  * @author Keith Donald
  * @author Juergen Hoeller
@@ -59,14 +46,13 @@ import org.springframework.lang.Nullable;
 public abstract class Assert {
 
 	/**
-	 * Assert a boolean expression, throwing an {@code IllegalStateException}
-	 * if the expression evaluates to {@code false}.
-	 * <p>Call {@link #isTrue} if you wish to throw an {@code IllegalArgumentException}
-	 * on an assertion failure.
-	 * <pre class="code">Assert.state(id == null, "The id property must not already be initialized");</pre>
-	 * @param expression a boolean expression
-	 * @param message the exception message to use if the assertion fails
-	 * @throws IllegalStateException if {@code expression} is {@code false}
+	 * <p>断言一个布尔表达式，若表达式结果为 {@code false} 则抛出 {@code IllegalStateException}。</p>
+	 * <p>若需在断言失败时抛出 {@code IllegalArgumentException}，请调用 {@link #isTrue} 方法。</p>
+	 * <pre class="code">Assert.state(id == null, "id 属性必须未被初始化");</pre>
+	 *
+	 * @param expression 布尔表达式
+	 * @param message 断言失败时使用的异常消息
+	 * @throws IllegalStateException 如果 {@code expression} 为 {@code false}
 	 */
 	public static void state(boolean expression, String message) {
 		if (!expression) {

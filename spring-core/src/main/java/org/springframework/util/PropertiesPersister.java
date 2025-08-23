@@ -24,6 +24,11 @@ import java.io.Writer;
 import java.util.Properties;
 
 /**
+ * 【Properties持久化器】
+ * <p>用于持久化{@code java.util.Properties}的策略接口，允许可插拔的解析策略。<p/>
+ * <p>DefaultPropertiesPersister 是其的默认实现，提供{@code java.util.Properties}的本地解析，
+ * 但允许 从任何Reader读取 和 向任何Writer写入（它允许为属性文件指定编码）。<p/>
+ *
  * Strategy interface for persisting {@code java.util.Properties},
  * allowing for pluggable parsing strategies.
  *

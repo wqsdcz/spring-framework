@@ -29,6 +29,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 
 /**
+ * <p>{@link Decoder}实现类的抽象基类。<p/>
+ *
  * Abstract base class for {@link Decoder} implementations.
  *
  * @author Sebastien Deleuze

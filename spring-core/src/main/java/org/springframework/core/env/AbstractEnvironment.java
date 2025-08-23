@@ -34,6 +34,15 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>{@link Environment} 接口实现的抽象基类。
+ * 支持保留默认profile名机制，并允许通过 {@link #ACTIVE_PROFILES_PROPERTY_NAME} 和 {@link #DEFAULT_PROFILES_PROPERTY_NAME} 属性
+ * 指定 [激活profile] 与 [默认profile]。<p/>
+ *
+ * <p>具体子类的核心区别在于默认添加的 {@link PropertySource} 对象不同：{@code AbstractEnvironment} 自身不添加任何属性源。
+ * 子类应通过protected的钩子方法 {@link #customizePropertySources(MutablePropertySources)} 提供属性源，
+ * 而客户端则应使用 {@link ConfigurableEnvironment#getPropertySources()} 获取属性源后，通过 {@link MutablePropertySources} API 进行操作。
+ * 用法示例请参阅 {@link ConfigurableEnvironment} 的 javadoc。<p/>
+ *
  * Abstract base class for {@link Environment} implementations. Supports the notion of
  * reserved default profile names and enables specifying active and default profiles
  * through the {@link #ACTIVE_PROFILES_PROPERTY_NAME} and

@@ -28,6 +28,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 
 /**
+ * <p>{@link org.springframework.core.codec.Encoder} 的抽象基类，限定仅能处理单值。<p/>
+ *
  * Abstract base class for {@link org.springframework.core.codec.Encoder}
  * classes that can only deal with a single value.
  *

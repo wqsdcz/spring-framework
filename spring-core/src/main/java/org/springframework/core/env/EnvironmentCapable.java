@@ -17,6 +17,19 @@
 package org.springframework.core.env;
 
 /**
+ * <p>该接口表明组件持有并暴露{@link Environment}环境引用。<p/>
+ *
+ * <p>所有Spring应用上下文均实现 EnvironmentCapable（具备环境能力），
+ * 该接口主要用于框架方法中执行{@code instanceof}类型检查——当方法接收可能是（也可能不是）
+ * ApplicationContext实例的BeanFactory实例时，若确实存在可用环境，则通过此接口与环境交互。<p/>
+ *
+ * <p>如前所述，{@link org.springframework.context.ApplicationContext ApplicationContext}继承EnvironmentCapable接口，
+ * 因而暴露{@link #getEnvironment()}方法；
+ * 然而{@link org.springframework.context.ConfigurableApplicationContext ConfigurableApplicationContext}
+ * 重定义了{@link org.springframework.context.ConfigurableApplicationContext#getEnvironment getEnvironment()}方法，
+ * 收窄方法签名以返回{@link ConfigurableEnvironment}类型。
+ * 这意味着Environment对象在通过ConfigurableApplicationContext访问之前处于'只读'状态，而当通过该上下文访问时，环境对象方可被配置。<p/>
+ *
  * Interface indicating a component that contains and exposes an {@link Environment} reference.
  *
  * <p>All Spring application contexts are EnvironmentCapable, and the interface is used primarily

@@ -27,6 +27,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>一个组合式的 {@link PropertySource} 实现，可迭代处理一组 {@link PropertySource} 实例。
+ * 当多个属性源共享相同名称时（例如：向 {@code @PropertySource} 提供多值配置的场景），此类实现必不可少。<p/>
+ *
+ * <p>从 Spring 4.1.2 开始，该类扩展自 {@link EnumerablePropertySource} 而非基础 {@link PropertySource}，
+ * 其 {@link #getPropertyNames()} 方法基于所有包含源（尽可能）聚合的属性名实现。<p/>
+ *
  * Composite {@link PropertySource} implementation that iterates over a set of
  * {@link PropertySource} instances. Necessary in cases where multiple property sources
  * share the same name, e.g. when multiple values are supplied to {@code @PropertySource}.

@@ -19,6 +19,53 @@ package org.springframework.core.env;
 import java.util.Map;
 
 /**
+ * <p>
+ *     该配置接口应该被大多数（即使不是全部）{@link Environment}类型实现。
+ *     它提供设置激活配置文件和默认配置文件、操作底层属性源的功能，
+ *     并通过其超接口{@link ConfigurablePropertyResolver}支持客户端设置与验证必需属性、定制转换服务等更多功能。
+ * </p>
+ * <p/>
+ * <h2>操控属性源</h2>
+ * <p>
+ *     属性源可被移除、重新排序或替换；同时可以通过{@link #getPropertySources()}方法返回的{@link MutablePropertySources}实例添加额外的属性源。
+ *     以下示例虽然针对{@link StandardEnvironment}对{@code ConfigurableEnvironment}接口的实现，但原则上适用于所有实现——尽管不同实现的默认属性源可能存在差异。
+ * </p>
+ * <p/>
+ * <h4>示例: 添加具有最高搜索优先级的新属性源</h4>
+ * <p>
+ * <pre class="code">
+ * ConfigurableEnvironment environment = new StandardEnvironment();
+ * MutablePropertySources propertySources = environment.getPropertySources();
+ * Map&lt;String, String&gt; myMap = new HashMap&lt;&gt;();
+ * myMap.put("xyz", "myValue");
+ * propertySources.addFirst(new MapPropertySource("MY_MAP", myMap));
+ * </pre>
+ * </p>
+ * <p/>
+ * <h4>示例: 删除默认的系统属性的属性源</h4>
+ * <p>
+ * <pre class="code">
+ * MutablePropertySources propertySources = environment.getPropertySources();
+ * propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME)
+ * </pre>
+ * </p>
+ * <p/>
+ * <h4>示例: 模拟系统环境以进行测试</h4>
+ * <p>
+ * <pre class="code">
+ * MutablePropertySources propertySources = environment.getPropertySources();
+ * MockPropertySource mockEnvVars = new MockPropertySource().withProperty("xyz", "myValue");
+ * propertySources.replace(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, mockEnvVars);
+ * </pre>
+ * </p>
+ * <p/>
+ * <p>
+ *    当 {@link Environment} 被 {@code ApplicationContext} 使用时，关键点在于所有 {@code PropertySource} 操作都<em>必须</em>在上下文
+ *    调用{@link org.springframework.context.support.AbstractApplicationContext#refresh() refresh()}方法<em>之前</em>完成。
+ *    这能确保在容器引导启动过程中所有属性源均已就绪可用，包括供
+ *    {@linkplain org.springframework.context.support.PropertySourcesPlaceholderConfigurer 属性占位符配置器}使用的场景。
+ * </p>
+ * <p/>
  * Configuration interface to be implemented by most if not all {@link Environment} types.
  * Provides facilities for setting active and default profiles and manipulating underlying
  * property sources. Allows clients to set and validate required properties, customize the

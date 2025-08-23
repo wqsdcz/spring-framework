@@ -19,6 +19,14 @@ package org.springframework.core.env;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * <p>这是一个能够探查其底层源对象以列举所有可能的属性名/值对的 {@link PropertySource} 实现。
+ * 该实现通过暴露 {@link #getPropertyNames()} 方法，允许调用者在无需访问底层源对象的情况下探查可用属性。
+ * 这也优化了 {@link #containsProperty(String)} 的实现效率——该方法可调用 {@link #getPropertyNames()} 并遍历返回的数组，
+ * 而非尝试调用可能开销更大的 {@link #getProperty(String)}。实现类可考虑缓存 {@link #getPropertyNames()} 的结果以充分提升性能。<p/>
+ *
+ * <p>大多数框架提供的 {@code PropertySource} 实现都是可枚举的；典型反例是 {@code JndiPropertySource}：由于 JNDI 的特性限制，
+ * 无法在任何给定时间确定所有可能的属性名；仅能通过尝试访问属性（通过 {@link #getProperty(String)}）来判断其是否存在。<p/>
+ *
  * A {@link PropertySource} implementation capable of interrogating its
  * underlying source object to enumerate all possible property name/value
  * pairs. Exposes the {@link #getPropertyNames()} method to allow callers
@@ -64,6 +72,7 @@ public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 	}
 
 	/**
+	 * 返回{@linkplain #getSource() source}对象包含的所有属性的名称（从不{@code null}）。
 	 * Return the names of all properties contained by the
 	 * {@linkplain #getSource() source} object (never {@code null}).
 	 */

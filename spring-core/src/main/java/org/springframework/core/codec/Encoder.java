@@ -30,6 +30,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 
 /**
+ * <p>将 {@code <T>} 类型对象流编码为字节输出流的策略。<p/>
+ *
  * Strategy to encode a stream of Objects of type {@code <T>} into an output
  * stream of bytes.
  *
@@ -41,6 +43,11 @@ import org.springframework.util.MimeType;
 public interface Encoder<T> {
 
 	/**
+	 * 判断该编码器是否支持给定的源流元素类型及输出流 MIME 类型。
+	 * @param elementType 源流的元素类型
+	 * @param mimeType 输出流的 MIME 类型（未指定时可传 {@code null}）
+	 * @return {@code true} 支持，{@code false} 不支持
+	 *
 	 * Whether the encoder supports the given source element type and the MIME
 	 * type for the output stream.
 	 * @param elementType the type of elements in the source stream
@@ -51,6 +58,15 @@ public interface Encoder<T> {
 	boolean canEncode(ResolvableType elementType, @Nullable MimeType mimeType);
 
 	/**
+	 * 将 {@code T} 类型对象流编码为 {@link DataBuffer} 输出流。
+	 *
+	 * @param inputStream 待编码的对象输入流（若需编码为单值而非元素流，请使用 {@link Mono} 实例）
+	 * @param bufferFactory 创建输出流 {@code DataBuffer} 的缓冲区工厂
+	 * @param elementType 输入流的元素预期类型（必须预先通过 {@link #canEncode} 校验并返回 {@code true}）
+	 * @param mimeType 输出流的 MIME 类型（可选）
+	 * @param hints 编码操作的附加配置信息
+	 * @return 编码后的输出流
+	 *
 	 * Encode a stream of Objects of type {@code T} into a {@link DataBuffer}
 	 * output stream.
 	 * @param inputStream the input stream of Objects to encode. If the input should be
@@ -68,6 +84,13 @@ public interface Encoder<T> {
 			ResolvableType elementType, @Nullable MimeType mimeType, @Nullable Map<String, Object> hints);
 
 	/**
+	 * 返回给定项目的字节长度（若已知）。
+	 * @param t 待检查的项目
+	 * @return 字节长度（未知时返回 {@code null}）
+	 * @since 5.0.5
+	 * @deprecated 此方法因 {@code EncoderHttpMessageWriter} 需设置内容长度头而添加，
+	 * 但在 5.0.7 版本架构改进后已废弃且不再使用。
+	 *
 	 * Return the length for the given item, if known.
 	 * @param t the item to check
 	 * @return the length in bytes, or {@code null} if not known.
@@ -83,6 +106,7 @@ public interface Encoder<T> {
 	}
 
 	/**
+	 * 返回此编码器支持的MIME类型列表。
 	 * Return the list of mime types this encoder supports.
 	 */
 	List<MimeType> getEncodableMimeTypes();

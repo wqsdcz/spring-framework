@@ -24,6 +24,22 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * <p>表示[名称/值]属性对来源的抽象基类。
+ * 其底层{@linkplain #getSource() 源对象}可以是任意封装属性的类型{@code T}，典型示例包括：
+ * {@link java.util.Properties}对象、{@link java.util.Map}对象、{@code ServletContext}与{@code ServletConfig}对象（用于访问初始化参数）。
+ * 请探索{@code PropertySource}的类型体系以查看框架提供的具体实现。<p/>
+ *
+ * <p>{@code PropertySource} 对象通常不单独使用，而是通过聚合多个属性源的 {@link PropertySources} 对象进行操作，
+ * 并与 {@link PropertyResolver} 实现协同工作 —— 该解析器能在{@code PropertySources}集合上执行<strong>基于优先级的搜索</strong>。<p/>
+ *
+ * <p>{@code PropertySource} 的身份标识<strong>不基于封装属性的内容</strong>，而<strong>仅取决于其 {@link #getName() 名称}</strong>。
+ * 此特性在集合操作场景中操控 {@code PropertySource} 对象时尤为实用，具体操作详见 {@link MutablePropertySources} 中的方法，
+ * 以及 {@link #named(String)} 和 {@link #toString()} 方法的实现细节。<p/>
+ *
+ * <p> 请注意：当处理带 @{@link org.springframework.context.annotation.Configuration Configuration} 注解的配置类时，
+ * @{@link org.springframework.context.annotation.PropertySource PropertySource} 注解提供了一种便捷且声明式的手段，
+ * 可将属性源添加到其所属的 {@code Environment} 环境中。<p/>
+ *
  * Abstract base class representing a source of name/value property pairs. The underlying
  * {@linkplain #getSource() source object} may be of any type {@code T} that encapsulates
  * properties. Examples include {@link java.util.Properties} objects, {@link java.util.Map}
@@ -66,6 +82,7 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * <p>创建一个新的 {@code PropertySource} 对象，该对象具有给定的 名称 和 源对象。<p/>
 	 * Create a new {@code PropertySource} with the given name and source object.
 	 */
 	public PropertySource(String name, T source) {
@@ -76,6 +93,9 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * <p>创建一个新的 {@code PropertySource} 对象，该对象具有指定 名称 且底层源为一个新 {@code Object} 实例。<p/>
+	 * <p>此方法在测试场景中尤为实用——当需要创建永不查询真实数据源、仅返回硬编码值的匿名实现时。<p/>
+	 *
 	 * Create a new {@code PropertySource} with the given name and with a new
 	 * {@code Object} instance as the underlying source.
 	 * <p>Often useful in testing scenarios when creating anonymous implementations
@@ -88,6 +108,7 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * <p>返回这个 {@code PropertySource} 的名称。<p/>
 	 * Return the name of this {@code PropertySource}
 	 */
 	public String getName() {
@@ -95,6 +116,7 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * <p>返回这个 {@code PropertySource} 的底层源对象。<p/>
 	 * Return the underlying source object for this {@code PropertySource}.
 	 */
 	public T getSource() {
@@ -102,6 +124,8 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * <p>返回这个 {@code PropertySource} 是否含有给定名称的属性。<p/>
+	 * <p>这个实现简单地检查{@link #getProperty(String)}返回的值是否为{@code null}。如果可能的话，子类可能希望实现一个更有效的算法。<p/>
 	 * Return whether this {@code PropertySource} contains the given name.
 	 * <p>This implementation simply checks for a {@code null} return value
 	 * from {@link #getProperty(String)}. Subclasses may wish to implement
@@ -113,6 +137,7 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * <p>返回与给定名称关联的值，如果没有发现，则返回{@code null}。<p/>
 	 * Return the value associated with the given name,
 	 * or {@code null} if not found.
 	 * @param name the property to find
@@ -167,6 +192,20 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * <p>返回一个专门用于集合比较目的的 {@code PropertySource} 实现。<p/>
+	 * <p>该方法主要供内部使用，但若存在 {@code PropertySource} 对象集合时，可如下使用：
+	 * <pre class="code">
+	 *     {@code List<PropertySource<?>> sources = new ArrayList<PropertySource<?>>();
+	 *     sources.add(new MapPropertySource("sourceA", mapA));
+	 *     sources.add(new MapPropertySource("sourceB", mapB));
+	 *     assert sources.contains(PropertySource.named("sourceA"));
+	 *     assert sources.contains(PropertySource.named("sourceB"));
+	 *     assert !sources.contains(PropertySource.named("sourceC")); }
+	 * </pre>
+	 * <p/>
+	 * <p>返回的 {@code PropertySource} 在调用除 {@code equals(Object)}、{@code hashCode()} 及 {@code toString()} 之外的方法时，
+	 * 将抛出 {@code UnsupportedOperationException}。<p/>
+	 *
 	 * Return a {@code PropertySource} implementation intended for collection comparison purposes only.
 	 * <p>Primarily for internal use, but given a collection of {@code PropertySource} objects, may be
 	 * used as follows:

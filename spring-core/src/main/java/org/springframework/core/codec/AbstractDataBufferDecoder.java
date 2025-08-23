@@ -29,6 +29,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeType;
 
 /**
+ * <p>{@code Decoder} 实现类的抽象基类，支持将 {@code DataBuffer} 直接解码为目标元素类型。<p/>
+ *
+ * <p>子类必须实现 {@link #decodeDataBuffer} 以提供 {@code DataBuffer} 到目标数据类型的转换逻辑。
+ * 默认的 {@link #decode} 实现会**逐个转换**数据缓冲区，
+ * 而 {@link #decodeToMono} 执行 **"聚合归约"** 后转换**聚合缓冲区**。
+ *
+ * <p>子类可重写 {@link #decode} 实现：
+ * • 按不同边界分割输入流（如 {@code String} 的换行符）
+ * • 或始终归约为单个缓冲区（如 {@code Resource}）。
+ *
  * Abstract base class for {@code Decoder} implementations that can decode
  * a {@code DataBuffer} directly to the target element type.
  *

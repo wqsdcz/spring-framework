@@ -19,6 +19,10 @@ package org.springframework.core.env;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>
+ *     包含一个或多个{@link PropertySource}对象的容器。
+ * </p>
+ * <p/>
  * Holder containing one or more {@link PropertySource} objects.
  *
  * @author Chris Beams

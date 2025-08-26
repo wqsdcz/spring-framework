@@ -225,6 +225,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 返回指定 bean 的一个实例（可能是共享实例或独立实例）。
+	 * @param name 要检索的 bean 的名称
+	 * @param requiredType 要检索的 bean 的目标类型
+	 * @param args 使用显式参数创建 bean 实例时使用的参数（仅适用于创建新实例而非检索现有实例的情况）
+	 * @param typeCheckOnly 是否仅为类型检查而获取实例（而非实际使用）
+	 * @return bean 的实例
+	 * @throws BeansException 如果无法创建 bean
+	 *
 	 * Return an instance, which may be shared or independent, of the specified bean.
 	 * @param name the name of the bean to retrieve
 	 * @param requiredType the required type of the bean to retrieve
@@ -1137,9 +1145,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Determine the original bean name, resolving locally defined aliases to canonical names.
-	 * @param name the user-specified name
-	 * @return the original bean name
+	 * 确定原始的 bean 名称，将本地定义的别名转换为规范名称。
+	 * @param name 用户指定的名称
+	 * @return 原始的 bean 名称
 	 */
 	protected String originalBeanName(String name) {
 		String beanName = transformedBeanName(name);
@@ -1239,6 +1247,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 通过与该 bean 的父定义（如果给定 bean 定义是一个子 bean 定义）进行合并，返回对应 bean 的 RootBeanDefinition。
+	 * @param beanName bean 定义的名称
+	 * @param bd 原始的 bean 定义（Root/ChildBeanDefinition）
+	 * @param containingBd 内部 bean 情况下的包含 bean 定义，顶级 bean 情况下则为 {@code null}
+	 * @return 给定 bean（可能经过合并）的 RootBeanDefinition
+	 * @throws BeanDefinitionStoreException 当 bean 定义无效时抛出
+	 *
 	 * Return a RootBeanDefinition for the given bean, by merging with the
 	 * parent if the given bean's definition is a child bean definition.
 	 * @param beanName the name of the bean definition
@@ -1553,10 +1568,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Mark the specified bean as already created (or about to be created).
-	 * <p>This allows the bean factory to optimize its caching for repeated
-	 * creation of the specified bean.
-	 * @param beanName the name of the bean
+	 * <p>
+	 *     将指定 bean 标记为已创建（或即将创建）。
+	 * </p>
+	 * <p>
+	 *     这允许 bean 工厂针对重复创建指定 bean 的情况优化其缓存。
+	 * </p>
+	 * @param beanName bean 的名称
 	 */
 	protected void markBeanAsCreated(String beanName) {
 		if (!this.alreadyCreated.contains(beanName)) {

@@ -107,27 +107,28 @@ public interface FactoryBean<T> {
 	Class<?> getObjectType();
 
 	/**
-	 * Is the object managed by this factory a singleton? That is,
-	 * will {@link #getObject()} always return the same object
-	 * (a reference that can be cached)?
-	 * <p><b>NOTE:</b> If a FactoryBean indicates to hold a singleton object,
-	 * the object returned from {@code getObject()} might get cached
-	 * by the owning BeanFactory. Hence, do not return {@code true}
-	 * unless the FactoryBean always exposes the same reference.
-	 * <p>The singleton status of the FactoryBean itself will generally
-	 * be provided by the owning BeanFactory; usually, it has to be
-	 * defined as singleton there.
-	 * <p><b>NOTE:</b> This method returning {@code false} does not
-	 * necessarily indicate that returned objects are independent instances.
-	 * An implementation of the extended {@link SmartFactoryBean} interface
-	 * may explicitly indicate independent instances through its
-	 * {@link SmartFactoryBean#isPrototype()} method. Plain {@link FactoryBean}
-	 * implementations which do not implement this extended interface are
-	 * simply assumed to always return independent instances if the
-	 * {@code isSingleton()} implementation returns {@code false}.
-	 * <p>The default implementation returns {@code true}, since a
-	 * {@code FactoryBean} typically manages a singleton instance.
-	 * @return whether the exposed object is a singleton
+	 * <p>
+	 *     此工厂管理的对象是单例吗？即，{@link #getObject()} 是否会始终返回相同的对象（可被缓存的引用）？
+	 * </p>
+	 * <p>
+	 *     <b>注意：</b>
+	 *     如果 FactoryBean 表明持有单例对象，则从 {@code getObject()} 返回的对象可能会被 所属的 BeanFactory 缓存。
+	 *     因此，除非 FactoryBean 始终暴露相同的引用，否则不要返回 {@code true}。
+	 * </p>
+	 * <p>
+	 *     FactoryBean 本身的单例状态通常由所属的 BeanFactory 提供； 通常，它必须在其中被定义为单例。
+	 * </p>
+	 * <p>
+	 *     <b>注意：</b>
+	 *     该方法返回 {@code false} 并不 一定表示返回的对象是独立实例。
+	 *     扩展的 {@link SmartFactoryBean} 接口的实现 可以通过其 {@link SmartFactoryBean#isPrototype()} 方法 明确指示独立实例。
+	 *     但对于未实现扩展的 {@link SmartFactoryBean} 接口的普通 {@link FactoryBean} 实现来说，
+	 *     如果其 {@code isSingleton()} 实现返回 {@code false}，则通常假定它们始终返回独立实例。
+	 * </p>
+	 * <p>4
+	 *     默认实现返回 {@code true}，因为 {@code FactoryBean} 通常管理一个单例实例。
+	 * </p>
+	 * @return 暴露的对象是否为单例
 	 * @see #getObject()
 	 * @see SmartFactoryBean#isPrototype()
 	 */

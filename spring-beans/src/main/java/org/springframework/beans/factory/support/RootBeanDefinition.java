@@ -33,17 +33,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * A root bean definition represents the merged bean definition that backs
- * a specific bean in a Spring BeanFactory at runtime. It might have been created
- * from multiple original bean definitions that inherit from each other,
- * typically registered as {@link GenericBeanDefinition GenericBeanDefinitions}.
- * A root bean definition is essentially the 'unified' bean definition view at runtime.
- *
- * <p>Root bean definitions may also be used for registering individual bean definitions
- * in the configuration phase. However, since Spring 2.5, the preferred way to register
- * bean definitions programmatically is the {@link GenericBeanDefinition} class.
- * GenericBeanDefinition has the advantage that it allows to dynamically define
- * parent dependencies, not 'hard-coding' the role as a root bean definition.
+ * <p>
+ *     根Bean定义代表了在运行时Spring BeanFactory中支持的特定Bean的合并后Bean定义。
+ *     它可能由多个相互继承的原始Bean定义创建而成，这些原始定义通常注册为{@link GenericBeanDefinition GenericBeanDefinitions}。
+ *     根Bean定义本质上是运行时的"统一"Bean定义视图。
+ * </p>
+ * <p>
+ *     在配置阶段，根Bean定义也可用于注册单个Bean定义。
+ *     但自Spring 2.5起，以编程方式注册Bean定义的首选方法是使用{@link GenericBeanDefinition}类。
+ *     GenericBeanDefinition的优势在于允许动态定义父级依赖关系，而非将角色"硬编码"为根Bean定义。
+ * </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

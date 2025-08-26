@@ -19,6 +19,13 @@ package org.springframework.beans.factory.config;
 import org.springframework.beans.BeansException;
 
 /**
+ * <p>允许对应用程序上下文中的 bean 定义进行自定义修改，从而调整该上下文底层 bean 工厂的 bean 属性值。
+ * <p>应用程序上下文能够在其 bean 定义中自动检测 BeanFactoryPostProcessor 类型的 bean，并在任何其他 bean 创建之前应用它们。
+ * <p>该功能特别适用于面向系统管理员的自定义配置文件，这些文件可覆盖应用上下文中已配置的bean属性。
+ * <p>请参阅 PropertyResourceConfigurer 及其具体实现，以获取解决此类配置需求的现成解决方案。
+ * <p>BeanFactoryPostProcessor 可以与 bean 定义进行交互并对其进行修改，但绝不能修改 bean 实例。
+ * 这样做可能会导致过早的 bean 实例化，违反容器并产生意外的副作用。如果需要与 bean 实例进行交互，请考虑实现 {@link BeanPostProcessor} 替代方案。
+ *
  * Allows for custom modification of an application context's bean definitions,
  * adapting the bean property values of the context's underlying bean factory.
  *
@@ -50,7 +57,7 @@ public interface BeanFactoryPostProcessor {
 	 * initialization. All bean definitions will have been loaded, but no beans
 	 * will have been instantiated yet. This allows for overriding or adding
 	 * properties even to eager-initializing beans.
-	 * @param beanFactory the bean factory used by the application context
+	 * @param beanFactory 在应用程序上下文中，使用的bean工厂
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */
 	void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException;

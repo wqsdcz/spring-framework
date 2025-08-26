@@ -1361,6 +1361,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 解析指定 Bean 定义的bean类型，必要时将 Bean 类名称解析为Class引用，并将解析后的 Class 对象存储在 Bean 定义中供后续使用。
+	 *
 	 * Resolve the bean class for the specified bean definition,
 	 * resolving a bean class name into a Class reference (if necessary)
 	 * and storing the resolved Class in the bean definition for further use.
@@ -1617,6 +1619,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 获取给定 bean 实例所对应的对象，如果是工厂 bean 则为其生成的对象，否则就是该 bean 实例本身。
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
 	 * @param beanInstance the shared bean instance
@@ -1627,39 +1630,71 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
-
-		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
 				return beanInstance;
 			}
-			if (!(beanInstance instanceof FactoryBean)) {
+			if (beanInstance instanceof FactoryBean) {
+				return beanInstance;
+			} else {
+				// Don't let calling code try to dereference the factory if the bean isn't a factory.
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
-		}
-
-		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
-		// If it's a FactoryBean, we use it to create a bean instance, unless the
-		// caller actually wants a reference to the factory.
-		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
-			return beanInstance;
-		}
-
-		Object object = null;
-		if (mbd == null) {
-			object = getCachedObjectForFactoryBean(beanName);
-		}
-		if (object == null) {
-			// Return bean instance from factory.
-			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
-			// Caches object obtained from FactoryBean if it is a singleton.
-			if (mbd == null && containsBeanDefinition(beanName)) {
-				mbd = getMergedLocalBeanDefinition(beanName);
+		} else {
+			if (beanInstance instanceof FactoryBean) {
+				Object object = null;
+				if (mbd == null) {
+					object = getCachedObjectForFactoryBean(beanName);
+				}
+				if (object == null) {
+					// Return bean instance from factory.
+					FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
+					// Caches object obtained from FactoryBean if it is a singleton.
+					if (mbd == null && containsBeanDefinition(beanName)) {
+						mbd = getMergedLocalBeanDefinition(beanName);
+					}
+					boolean synthetic = (mbd != null && mbd.isSynthetic());
+					object = getObjectFromFactoryBean(factory, beanName, !synthetic);
+				}
+				return object;
+			} else {
+				return beanInstance;
 			}
-			boolean synthetic = (mbd != null && mbd.isSynthetic());
-			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}
-		return object;
+
+
+//		// Don't let calling code try to dereference the factory if the bean isn't a factory.
+//		if (BeanFactoryUtils.isFactoryDereference(name)) {
+//			if (beanInstance instanceof NullBean) {
+//				return beanInstance;
+//			}
+//			if (!(beanInstance instanceof FactoryBean)) {
+//				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
+//			}
+//		}
+//
+//		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
+//		// If it's a FactoryBean, we use it to create a bean instance, unless the
+//		// caller actually wants a reference to the factory.
+//		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
+//			return beanInstance;
+//		}
+//
+//		Object object = null;
+//		if (mbd == null) {
+//			object = getCachedObjectForFactoryBean(beanName);
+//		}
+//		if (object == null) {
+//			// Return bean instance from factory.
+//			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
+//			// Caches object obtained from FactoryBean if it is a singleton.
+//			if (mbd == null && containsBeanDefinition(beanName)) {
+//				mbd = getMergedLocalBeanDefinition(beanName);
+//			}
+//			boolean synthetic = (mbd != null && mbd.isSynthetic());
+//			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
+//		}
+//		return object;
 	}
 
 	/**

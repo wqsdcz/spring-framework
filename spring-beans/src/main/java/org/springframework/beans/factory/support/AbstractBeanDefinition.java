@@ -38,6 +38,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>
+ *     作为具体、完备的 {@link BeanDefinition} 类的基础类，
+ *     它将 {@link GenericBeanDefinition}、 {@link RootBeanDefinition} 和 {@link ChildBeanDefinition} 的共同属性进行了提取。
+ * </p>
+ * <p>
+ *     自动装配常量与 {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory} 接口中定义的常量相匹配。
+ * </p>
  * Base class for concrete, full-fledged {@link BeanDefinition} classes,
  * factoring out common properties of {@link GenericBeanDefinition},
  * {@link RootBeanDefinition}, and {@link ChildBeanDefinition}.
@@ -59,30 +66,35 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 		implements BeanDefinition, Cloneable {
 
 	/**
+	 * 表示默认的作用域名称的常量：{@code ""}，等效于singleton状态，除非被父bean定义覆盖（如果适用）。
 	 * Constant for the default scope name: {@code ""}, equivalent to singleton
 	 * status unless overridden from a parent bean definition (if applicable).
 	 */
 	public static final String SCOPE_DEFAULT = "";
 
 	/**
+	 * 常量：表示
 	 * Constant that indicates no external autowiring at all.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
 
 	/**
+	 * 常量：表示通过bean属性的名称来自动注入。
 	 * Constant that indicates autowiring bean properties by name.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
 
 	/**
+	 * 常量：表示通过bean属性的类型来自动注入。
 	 * Constant that indicates autowiring bean properties by type.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 	/**
+	 * 常量：表示自动注入构造器。
 	 * Constant that indicates autowiring a constructor.
 	 * @see #setAutowireMode
 	 */
@@ -99,18 +111,21 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final int AUTOWIRE_AUTODETECT = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
 
 	/**
+	 * 常量：指示完全不进行依赖检查。
 	 * Constant that indicates no dependency check at all.
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_NONE = 0;
 
 	/**
+	 * 常量：指示对【对象引用】进行依赖检查。
 	 * Constant that indicates dependency checking for object references.
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
 	/**
+	 * 常量：指示对【“简单”属性】进行依赖检查。
 	 * Constant that indicates dependency checking for "simple" properties.
 	 * @see #setDependencyCheck
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
@@ -118,6 +133,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final int DEPENDENCY_CHECK_SIMPLE = 2;
 
 	/**
+	 * 常量：指示对所有属性（包括【对象引用】及【"简单"属性】）进行依赖检查
 	 * Constant that indicates dependency checking for all properties
 	 * (object references as well as "simple" properties).
 	 * @see #setDependencyCheck
@@ -125,6 +141,14 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final int DEPENDENCY_CHECK_ALL = 3;
 
 	/**
+	 * <p>
+	 *     常量：指示容器应尝试推断Bean的{@link #setDestroyMethodName 销毁方法名称}而非显式指定方法名称的常量。
+	 *     该值{@value}经过特殊设计，包含方法名中通常不允许的字符，确保不会与具有相同名称的合法命名方法发生冲突。
+	 * </p>
+	 * <p>
+	 *     当前在销毁方法推断过程中检测到的方法名称为"close"和"shutdown"（若特定Bean类中存在这些方法）。
+	 * </p>
+	 *
 	 * Constant that indicates the container should attempt to infer the
 	 * {@link #setDestroyMethodName destroy method name} for a bean as opposed to
 	 * explicit specification of a method name. The value {@value} is specifically

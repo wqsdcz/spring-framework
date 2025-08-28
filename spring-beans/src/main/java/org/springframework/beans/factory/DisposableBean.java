@@ -17,15 +17,17 @@
 package org.springframework.beans.factory;
 
 /**
- * Interface to be implemented by beans that want to release resources on destruction.
- * A {@link BeanFactory} will invoke the destroy method on individual destruction of a
- * scoped bean. An {@link org.springframework.context.ApplicationContext} is supposed
- * to dispose all of its singletons on shutdown, driven by the application lifecycle.
- *
- * <p>A Spring-managed bean may also implement Java's {@link AutoCloseable} interface
- * for the same purpose. An alternative to implementing an interface is specifying a
- * custom destroy method, for example in an XML bean definition. For a list of all
- * bean lifecycle methods, see the {@link BeanFactory BeanFactory javadocs}.
+ * <p>
+ *     需通过实现此接口使Bean能够在销毁时释放资源。{@link BeanFactory}会在单独销毁作用域Bean时调用其destroy方法。
+ *     而{@link org.springframework.context.ApplicationContext}则会在应用生命周期结束时，随着容器关闭而销毁所有单例Bean。
+ * </p>
+ * <p>
+ *     出于相同目的，Spring托管的Bean也可实现Java的{@link AutoCloseable}接口。
+ *     实现接口的替代方案是指定自定义的destroy方法，例如在XML bean定义中进行配置。
+ * </p>
+ * <p>
+ *     有关bean生命周期方法的完整列表，请参阅{@link BeanFactory BeanFactory javadocs}。
+ * </p>
  *
  * @author Juergen Hoeller
  * @since 12.08.2003

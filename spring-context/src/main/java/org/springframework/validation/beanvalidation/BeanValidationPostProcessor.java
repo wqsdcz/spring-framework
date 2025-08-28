@@ -31,6 +31,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * <p>
+ *     简单的{@link BeanPostProcessor}实现，用于检查Spring托管bean中的JSR-303约束注解，
+ *     在调用bean的初始化方法（若存在）之前，若发现约束违规将抛出初始化异常。
+ * </p>
+ *
  * Simple {@link BeanPostProcessor} that checks JSR-303 constraint annotations
  * in Spring-managed beans, throwing an initialization exception in case of
  * constraint violations right before calling the bean's init method (if any).

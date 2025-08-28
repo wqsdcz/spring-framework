@@ -19,6 +19,36 @@ package org.springframework.beans.factory;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>
+ *     这是一个接口，那些在{@link BeanFactory}中使用的对象工厂来实现，这些对象本身是单个对象的工厂。
+ *     若某个Bean实现此接口，那么这个Bean将作为负责暴露对象的工厂，而非直接将自身作为将被暴露的Bean实例。
+ * </p>
+ * <p>
+ *     <b>注意：实现此接口的bean不能作为普通bean使用。</b>
+ *     FactoryBean以bean的形式定义，但通过bean引用对外的暴露的对象（{@link #getObject()}）始终是其创建的对象。
+ * </p>
+ * <p>
+ *     FactoryBean支持单例和原型模式，既可按需延迟创建对象，也可在启动时立即创建。
+ *     {@link SmartFactoryBean}接口允许暴露更细粒度的行为元数据。
+ * </p>
+ * <p>
+ *     此接口在框架内部被广泛使用，例如AOP模块中的{@link org.springframework.aop.framework.ProxyFactoryBean}
+ *     或{@link org.springframework.jndi.JndiObjectFactoryBean}。它也可用于自定义组件，但通常仅见于基础设施代码中。
+ * </p>
+ * <p>
+ *     <b>{@code FactoryBean}是编程契约。实现类不应依赖于注解驱动的注入或其他反射机制。</b>
+ *     {@link #getObjectType()}和{@link #getObject()}的调用可能发生在引导过程早期，甚至早于任何后处理器设置。
+ *     如需访问其他bean，请实现{@link BeanFactoryAware}并通过编程方式获取它们。
+ * </p>
+ * <p>
+ *     <b>容器仅负责管理FactoryBean实例的生命周期，不负责管理由FactoryBean创建的对象生命周期。</b>
+ *     因此，暴露的bean对象上的销毁方法（如{@link java.io.Closeable#close()}）将<em>不会</em>被自动调用。
+ *     如果要销毁暴露的bean对象，那么可以通过让FactoryBean实现{@link DisposableBean}，并将所有关闭调用委托给底层对象的方式来完成。
+ * </p>
+ * <p>
+ *     最后，FactoryBean对象会参与所在BeanFactory创建bean的同步过程。
+ *     通常不需要内部同步机制，除非用于FactoryBean本身内部的延迟初始化（或类似场景）。
+ * </p>
  * Interface to be implemented by objects used within a {@link BeanFactory} which
  * are themselves factories for individual objects. If a bean implements this
  * interface, it is used as a factory for an object to expose, not directly as a
@@ -65,26 +95,36 @@ import org.springframework.lang.Nullable;
 public interface FactoryBean<T> {
 
 	/**
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
-	 * <p>As with a {@link BeanFactory}, this allows support for both the
-	 * Singleton and Prototype design pattern.
-	 * <p>If this FactoryBean is not fully initialized yet at the time of
-	 * the call (for example because it is involved in a circular reference),
-	 * throw a corresponding {@link FactoryBeanNotInitializedException}.
-	 * <p>As of Spring 2.0, FactoryBeans are allowed to return {@code null}
-	 * objects. The factory will consider this as normal value to be used; it
-	 * will not throw a FactoryBeanNotInitializedException in this case anymore.
-	 * FactoryBean implementations are encouraged to throw
-	 * FactoryBeanNotInitializedException themselves now, as appropriate.
-	 * @return an instance of the bean (can be {@code null})
-	 * @throws Exception in case of creation errors
+	 * <p>
+	 *     返回此工厂管理的对象实例（该实例可能是共享的或独立的）。
+	 * </p>
+	 * <p>
+	 *     与{@link BeanFactory}一样，此方法同时支持单例（Singleton）和原型（Prototype）设计模式。
+	 * </p>
+	 * <p>
+	 *     若调用时此FactoryBean尚未完成初始化（例如由于涉及循环引用），则应抛出相应的{@link FactoryBeanNotInitializedException}。
+	 * </p>
+	 * <p>
+	 *     从Spring 2.0开始，FactoryBeans允许返回{@code null}对象。
+	 *     工厂会将此视为正常值使用；这种情况下不再抛出FactoryBeanNotInitializedException。
+	 *     现在鼓励FactoryBean实现根据情况自行抛出FactoryBeanNotInitializedException。
+	 * </p>
+	 *
+	 * @return bean的一个实例（可以是{@code null}）
+	 * @throws Exception 如果创建错误
 	 * @see FactoryBeanNotInitializedException
 	 */
 	@Nullable
 	T getObject() throws Exception;
 
 	/**
+	 * <p>返回此FactoryBean所创建对象的类型，如果无法提前获知则返回{@code null}。</p>
+	 * <p>此方法允许在不实例化对象的情况下检查特定类型的bean，例如在自动装配过程中。</p>
+	 * <p>对于创建单例对象的实现，此方法应尽量避免创建单例实例；而应该提前预估类型。 对于原型对象，同样建议在此返回有意义的类型。</p>
+	 * <p>此方法可在FactoryBean<i>尚未完成初始化之前</i>被调用。它不能依赖于初始化过程中创建的状态； 当然，如果状态已可用，则仍可使用这些状态。</p>
+	 * <p><b>注意：</b>自动装配将直接忽略在此返回{@code null}的FactoryBean。 因此强烈建议根据FactoryBean的当前状态正确实现此方法。</p>
+	 * @return 此FactoryBean创建的对象类型，若调用时类型未知则返回{@code null}
+	 *
 	 * Return the type of object that this FactoryBean creates,
 	 * or {@code null} if not known in advance.
 	 * <p>This allows one to check for specific types of beans without

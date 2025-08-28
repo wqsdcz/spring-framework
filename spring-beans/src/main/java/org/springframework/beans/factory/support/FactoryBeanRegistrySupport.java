@@ -95,9 +95,12 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	 */
 	protected Object getObjectFromFactoryBean(FactoryBean<?> factory, String beanName, boolean shouldPostProcess) {
 		if (factory.isSingleton() && containsSingleton(beanName)) {
+			// factory：为已经创建的单例Bean工厂
 			synchronized (getSingletonMutex()) {
+				// 查询缓存
 				Object object = this.factoryBeanObjectCache.get(beanName);
 				if (object == null) {
+					// 缓存未命中，调用FactoryBean的getObject()方法，获取对象。
 					object = doGetObjectFromFactoryBean(factory, beanName);
 					// Only post-process and store if not put there already during getObject() call above
 					// (e.g. because of circular reference processing triggered by custom getBean calls)
@@ -123,6 +126,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 								afterSingletonCreation(beanName);
 							}
 						}
+						// 将FactoryBean的getObject()方法返回的结果存入缓存
 						if (containsSingleton(beanName)) {
 							this.factoryBeanObjectCache.put(beanName, object);
 						}
@@ -189,14 +193,16 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
-	 * Post-process the given object that has been obtained from the FactoryBean.
-	 * The resulting object will get exposed for bean references.
-	 * <p>The default implementation simply returns the given object as-is.
-	 * Subclasses may override this, for example, to apply post-processors.
-	 * @param object the object obtained from the FactoryBean.
-	 * @param beanName the name of the bean
-	 * @return the object to expose
-	 * @throws org.springframework.beans.BeansException if any post-processing failed
+	 * <p>
+	 *     对从FactoryBean获取的给定对象进行后处理。最终生成的对象将暴露给bean引用。
+	 * </p>
+	 * <p>
+	 *     默认实现直接按原样返回给定对象。子类可重写此方法，例如：用于应用后处理器。
+	 * </p>
+	 * @param object 从FactoryBean获得的对象。
+	 * @param beanName Bean的名字
+	 * @return 将要暴露的对象
+	 * @throws org.springframework.beans.BeansException 如果任何的后处理出现失败
 	 */
 	protected Object postProcessObjectFromFactoryBean(Object object, String beanName) throws BeansException {
 		return object;

@@ -17,6 +17,17 @@
 package org.springframework.beans.factory;
 
 /**
+ * <p>
+ *     这是一个回调接口，让Bean能感知到这个Bean所属的{@link ClassLoader 类加载器}。
+ *     这个类加载器就是当前Bean工厂用于加载Bean类的类加载器。
+ * </p>
+ * <p>
+ *     这主要是要由框架类来实现的，这些框架类必须根据名称来识别应用程序类，尽管这些应用程序类本身可能是由共享类加载器加载的。
+ *     译者补充：框架类自身是共享的，但是应用程序类可能是隔离的（如：不同的web应用之间的隔离）。
+ * </p>
+ * <p>
+ *     有关Bean生命周期方法的完整列表，请参见 {@link BeanFactory BeanFactory javadocs}。
+ * </p>
  * Callback that allows a bean to be aware of the bean
  * {@link ClassLoader class loader}; that is, the class loader used by the
  * present bean factory to load bean classes.

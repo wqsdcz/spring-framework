@@ -21,78 +21,61 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
- * The root interface for accessing a Spring bean container.
- * This is the basic client view of a bean container;
- * further interfaces such as {@link ListableBeanFactory} and
- * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}
- * are available for specific purposes.
- *
- * <p>This interface is implemented by objects that hold a number of bean definitions,
- * each uniquely identified by a String name. Depending on the bean definition,
- * the factory will return either an independent instance of a contained object
- * (the Prototype design pattern), or a single shared instance (a superior
- * alternative to the Singleton design pattern, in which the instance is a
- * singleton in the scope of the factory). Which type of instance will be returned
- * depends on the bean factory configuration: the API is the same. Since Spring
- * 2.0, further scopes are available depending on the concrete application
- * context (e.g. "request" and "session" scopes in a web environment).
- *
- * <p>The point of this approach is that the BeanFactory is a central registry
- * of application components, and centralizes configuration of application
- * components (no more do individual objects need to read properties files,
- * for example). See chapters 4 and 11 of "Expert One-on-One J2EE Design and
- * Development" for a discussion of the benefits of this approach.
- *
- * <p>Note that it is generally better to rely on Dependency Injection
- * ("push" configuration) to configure application objects through setters
- * or constructors, rather than use any form of "pull" configuration like a
- * BeanFactory lookup. Spring's Dependency Injection functionality is
- * implemented using this BeanFactory interface and its subinterfaces.
- *
- * <p>Normally a BeanFactory will load bean definitions stored in a configuration
- * source (such as an XML document), and use the {@code org.springframework.beans}
- * package to configure the beans. However, an implementation could simply return
- * Java objects it creates as necessary directly in Java code. There are no
- * constraints on how the definitions could be stored: LDAP, RDBMS, XML,
- * properties file, etc. Implementations are encouraged to support references
- * amongst beans (Dependency Injection).
- *
- * <p>In contrast to the methods in {@link ListableBeanFactory}, all of the
- * operations in this interface will also check parent factories if this is a
- * {@link HierarchicalBeanFactory}. If a bean is not found in this factory instance,
- * the immediate parent factory will be asked. Beans in this factory instance
- * are supposed to override beans of the same name in any parent factory.
- *
- * <p>Bean factory implementations should support the standard bean lifecycle interfaces
- * as far as possible. The full set of initialization methods and their standard order is:
- * <ol>
- * <li>BeanNameAware's {@code setBeanName}
- * <li>BeanClassLoaderAware's {@code setBeanClassLoader}
- * <li>BeanFactoryAware's {@code setBeanFactory}
- * <li>EnvironmentAware's {@code setEnvironment}
- * <li>EmbeddedValueResolverAware's {@code setEmbeddedValueResolver}
- * <li>ResourceLoaderAware's {@code setResourceLoader}
- * (only applicable when running in an application context)
- * <li>ApplicationEventPublisherAware's {@code setApplicationEventPublisher}
- * (only applicable when running in an application context)
- * <li>MessageSourceAware's {@code setMessageSource}
- * (only applicable when running in an application context)
- * <li>ApplicationContextAware's {@code setApplicationContext}
- * (only applicable when running in an application context)
- * <li>ServletContextAware's {@code setServletContext}
- * (only applicable when running in a web application context)
- * <li>{@code postProcessBeforeInitialization} methods of BeanPostProcessors
- * <li>InitializingBean's {@code afterPropertiesSet}
- * <li>a custom init-method definition
- * <li>{@code postProcessAfterInitialization} methods of BeanPostProcessors
- * </ol>
- *
- * <p>On shutdown of a bean factory, the following lifecycle methods apply:
- * <ol>
- * <li>{@code postProcessBeforeDestruction} methods of DestructionAwareBeanPostProcessors
- * <li>DisposableBean's {@code destroy}
- * <li>a custom destroy-method definition
- * </ol>
+ * <p>
+ *     这是一个用于访问Spring Bean容器的根接口。该接口提供了Bean容器的基础客户端视图；
+ *     其他特定用途的接口（如{@link ListableBeanFactory} 和
+ *     {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}）可用于特殊场景。
+ * </p>
+ * <p>
+ *     持有多个Bean定义（每个Bean定义都由字符串名称唯一标识）的对象负责实现。
+ *     根据Bean定义的不同，BeanFactory可能为每个对象各自返回一个独立实例（原型设计模式），也可能只返回唯一的共享实例（比单例设计模式更优的方案，该实例在工厂作用域内为单例）。
+ *     具体返回哪种实例取决于提供给Bean工厂的配置：两者使用相同的API。自Spring 2.0起，根据具体应用上下文还可使用更多作用域（例如Web环境中的"request"和"session"作用域）。
+ * </p>
+ * <p>
+ *     这种设计的核心在于BeanFactory作为应用组件的中央注册表，集中管理应用组件的配置（例如:不需要为每个对象读取一个单独属性文件）。
+ *     关于此方案优势的讨论，请参阅《Expert One-on-One J2EE Design and Development》第4章和第11章。
+ * </p>
+ * <p>
+ *     需要注意的是，在配置应用对象时，我们通常更推荐通过依赖注入的方法（通过setter或构造函数）来"推送"配置，而非使用BeanFactory查找等任何形式来"拉取"配置。
+ *     而Spring的依赖注入功能正是通过BeanFactory接口及其子接口来实现的。
+ * </p>
+ * <p>
+ *     通常BeanFactory会加载存储在配置源（如XML文档）中的Bean定义，并使用{@code org.springframework.beans}包配置Bean。
+ *     但具体的实现方式也可以是直接在Java代码中按需创建并返回Java对象。定义存储方式不受限制：LDAP、关系数据库、XML、属性文件等均可。
+ *     鼓励实现类支持Bean间的引用（依赖注入）。
+ * </p>
+ * <p>
+ *     与{@link ListableBeanFactory}中的方法不同，若当前工厂是{@link HierarchicalBeanFactory}，本接口的所有操作都会检查父工厂。
+ *     若在本工厂实例中找不到Bean，则会向直接父工厂查询。本工厂实例中的Bean会覆盖任何父工厂中同名的Bean。
+ * </p>
+ * <p>
+ *     BeanFactory的实现应尽可能支持标准的Bean生命周期接口。
+ *     完整的初始化方法及其标准顺序如下：
+ *     <ol>
+ *         <li>BeanNameAware的{@code setBeanName}</li>
+ *         <li>BeanClassLoaderAware的{@code setBeanClassLoader}</li>
+ *         <li>BeanFactoryAware的{@code setBeanFactory}</li>
+ *         <li>EnvironmentAware的{@code setEnvironment}</li>
+ *         <li>EmbeddedValueResolverAware的{@code setEmbeddedValueResolver}</li>
+ *         <li>ResourceLoaderAware的{@code setResourceLoader}（仅适用于应用上下文环境）</li>
+ *         <li>ApplicationEventPublisherAware的{@code setApplicationEventPublisher}（仅适用于应用上下文环境）</li>
+ *         <li>MessageSourceAware的{@code setMessageSource}（仅适用于应用上下文环境）</li>
+ *         <li>ApplicationContextAware的{@code setApplicationContext}（仅适用于应用上下文环境）</li>
+ *         <li>ServletContextAware的{@code setServletContext}（仅适用于Web应用上下文环境）</li>
+ *         <li>BeanPostProcessors的{@code postProcessBeforeInitialization}方法</li>
+ *         <li>InitializingBean的{@code afterPropertiesSet}</li>
+ *         <li>自定义init-method的定义</li>
+ *         <li>BeanPostProcessors的{@code postProcessAfterInitialization}方法</li>
+ *     </ol>
+ * </p>
+ * <p>
+ *     在Bean工厂关闭时，将应用以下生命周期方法：
+ *     <ol>
+ *         <li>DestructionAwareBeanPostProcessors的{@code postProcessBeforeDestruction}方法</li>
+ *         <li>DisposableBean的{@code destroy}</li>
+ *         <li>自定义destroy-method的定义</li>
+ *     </ol>
+ * </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -114,6 +97,12 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
 public interface BeanFactory {
+	/**
+	 * Bean的集合
+	 * Bean的作用域
+	 * Bean的类型
+	 * Bean的别名
+	 */
 
 	/**
 	 * Used to dereference a {@link FactoryBean} instance and distinguish it from

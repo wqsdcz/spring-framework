@@ -30,6 +30,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>
+ *     用于操作bean工厂（特别是{@link ListableBeanFactory}接口）的便捷方法。
+ * </p>
+ * <p>
+ *     返回bean数量、bean名称或bean实例时，会考虑bean工厂的嵌套层次结构
+ *     （这与BeanFactory接口中定义的方法相同，而与ListableBeanFactory接口中定义的方法不同）。
+ * </p>
+ *
  * Convenience methods operating on bean factories, in particular
  * on the {@link ListableBeanFactory} interface.
  *

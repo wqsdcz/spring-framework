@@ -20,6 +20,31 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>
+ *     策略接口，由 {@link ConfigurableBeanFactory} 使用，用于表示一个目标作用域，用于存放 Bean 实例。
+ *     这允许通过自定义的、使用 {@link ConfigurableBeanFactory#registerScope(String, Scope) 特定键} 注册的进一步作用域，
+ *     来扩展 BeanFactory 的标准作用域
+ *     {@link ConfigurableBeanFactory#SCOPE_SINGLETON "singleton"}（单例） 和
+ *     {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE "prototype"}（原型）。
+ * </p>
+ * <p>
+ *     {@link org.springframework.context.ApplicationContext} 的实现，
+ *     例如：{@link org.springframework.web.context.WebApplicationContext}（Web应用上下文），
+ *     可以基于此 SPI（Service Provider Interface）注册特定于其环境的附加标准作用域，
+ *     例如：{@link org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST "request"}（请求）和
+ *     {@link org.springframework.web.context.WebApplicationContext#SCOPE_SESSION "session"}（会话）。
+ * </p>
+ * <p>
+ *     尽管其主要用途是在 Web 环境中扩展作用域， 但此 SPI 是完全通用的：
+ *     它提供了从任何底层存储机制（例如 HTTP Session 或自定义的会话机制）中 获取（get）和存放（put）对象的能力。
+ *     传入此类的 {@code get} 和 {@code remove} 方法的名称将用于 标识当前作用域中的目标对象。
+ * </p>
+ * <p>
+ *     {@code Scope} 的实现需要是线程安全的。
+ *     一个 {@code Scope} 实例（除非它显式地需要感知其所属的 BeanFactory）可以同时被多个 bean 工厂使用，
+ *     并且可以由任意数量的线程从任意数量的工厂并发访问该 {@code Scope}。
+ * </p>
+ *
  * Strategy interface used by a {@link ConfigurableBeanFactory},
  * representing a target scope to hold bean instances in.
  * This allows for extending the BeanFactory's standard scopes

@@ -35,16 +35,20 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringValueResolver;
 
 /**
- * {@link org.springframework.beans.factory.config.BeanPostProcessor}
- * implementation that passes the ApplicationContext to beans that
- * implement the {@link EnvironmentAware}, {@link EmbeddedValueResolverAware},
- * {@link ResourceLoaderAware}, {@link ApplicationEventPublisherAware},
- * {@link MessageSourceAware} and/or {@link ApplicationContextAware} interfaces.
+ * 【为如下接口提供支持】: EnvironmentAware、EmbeddedValueResolverAware、ResourceLoaderAware、
+ * ApplicationEventPublisherAware、MessageSourceAware、ApplicationContextAware
  *
- * <p>Implemented interfaces are satisfied in order of their mention above.
- *
- * <p>Application contexts will automatically register this with their
- * underlying bean factory. Applications do not use this directly.
+ * <p>
+ *     {@link org.springframework.beans.factory.config.BeanPostProcessor}的实现类，
+ *     传递ApplicationContext给向实现了{@link EnvironmentAware}、{@link EmbeddedValueResolverAware}、{@link ResourceLoaderAware}、
+ *     {@link ApplicationEventPublisherAware}、{@link MessageSourceAware}、{@link ApplicationContextAware}接口的Bean。
+ * </p>
+ * <p>
+ *     接口的实现按上述顺序依次处理。
+ * </p>
+ * <p>
+ *     应用上下文会自动将其注册到底层Bean工厂中。应用程序不应直接使用此处理器。
+ * </p>
  *
  * @author Juergen Hoeller
  * @author Costin Leau

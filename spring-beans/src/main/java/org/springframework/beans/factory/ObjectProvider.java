@@ -23,6 +23,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.lang.Nullable;
 
 /**
+ * {@link ObjectFactory}的一种特定变体，专为注入点设计，支持编程式可选性及宽松的非唯一处理机制。
+ *
  * A variant of {@link ObjectFactory} designed specifically for injection points,
  * allowing for programmatic optionality and lenient not-unique handling.
  *

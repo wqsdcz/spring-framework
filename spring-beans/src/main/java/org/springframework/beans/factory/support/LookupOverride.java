@@ -23,9 +23,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Represents an override of a method that looks up an object in the same IoC context.
+ * <p>表示对同一IoC上下文中对象查找方法的覆盖。</p>
  *
- * <p>Methods eligible for lookup override must not have arguments.
+ * <p>【符合查找覆盖条件的 方法】必须【不含参数】。</p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

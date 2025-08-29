@@ -976,6 +976,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * A handler for a specific property.
+	 *
 	 * 特定属性的处理器
 	 */
 	protected abstract static class PropertyHandler {
@@ -1035,7 +1036,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Holder class used to store property tokens.
-	 * 用于存储属性标记的持有者类。
+	 * 用于存储属性标记(property tokens)的持有者类
 	 */
 	protected static class PropertyTokenHolder {
 

@@ -24,11 +24,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Extension of MethodOverride that represents an arbitrary
- * override of a method by the IoC container.
+ * <p>
+ *     这是MethodOverride的扩展，代表由IoC容器实现的任意方法覆盖。
+ * </p>
  *
- * <p>Any non-final method can be overridden, irrespective of its
- * parameters and return types.
+ * <p>
+ *     任何非final方法都可以被覆盖，无论其参数和返回类型如何。
+ * </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

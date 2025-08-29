@@ -83,6 +83,30 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * <p>
+ *     抽象Bean工厂的基类，实现了默认的Bean创建机制，并具备{@link RootBeanDefinition}类所需的全部功能。
+ *     除继承AbstractBeanFactory的{@link #createBean}方法外，
+ *     还实现了{@link org.springframework.beans.factory.config.AutowireCapableBeanFactory}接口。
+ * </p>
+ *
+ * <p>
+ *     提供Bean创建（含构造函数解析）、属性注入、装配（包括自动装配）和初始化等核心功能。
+ *     可处理运行时的Bean引用、解析管理Bean的集合、调用初始化方法等。
+ *     支持通过【构造函数】、【按属性名称】和【按属性类型】的自动装配。
+ * </p>
+ *
+ * <p>
+ *     子类需要实现的主要模板方法是{@link #resolveDependency(DependencyDescriptor, String, Set, TypeConverter)}，
+ *     该方法用于按类型进行自动装配。
+ *     对于支持检索Bean定义的工厂，通常通过此类搜索来实现匹配Bean的查找；而对于其他工厂类型，则可实现简化的匹配算法。
+ * </p>
+ *
+ * <p>
+ *     请注意：本类既不假定也不实现Bean定义注册表功能。
+ *     若需实现{@link org.springframework.beans.factory.ListableBeanFactory}和{@link BeanDefinitionRegistry}接口
+ *     （分别代表此类工厂的API接口和SPI接口），请参阅{@link DefaultListableBeanFactory}。
+ * </p>
+ *
  * Abstract bean factory superclass that implements default bean creation,
  * with the full capabilities specified by the {@link RootBeanDefinition} class.
  * Implements the {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory}
@@ -120,44 +144,32 @@ import org.springframework.util.StringUtils;
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
 		implements AutowireCapableBeanFactory {
 
-	/** Strategy for creating bean instances */
+	/** 创建Bean实例的策略 */
 	private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
-	/** Resolver strategy for method parameter names */
+	/** 方法参数名的解析器策略 */
 	@Nullable
 	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
-	/** Whether to automatically try to resolve circular references between beans */
+	/** 是否自动尝试解析bean之间的循环引用 */
 	private boolean allowCircularReferences = true;
 
-	/**
-	 * Whether to resort to injecting a raw bean instance in case of circular reference,
-	 * even if the injected bean eventually got wrapped.
-	 */
+	/** 是否在出现循环引用的情况下，采用注入原始 bean 实例的方式，即便所注入的 bean 最终被进行了封装处理。 */
 	private boolean allowRawInjectionDespiteWrapping = false;
 
-	/**
-	 * Dependency types to ignore on dependency check and autowire, as Set of
-	 * Class objects: for example, String. Default is none.
-	 */
+	/** 在依赖检查和自动装配过程中需要忽略的依赖类型，这是一个Class对象的集合（Set）。例如，可以忽略String类型。默认情况下不忽略任何类型。*/
 	private final Set<Class<?>> ignoredDependencyTypes = new HashSet<>();
 
-	/**
-	 * Dependency interfaces to ignore on dependency check and autowire, as Set of
-	 * Class objects. By default, only the BeanFactory interface is ignored.
-	 */
+	/** 在依赖检查和自动装配过程中需要忽略的依赖接口，这是一个Class对象的集合（Set）。默认情况下，只忽略BeanFactory接口。*/
 	private final Set<Class<?>> ignoredDependencyInterfaces = new HashSet<>();
 
-	/**
-	 * The name of the currently created bean, for implicit dependency registration
-	 * on getBean etc invocations triggered from a user-specified Supplier callback.
-	 */
+	/** 当前已开始创建的Bean的名称，在由用户指定的Supplier回调触发的getBean等方法调用中，用于进行隐式依赖注册。 */
 	private final NamedThreadLocal<String> currentlyCreatedBean = new NamedThreadLocal<>("Currently created bean");
 
-	/** Cache of unfinished FactoryBean instances: FactoryBean name to BeanWrapper */
+	/** 未完成的FactoryBean实例的缓存：FactoryBean的名称 -> BeanWrapper */
 	private final ConcurrentMap<String, BeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>(16);
 
-	/** Cache of filtered PropertyDescriptors: bean Class to PropertyDescriptor array */
+	/** 过滤后的PropertyDescriptor数组的缓存：Bean的Class -> PropertyDescriptor数组 */
 	private final ConcurrentMap<Class<?>, PropertyDescriptor[]> filteredPropertyDescriptorsCache =
 			new ConcurrentHashMap<>(256);
 
@@ -1014,6 +1026,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	}
 
 	/**
+	 * 应用实例化前的后处理器，解析指定bean是否存在实例化前的快捷方式。
 	 * Apply before-instantiation post-processors, resolving whether there is a
 	 * before-instantiation shortcut for the specified bean.
 	 * @param beanName the name of the bean

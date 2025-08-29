@@ -1,4 +1,4 @@
-/***
+/*
  * ASM: a very small and fast Java bytecode manipulation framework
  * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
@@ -30,9 +30,9 @@
 package org.springframework.asm;
 
 /**
- * 访问器访问Java注释。这个类的方法必须按照以下顺序调用：
- * (<tt>visit</tt> | <tt>visitEnum</tt> | <tt>visitAnnotation</tt> | <tt>visitArray</tt>)* <tt>visitEnd</tt>。
- *
+ * <p>访问Java注解的访问器。这个类的方法必须按照以下顺序调用：
+ * <p>(<tt>visit</tt> | <tt>visitEnum</tt> | <tt>visitAnnotation</tt> | <tt>visitArray</tt>)* <tt>visitEnd</tt>
+ * <p>
  * A visitor to visit a Java annotation. The methods of this class must be
  * called in the following order: ( <tt>visit</tt> | <tt>visitEnum</tt> |
  * <tt>visitAnnotation</tt> | <tt>visitArray</tt> )* <tt>visitEnd</tt>.
@@ -43,10 +43,7 @@ package org.springframework.asm;
 public abstract class AnnotationVisitor {
 
     /**
-	 * 此访问器实现的ASM API版本。该字段的值必须是{@link Opcodes#ASM4}、{@link Opcodes#ASM5}或{@link Opcodes#ASM6}中的一个。
-	 *
-     * The ASM API version implemented by this visitor. The value of this field
-     * must be one of {@link Opcodes#ASM4}, {@link Opcodes#ASM5} or {@link Opcodes#ASM6}.
+	 * 此访问器实现的ASM API版本。该字段的值必须是 {@link Opcodes#ASM4} 、{@link Opcodes#ASM5} 或 {@link Opcodes#ASM6} 中的一个。
      */
     protected final int api;
 

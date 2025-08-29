@@ -1216,12 +1216,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 
 	/**
-	 * Return a merged RootBeanDefinition, traversing the parent bean definition
-	 * if the specified bean corresponds to a child bean definition.
-	 * @param beanName the name of the bean to retrieve the merged definition for
-	 * @return a (potentially merged) RootBeanDefinition for the given bean
-	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
-	 * @throws BeanDefinitionStoreException in case of an invalid bean definition
+	 * 返回一个合并后的 RootBeanDefinition（若指定 bean 为子BeanDefinition，则遍历其父BeanDefinition）。
+	 * @param beanName 需要获取合并定义的 bean 的名称
+	 * @return 给定 bean（可能经过合并）的 RootBeanDefinition
+	 * @throws NoSuchBeanDefinitionException 如果不存在指定名称的 bean
+	 * @throws BeanDefinitionStoreException 当 bean 定义无效时抛出
 	 */
 	protected RootBeanDefinition getMergedLocalBeanDefinition(String beanName) throws BeansException {
 		// Quick check on the concurrent map first, with minimal locking.

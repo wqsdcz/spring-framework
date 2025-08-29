@@ -24,11 +24,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Object representing the override of a method on a managed object by the IoC
- * container.
- *
- * <p>Note that the override mechanism is <em>not</em> intended as a generic
- * means of inserting crosscutting code: use AOP for that.
+ * <p>
+ *     该对象代表IoC容器对托管对象上某个方法的重写。
+ * </p>
+ * <p>
+ *     请注意，此重写机制<em>并非</em>用于插入横切代码的通用方案：此类场景应使用AOP实现。
+ * </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

@@ -23,6 +23,8 @@ import org.springframework.aop.TargetClassAware;
 import org.springframework.aop.TargetSource;
 
 /**
+ * 该接口将由负责管理 AOP 代理工厂配置的类来实现。此配置包括拦截器及其他建议、Advisors以及被代理的接口。
+ * <p>从 Spring 中获取的任何 AOP 代理都可以转换为该接口，以便对其进行 AOP 建议的操作。
  * Interface to be implemented by classes that hold the configuration
  * of a factory of AOP proxies. This configuration includes the
  * Interceptors and other advice, Advisors, and the proxied interfaces.

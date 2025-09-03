@@ -17,24 +17,20 @@
 package org.aopalliance.intercept;
 
 /**
- * Intercepts calls on an interface on its way to the target. These
- * are nested "on top" of the target.
- *
- * <p>The user should implement the {@link #invoke(MethodInvocation)}
- * method to modify the original behavior. E.g. the following class
- * implements a tracing interceptor (traces all the calls on the
- * intercepted method(s)):
- *
+ * <p>拦截发往目标接口的调用。这些调用会以嵌套形式作用于目标对象之上。</p>
+ * <p>
+ *     用户需要通过实现{@link #invoke(MethodInvocation)}方法来修改原始行为。
+ *     例如下列实现追踪拦截器的类（记录被拦截方法的所有调用信息）：
+ * </p>
  * <pre class=code>
- * class TracingInterceptor implements MethodInterceptor {
- *   Object invoke(MethodInvocation i) throws Throwable {
- *     System.out.println("method "+i.getMethod()+" is called on "+
- *                        i.getThis()+" with args "+i.getArguments());
- *     Object ret=i.proceed();
- *     System.out.println("method "+i.getMethod()+" returns "+ret);
- *     return ret;
- *   }
- * }
+ *     class TracingInterceptor implements MethodInterceptor {
+ *         Object invoke(MethodInvocation i) throws Throwable {
+ *             System.out.println("方法 "+i.getMethod()+" 被 "+i.getThis()+" 调用，参数为 "+i.getArguments());
+ *             Object ret=i.proceed();
+ *             System.out.println("方法 "+i.getMethod()+" 返回 "+ret);
+ *             return ret;
+ *         }
+ *     }
  * </pre>
  *
  * @author Rod Johnson
@@ -43,14 +39,10 @@ package org.aopalliance.intercept;
 public interface MethodInterceptor extends Interceptor {
 	
 	/**
-	 * Implement this method to perform extra treatments before and
-	 * after the invocation. Polite implementations would certainly
-	 * like to invoke {@link Joinpoint#proceed()}.
-	 * @param invocation the method invocation joinpoint
-	 * @return the result of the call to {@link Joinpoint#proceed()};
-	 * might be intercepted by the interceptor
-	 * @throws Throwable if the interceptors or the target object
-	 * throws an exception
+	 * 实现此方法可在方法调用前后执行额外处理。规范的实现通常需要调用{@link Joinpoint#proceed()}方法。
+	 * @param invocation 方法调用连接点
+	 * @return 调用 {@link Joinpoint#proceed()} 的结果，该结果可能被拦截器替换
+	 * @throws Throwable 当拦截器或目标对象抛出异常时
 	 */
 	Object invoke(MethodInvocation invocation) throws Throwable;
 

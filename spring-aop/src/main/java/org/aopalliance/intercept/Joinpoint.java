@@ -19,20 +19,16 @@ package org.aopalliance.intercept;
 import java.lang.reflect.AccessibleObject;
 
 /**
- * This interface represents a generic runtime joinpoint (in the AOP
- * terminology).
- *
- * <p>A runtime joinpoint is an <i>event</i> that occurs on a static
- * joinpoint (i.e. a location in a the program). For instance, an
- * invocation is the runtime joinpoint on a method (static joinpoint).
- * The static part of a given joinpoint can be generically retrieved
- * using the {@link #getStaticPart()} method.
- *
- * <p>In the context of an interception framework, a runtime joinpoint
- * is then the reification of an access to an accessible object (a
- * method, a constructor, a field), i.e. the static part of the
- * joinpoint. It is passed to the interceptors that are installed on
- * the static joinpoint.
+ * <p>该接口表示的通用的【运行时连接点】（在AOP术语中）。</p>
+ * <p>
+ *     【运行时连接点】是指发生在【静态连接点】（即程序中的某个位置）上的一个<i>【事件】</i>。
+ *     例如，方法调用（【运行时连接点】）是发生在方法（【静态连接点】）上的一个【事件】。
+ *     通过调用{@link #getStaticPart()}方法可泛型获取指定连接点的静态部分。
+ * </p>
+ * <p>
+ *     在拦截器框架上下文中，【运行时连接点】是对可访问对象（方法、构造函数、字段，即连接点的静态部分）访问操作的具象化。
+ *     【运行时连接点】会被传递给安装在【静态连接点】上的拦截器。
+ * </p>
  *
  * @author Rod Johnson
  * @see Interceptor
@@ -40,25 +36,23 @@ import java.lang.reflect.AccessibleObject;
 public interface Joinpoint {
 
 	/**
-	 * Proceed to the next interceptor in the chain.
-	 * <p>The implementation and the semantics of this method depends
-	 * on the actual joinpoint type (see the children interfaces).
-	 * @return see the children interfaces' proceed definition
-	 * @throws Throwable if the joinpoint throws an exception
+	 * <p>执行在链中的下一个拦截器。</p>
+	 * <p>此方法的实现和语义取决于具体的连接点类型（参见子接口定义）。</p>
+	 * @return 参考各子接口中proceed方法的定义
+	 * @throws Throwable 当连接点抛出异常时
 	 */
 	Object proceed() throws Throwable;
 
 	/**
-	 * Return the object that holds the current joinpoint's static part.
-	 * <p>For instance, the target object for an invocation.
-	 * @return the object (can be null if the accessible object is static)
+	 * <p>返回持有当前连接点静态部分的对象。</p>
+	 * <p>例如：方法调用的目标对象。</p>
+	 * @return 该对象（若可访问对象为静态，则可能返回null）
 	 */
 	Object getThis();
 
 	/**
-	 * Return the static part of this joinpoint.
-	 * <p>The static part is an accessible object on which a chain of
-	 * interceptors are installed.
+	 * <p>返回此连接点的静态部分。</p>
+	 * <p>静态部分是一个可访问对象，拦截器链会安装在该对象上。</p>
 	 */
 	AccessibleObject getStaticPart();
 

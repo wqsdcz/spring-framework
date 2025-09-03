@@ -17,26 +17,24 @@
 package org.aopalliance.intercept;
 
 /**
- * Intercepts the construction of a new object.
- *
- * <p>The user should implement the {@link
- * #construct(ConstructorInvocation)} method to modify the original
- * behavior. E.g. the following class implements a singleton
- * interceptor (allows only one unique instance for the intercepted
- * class):
- *
+ * <p>拦截新对象的构造过程。</p>
+ * <p>
+ *     用户需要通过实现{@link #construct(ConstructorInvocation)}方法来修改原始行为。
+ *     例如下列实现单例拦截器的类（确保被拦截类只能创建唯一实例）：
+ * </p>
  * <pre class=code>
- * class DebuggingInterceptor implements ConstructorInterceptor {
- *   Object instance=null;
+ *     class DebuggingInterceptor implements ConstructorInterceptor {
  *
- *   Object construct(ConstructorInvocation i) throws Throwable {
- *     if(instance==null) {
- *       return instance=i.proceed();
- *     } else {
- *       throw new Exception("singleton does not allow multiple instance");
+ *         Object instance = null;
+ *
+ *         Object construct(ConstructorInvocation i) throws Throwable {
+ *             if(instance == null) {
+ *                 return instance = i.proceed();
+ *             } else {
+ *                 throw new Exception("singleton does not allow multiple instance");
+ *             }
+ *         }
  *     }
- *   }
- * }
  * </pre>
  *
  * @author Rod Johnson
@@ -44,15 +42,10 @@ package org.aopalliance.intercept;
 public interface ConstructorInterceptor extends Interceptor  {
 
 	/**
-	 * Implement this method to perform extra treatments before and
-	 * after the construction of a new object. Polite implementations
-	 * would certainly like to invoke {@link Joinpoint#proceed()}.
-	 * @param invocation the construction joinpoint
-	 * @return the newly created object, which is also the result of
-	 * the call to {@link Joinpoint#proceed()}; might be replaced by
-	 * the interceptor
-	 * @throws Throwable if the interceptors or the target object
-	 * throws an exception
+	 * 实现此方法可在新对象构造前后执行额外处理。规范的实现通常需要调用{@link Joinpoint#proceed()}方法。
+	 * @param invocation 构造连接点
+	 * @return 新创建的对象（该对象同时也是调用{@link Joinpoint#proceed()}的结果），拦截器可能替换该返回值
+	 * @throws Throwable 当拦截器或目标对象抛出异常时
 	 */
 	Object construct(ConstructorInvocation invocation) throws Throwable;
 

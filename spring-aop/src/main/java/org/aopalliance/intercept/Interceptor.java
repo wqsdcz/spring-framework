@@ -19,36 +19,27 @@ package org.aopalliance.intercept;
 import org.aopalliance.aop.Advice;
 
 /**
- * This interface represents a generic interceptor.
+ * <p>该接口定义了通用拦截器的基本规范。</p>
  *
- * <p>A generic interceptor can intercept runtime events that occur
- * within a base program. Those events are materialized by (reified
- * in) joinpoints. Runtime joinpoints can be invocations, field
- * access, exceptions...
- *
- * <p>This interface is not used directly. Use the sub-interfaces
- * to intercept specific events. For instance, the following class
- * implements some specific interceptors in order to implement a
- * debugger:
- *
+ * <p>通用拦截器能够拦截基础程序中发生的运行时事件，这些事件通过连接点实现具象化。运行时连接点可以是方法调用、字段访问、异常处理等场景。</p>
+ * <p>此接口不直接使用，需通过子接口实现对特定事件的拦截。例如下列调试器实现类，通过实现多个专用拦截器来实现调试功能：</p>
  * <pre class=code>
- * class DebuggingInterceptor implements MethodInterceptor,
- *     ConstructorInterceptor {
+ *     class DebuggingInterceptor implements MethodInterceptor, ConstructorInterceptor {
  *
- *   Object invoke(MethodInvocation i) throws Throwable {
- *     debug(i.getMethod(), i.getThis(), i.getArgs());
- *     return i.proceed();
- *   }
+ *         Object invoke(MethodInvocation i) throws Throwable {
+ *             debug(i.getMethod(), i.getThis(), i.getArgs());
+ *             return i.proceed();
+ *         }
  *
- *   Object construct(ConstructorInvocation i) throws Throwable {
- *     debug(i.getConstructor(), i.getThis(), i.getArgs());
- *     return i.proceed();
- *   }
+ *         Object construct(ConstructorInvocation i) throws Throwable {
+ *             debug(i.getConstructor(), i.getThis(), i.getArgs());
+ *             return i.proceed();
+ *         }
  *
- *   void debug(AccessibleObject ao, Object this, Object value) {
- *     ...
- *   }
- * }
+ *         void debug(AccessibleObject ao, Object this, Object value) {
+ *             ...
+ *         }
+ *     }
  * </pre>
  *
  * @author Rod Johnson

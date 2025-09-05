@@ -17,31 +17,32 @@
 package org.springframework.aop;
 
 /**
- * Tag interface for throws advice.
+ * 异常通知（Throws Advice）的标记接口。
  *
- * <p>There are not any methods on this interface, as methods are invoked by
- * reflection. Implementing classes must implement methods of the form:
- *
- * <pre class="code">void afterThrowing([Method, args, target], ThrowableSubclass);</pre>
- *
- * <p>Some examples of valid methods would be:
- *
- * <pre class="code">public void afterThrowing(Exception ex)</pre>
- * <pre class="code">public void afterThrowing(RemoteException)</pre>
- * <pre class="code">public void afterThrowing(Method method, Object[] args, Object target, Exception ex)</pre>
- * <pre class="code">public void afterThrowing(Method method, Object[] args, Object target, ServletException ex)</pre>
- *
- * The first three arguments are optional, and only useful if we want further
- * information about the joinpoint, as in AspectJ <b>after-throwing</b> advice.
- *
- * <p><b>Note:</b> If a throws-advice method throws an exception itself, it will
- * override the original exception (i.e. change the exception thrown to the user).
- * The overriding exception will typically be a RuntimeException; this is compatible
- * with any method signature. However, if a throws-advice method throws a checked
- * exception, it will have to match the declared exceptions of the target method
- * and is hence to some degree coupled to specific target method signatures.
- * <b>Do not throw an undeclared checked exception that is incompatible with
- * the target method's signature!</b>
+ * <p>此接口未定义任何方法，因为方法通过反射机制调用。实现类必须遵循以下形式的方法：  </p>
+ * <pre class="code">
+ *     void afterThrowing([Method, args, target], ThrowableSubclass);
+ * </pre>
+ * <p>有效方法示例如下：
+ * <pre class="code">
+ *     public void afterThrowing(Exception ex)
+ *  </pre>
+ *  <pre class="code">
+ *     public void afterThrowing(RemoteException)
+ *  </pre>
+ *  <pre class="code">
+ *     public void afterThrowing(Method method, Object[] args, Object target, Exception ex)
+ *  </pre>
+ *  <pre class="code">
+ *     public void afterThrowing(Method method, Object[] args, Object target, ServletException ex)
+ *  </pre>
+ *  前三个参数为可选参数，仅当需要获取连接点的额外信息时才有意义（与AspectJ<b>异常返回后通知</b>的机制类似）。
+ *  </p>
+ *  <p>
+ *      <b>注意：</b>若异常通知方法自身抛出异常，该异常将覆盖原始异常（即最终抛给用户的异常会被替换）。
+ *      覆盖异常通常应为RuntimeException类型，因其兼容所有方法签名；但若抛出受检异常，则必须与目标方法的声明异常相匹配，这意味着会与特定目标方法签名形成耦合。
+ *      <b>切勿抛出与目标方法签名不兼容的未声明受检异常！</b>
+ *  </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

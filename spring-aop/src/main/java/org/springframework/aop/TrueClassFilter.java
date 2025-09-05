@@ -19,7 +19,7 @@ package org.springframework.aop;
 import java.io.Serializable;
 
 /**
- * Canonical ClassFilter instance that matches all classes.
+ * 匹配所有类的规范ClassFilter实例。
  *
  * @author Rod Johnson
  */
@@ -29,7 +29,7 @@ class TrueClassFilter implements ClassFilter, Serializable {
 	public static final TrueClassFilter INSTANCE = new TrueClassFilter();
 
 	/**
-	 * Enforce Singleton pattern.
+	 * 私有的构造器——强制单例模式。
 	 */
 	private TrueClassFilter() {
 	}
@@ -40,9 +40,8 @@ class TrueClassFilter implements ClassFilter, Serializable {
 	}
 
 	/**
-	 * Required to support serialization. Replaces with canonical
-	 * instance on deserialization, protecting Singleton pattern.
-	 * Alternative to overriding {@code equals()}.
+	 * 支持序列化所必需。在反序列化时替换为规范实例，从而确保单例模式不被破坏。
+	 * 这是重写 {@code equals()} 方法的一种替代方案。
 	 */
 	private Object readResolve() {
 		return INSTANCE;

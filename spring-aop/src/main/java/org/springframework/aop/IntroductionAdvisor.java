@@ -17,13 +17,10 @@
 package org.springframework.aop;
 
 /**
- * Superinterface for advisors that perform one or more AOP <b>introductions</b>.
- *
- * <p>This interface cannot be implemented directly; subinterfaces must
- * provide the advice type implementing the introduction.
- *
- * <p>Introduction is the implementation of additional interfaces
- * (not implemented by a target) via AOP advice.
+ * 重点关联：目标类、额外接口、类匹配
+ * <p>用于执行一个或多个AOP<b>引入操作</b>的通知器的超级接口。</p>
+ * <p>此接口不能直接实现；子接口必须提供实现引入功能的通知类型。</p>
+ * <p>引入是通过AOP通知实现额外接口（目标类本身未实现的接口）的增强方式。</p>
  *
  * @author Rod Johnson
  * @since 04.04.2003
@@ -32,19 +29,16 @@ package org.springframework.aop;
 public interface IntroductionAdvisor extends Advisor, IntroductionInfo {
 
 	/**
-	 * Return the filter determining which target classes this introduction
-	 * should apply to.
-	 * <p>This represents the class part of a pointcut. Note that method
-	 * matching doesn't make sense to introductions.
-	 * @return the class filter
+	 * <p>返回确定此引入应应用于哪些目标类的过滤器。</p>
+	 * <p>这代表了切入点中的类匹配部分。请注意，【方法匹配】对【引入】来说没有实际意义。</p>
+	 * @return ClassFilter实例
 	 */
 	ClassFilter getClassFilter();
 
 	/**
-	 * Can the advised interfaces be implemented by the introduction advice?
-	 * Invoked before adding an IntroductionAdvisor.
-	 * @throws IllegalArgumentException if the advised interfaces can't be
-	 * implemented by the introduction advice
+	 * <p>校验【引入通知】能否实现【被通知的接口】？</p>
+	 * <p>该方法在添加IntroductionAdvisor之前调用。</p>
+	 * @throws IllegalArgumentException 如果【被通知的接口】无法由【引入通知】实现
 	 */
 	void validateInterfaces() throws IllegalArgumentException;
 

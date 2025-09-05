@@ -61,89 +61,79 @@ import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.WebUtils;
 
 /**
- * Central dispatcher for HTTP request handlers/controllers, e.g. for web UI controllers
- * or HTTP-based remote service exporters. Dispatches to registered handlers for processing
- * a web request, providing convenient mapping and exception handling facilities.
- *
- * <p>This servlet is very flexible: It can be used with just about any workflow, with the
- * installation of the appropriate adapter classes. It offers the following functionality
- * that distinguishes it from other request-driven web MVC frameworks:
- *
- * <ul>
- * <li>It is based around a JavaBeans configuration mechanism.
- *
- * <li>It can use any {@link HandlerMapping} implementation - pre-built or provided as part
- * of an application - to control the routing of requests to handler objects. Default is
- * {@link org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping} and
- * {@link org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping}.
- * HandlerMapping objects can be defined as beans in the servlet's application context,
- * implementing the HandlerMapping interface, overriding the default HandlerMapping if
- * present. HandlerMappings can be given any bean name (they are tested by type).
- *
- * <li>It can use any {@link HandlerAdapter}; this allows for using any handler interface.
- * Default adapters are {@link org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter},
- * {@link org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter}, for Spring's
- * {@link org.springframework.web.HttpRequestHandler} and
- * {@link org.springframework.web.servlet.mvc.Controller} interfaces, respectively. A default
- * {@link org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter}
- * will be registered as well. HandlerAdapter objects can be added as beans in the
- * application context, overriding the default HandlerAdapters. Like HandlerMappings,
- * HandlerAdapters can be given any bean name (they are tested by type).
- *
- * <li>The dispatcher's exception resolution strategy can be specified via a
- * {@link HandlerExceptionResolver}, for example mapping certain exceptions to error pages.
- * Default are
- * {@link org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver},
- * {@link org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver}, and
- * {@link org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver}.
- * These HandlerExceptionResolvers can be overridden through the application context.
- * HandlerExceptionResolver can be given any bean name (they are tested by type).
- *
- * <li>Its view resolution strategy can be specified via a {@link ViewResolver}
- * implementation, resolving symbolic view names into View objects. Default is
- * {@link org.springframework.web.servlet.view.InternalResourceViewResolver}.
- * ViewResolver objects can be added as beans in the application context, overriding the
- * default ViewResolver. ViewResolvers can be given any bean name (they are tested by type).
- *
- * <li>If a {@link View} or view name is not supplied by the user, then the configured
- * {@link RequestToViewNameTranslator} will translate the current request into a view name.
- * The corresponding bean name is "viewNameTranslator"; the default is
- * {@link org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator}.
- *
- * <li>The dispatcher's strategy for resolving multipart requests is determined by a
- * {@link org.springframework.web.multipart.MultipartResolver} implementation.
- * Implementations for Apache Commons FileUpload and Servlet 3 are included; the typical
- * choice is {@link org.springframework.web.multipart.commons.CommonsMultipartResolver}.
- * The MultipartResolver bean name is "multipartResolver"; default is none.
- *
- * <li>Its locale resolution strategy is determined by a {@link LocaleResolver}.
- * Out-of-the-box implementations work via HTTP accept header, cookie, or session.
- * The LocaleResolver bean name is "localeResolver"; default is
- * {@link org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver}.
- *
- * <li>Its theme resolution strategy is determined by a {@link ThemeResolver}.
- * Implementations for a fixed theme and for cookie and session storage are included.
- * The ThemeResolver bean name is "themeResolver"; default is
- * {@link org.springframework.web.servlet.theme.FixedThemeResolver}.
- * </ul>
- *
- * <p><b>NOTE: The {@code @RequestMapping} annotation will only be processed if a
- * corresponding {@code HandlerMapping} (for type-level annotations) and/or
- * {@code HandlerAdapter} (for method-level annotations) is present in the dispatcher.</b>
- * This is the case by default. However, if you are defining custom {@code HandlerMappings}
- * or {@code HandlerAdapters}, then you need to make sure that a corresponding custom
- * {@code RequestMappingHandlerMapping} and/or {@code RequestMappingHandlerAdapter}
- * is defined as well - provided that you intend to use {@code @RequestMapping}.
- *
- * <p><b>A web application can define any number of DispatcherServlets.</b>
- * Each servlet will operate in its own namespace, loading its own application context
- * with mappings, handlers, etc. Only the root application context as loaded by
- * {@link org.springframework.web.context.ContextLoaderListener}, if any, will be shared.
- *
- * <p>As of Spring 3.1, {@code DispatcherServlet} may now be injected with a web
- * application context, rather than creating its own internally. This is useful in Servlet
- * 3.0+ environments, which support programmatic registration of servlet instances.
- * See the {@link #DispatcherServlet(WebApplicationContext)} javadoc for details.
+ * <p>
+ *     负责HTTP请求处理器/控制器的调度工作的中央调度器，例如：用于Web UI控制器或基于HTTP的远程服务导出器。
+ *     它将Web请求分派给已注册的处理器进行处理，并提供便捷的映射和异常处理机制。
+ * </p>
+ * <p>
+ *     该Servlet非常灵活：只需安装适当的适配器类，即可用于几乎所有工作流程。
+ *     它具有以下功能，使其区别于其他基于请求驱动的Web MVC框架：
+ *     <ul>
+ *         <li>它基于JavaBeans配置机制。</li>
+ *         <li>
+ *             可以使用任何{@link HandlerMapping}实现（预构建的或作为应用程序的一部分提供的）来控制请求到处理器对象的路由。
+ *             默认实现为{@link org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping}和
+ *             {@link org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping}。
+ *             HandlerMapping对象可以在Servlet的应用上下文中定义为Bean，实现HandlerMapping接口，从而覆盖默认的HandlerMapping（如果存在）
+ *             。HandlerMapping可以指定任何Bean名称（它们按类型进行检测）。
+ *         </li>
+ *         <li>
+ *             可以使用任何{@link HandlerAdapter}；这允许使用任何处理器接口。
+ *             默认适配器为{@link org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter}和
+ *             {@link org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter}，
+ *             分别用于Spring的{@link org.springframework.web.HttpRequestHandler}和
+ *             {@link org.springframework.web.servlet.mvc.Controller}接口。
+ *             默认情况下还会注册{@link org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter}。
+ *             HandlerAdapter对象可以作为Bean添加到应用上下文中，以覆盖默认的HandlerAdapter。
+ *             与HandlerMapping类似，HandlerAdapter可以指定任何Bean名称（它们按类型进行检测）。
+ *         </li>
+ *         <li>
+ *             调度器的异常解析策略可以通过{@link HandlerExceptionResolver}指定，例如将某些异常映射到错误页面。
+ *             默认实现为{@link org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver}、
+ *             {@link org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver}和
+ *             {@link org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver}。
+ *             这些HandlerExceptionResolver可以通过应用上下文进行覆盖。
+ *             HandlerExceptionResolver可以指定任何Bean名称（它们按类型进行检测）。
+ *         </li>
+ *         <li>
+ *             其视图解析策略可以通过{@link ViewResolver}实现指定，将符号视图名称解析为View对象。
+ *             默认实现为{@link org.springframework.web.servlet.view.InternalResourceViewResolver}。
+ *             ViewResolver对象可以作为Bean添加到应用上下文中，以覆盖默认的ViewResolver。
+ *             ViewResolver可以指定任何Bean名称（它们按类型进行检测）。
+ *         </li>
+ *         <li>
+ *             如果用户未提供{@link View}或视图名称，则配置的{@link RequestToViewNameTranslator}会将当前请求转换为视图名称。
+ *             对应的Bean名称为"viewNameTranslator"；默认实现为{@link org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator}。
+ *         </li>
+ *         <li>
+ *             调度器解析多部分请求的策略由{@link org.springframework.web.multipart.MultipartResolver}实现决定。
+ *             包含Apache Commons FileUpload和Servlet 3的实现；典型选择是{@link org.springframework.web.multipart.commons.CommonsMultipartResolver}。
+ *             MultipartResolver的Bean名称为"multipartResolver"；默认情况下未设置。
+ *         </li>
+ *         <li>
+ *             其区域解析策略由{@link LocaleResolver}决定。开箱即用的实现通过HTTP接受头、Cookie或会话工作。
+ *             LocaleResolver的Bean名称为"localeResolver"；默认实现为{@link org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver}。
+ *         </li>
+ *         <li>
+ *             其主题解析策略由{@link ThemeResolver}决定。包含固定主题以及Cookie和会话存储的实现。
+ *             ThemeResolver的Bean名称为"themeResolver"；默认实现为{@link org.springframework.web.servlet.theme.FixedThemeResolver}。
+ *         </li>
+ *     </ul>
+ * <p>
+ *     <b>注意：仅当调度器中存在相应的{@code HandlerMapping}（用于类型级别注解）和/或{@code HandlerAdapter}（用于方法级别注解）时，{@code @RequestMapping}注解才会被处理。</b>
+ *     默认情况下即是如此。但是，如果您正在定义自定义的{@code HandlerMapping}或{@code HandlerAdapter}，
+ *     则需要确保也定义了相应的自定义{@code RequestMappingHandlerMapping}和/或{@code RequestMappingHandlerAdapter}——前提是您打算使用{@code @RequestMapping}。
+ * </p>
+ * <p>
+ *     <b>Web应用程序可以定义任意数量的DispatcherServlet。</b>
+ *     每个Servlet将在其自己的命名空间中运行，加载其自己的应用上下文（包含映射、处理器等）。
+ *     只有由{@link org.springframework.web.context.ContextLoaderListener}加载的根应用上下文（如果有）会被共享。
+ * </p>
+ * <p>
+ *     从Spring 3.1开始，{@code DispatcherServlet}现在可以注入Web应用上下文，而不是在内部创建自己的上下文。
+ *     这在支持Servlet实例编程注册的Servlet 3.0+环境中非常有用。
+ *     详细信息请参阅{@link #DispatcherServlet(WebApplicationContext)}的Javadoc。
+ * </p>
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

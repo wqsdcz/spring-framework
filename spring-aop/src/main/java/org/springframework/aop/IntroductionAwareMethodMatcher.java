@@ -21,6 +21,11 @@ import java.lang.reflect.Method;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>
+ *     一种特殊类型的{@link MethodMatcher}，其在匹配方法时会纳入引入（introductions）的考量。
+ *     例如，若目标类上未定义任何引入，方法匹配器则能够实现更高效的匹配优化。
+ * </p>
+ *
  * A specialized type of {@link MethodMatcher} that takes into account introductions
  * when matching methods. If there are no introductions on the target class,
  * a method matcher may be able to optimize matching more effectively for example.
@@ -31,15 +36,12 @@ import org.springframework.lang.Nullable;
 public interface IntroductionAwareMethodMatcher extends MethodMatcher {
 
 	/**
-	 * Perform static checking whether the given method matches. This may be invoked
-	 * instead of the 2-arg {@link #matches(java.lang.reflect.Method, Class)} method
-	 * if the caller supports the extended IntroductionAwareMethodMatcher interface.
-	 * @param method the candidate method
-	 * @param targetClass the target class (may be {@code null}, in which case
-	 * the candidate class must be taken to be the method's declaring class)
-	 * @param hasIntroductions {@code true} if the object on whose behalf we are
-	 * asking is the subject on one or more introductions; {@code false} otherwise
-	 * @return whether or not this method matches statically
+	 * 对给定方法是否匹配执行静态检查。当调用方支持扩展的 IntroductionAwareMethodMatcher 接口时，
+	 * 可能会调用本方法替代双参数方法 {@link #matches(java.lang.reflect.Method, Class)}。
+	 * @param method 待检测的候选方法
+	 * @param targetClass 目标类（允许为 {@code null}，此时应将候选类视为方法的声明类）
+	 * @param hasIntroductions 若当前调用对象承载了一个或多个引入，则该值为 {@code true}；否则为 {@code false}
+	 * @return 此方法是否满足静态匹配条件
 	 */
 	boolean matches(Method method, @Nullable Class<?> targetClass, boolean hasIntroductions);
 

@@ -19,6 +19,9 @@ package org.springframework.aop;
 import org.springframework.lang.Nullable;
 
 /**
+ * <p>暴露代理背后的目标类的最小化接口。</p>
+ * <p>该接口由AOP代理对象、代理工厂（通过{@link org.springframework.aop.framework.Advised}接口） 以及{@link TargetSource 目标源}共同实现。</p>
+ *
  * Minimal interface for exposing the target class behind a proxy.
  *
  * <p>Implemented by AOP proxy objects and proxy factories
@@ -32,9 +35,8 @@ import org.springframework.lang.Nullable;
 public interface TargetClassAware {
 
 	/**
-	 * Return the target class behind the implementing object
-	 * (typically a proxy configuration or an actual proxy).
-	 * @return the target Class, or {@code null} if not known
+	 * 返回实现对象（通常是代理配置或实际代理实例）背后的目标类。
+	 * @return 目标类，若未知目标类则返回 {@code null}
 	 */
 	@Nullable
 	Class<?> getTargetClass();

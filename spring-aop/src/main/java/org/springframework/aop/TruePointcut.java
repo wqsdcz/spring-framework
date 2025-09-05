@@ -19,7 +19,7 @@ package org.springframework.aop;
 import java.io.Serializable;
 
 /**
- * Canonical Pointcut instance that always matches.
+ * 这是一个规范化切入点实例，该实例总能匹配成功的。
  *
  * @author Rod Johnson
  */
@@ -29,7 +29,7 @@ class TruePointcut implements Pointcut, Serializable {
 	public static final TruePointcut INSTANCE = new TruePointcut();
 
 	/**
-	 * Enforce Singleton pattern.
+	 * 私有的构造器——强制单例模式。
 	 */
 	private TruePointcut() {
 	}
@@ -45,9 +45,8 @@ class TruePointcut implements Pointcut, Serializable {
 	}
 
 	/**
-	 * Required to support serialization. Replaces with canonical
-	 * instance on deserialization, protecting Singleton pattern.
-	 * Alternative to overriding {@code equals()}.
+	 * 支持序列化所必需。在反序列化时替换为规范实例，从而确保单例模式不被破坏。
+	 * 这是重写 {@code equals()} 方法的一种替代方案。
 	 */
 	private Object readResolve() {
 		return INSTANCE;

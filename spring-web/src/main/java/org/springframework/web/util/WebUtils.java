@@ -374,12 +374,10 @@ public abstract class WebUtils {
 
 
 	/**
-	 * Return an appropriate request object of the specified type, if available,
-	 * unwrapping the given request as far as necessary.
-	 * @param request the servlet request to introspect
-	 * @param requiredType the desired type of request object
-	 * @return the matching request object, or {@code null} if none
-	 * of that type is available
+	 * 返回指定类型的相应请求对象（如果可用），并在必要时对给定请求进行解包操作。
+	 * @param request 需要内省的servlet请求
+	 * @param requiredType 期望的请求对象类型
+	 * @return 匹配的请求对象，如果该类型不可用，则返回{@code null}
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable

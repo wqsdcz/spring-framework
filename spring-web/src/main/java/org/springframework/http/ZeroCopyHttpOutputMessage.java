@@ -21,12 +21,11 @@ import java.io.File;
 import reactor.core.publisher.Mono;
 
 /**
- * Sub-interface of {@code ReactiveOutputMessage} that has support for "zero-copy"
- * file transfers.
+ * “ReactiveOutputMessage”子接口，该接口支持“零拷贝”文件传输功能。
  *
  * @author Arjen Poutsma
  * @since 5.0
- * @see <a href="https://en.wikipedia.org/wiki/Zero-copy">Zero-copy</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Zero-copy">零拷贝</a>
  */
 public interface ZeroCopyHttpOutputMessage extends ReactiveHttpOutputMessage {
 

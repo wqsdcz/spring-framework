@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Represents a HTTP output message that allows for setting a streaming body.
- * Note that such messages typically do not support {@link #getBody()} access.
+ * 表示一个 HTTP 输出消息，该消息支持设置流式主体。
+ * 请注意，此类消息通常不支持 {@link #getBody()} 访问。
  *
  * @author Arjen Poutsma
  * @since 4.0

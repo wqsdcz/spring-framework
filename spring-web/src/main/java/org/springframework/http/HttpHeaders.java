@@ -49,18 +49,16 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
- * A data structure representing HTTP request or response headers, mapping String header names
- * to a list of String values, also offering accessors for common application-level data types.
+ * <p>一种表示HTTP请求或响应头的数据结构，它将字符串类型的头名称映射到字符串值列表，同时支持常见应用层级数据类型的访问器。</p>
  *
- * <p>In addition to the regular methods defined by {@link Map}, this class offers many common
- * convenience methods, for example:
+ * <p>除了由{@link Map}接口定义的常规方法外，该类还提供了许多便捷方法，例如：</p>
  * <ul>
- * <li>{@link #getFirst(String)} returns the first value associated with a given header name</li>
- * <li>{@link #add(String, String)} adds a header value to the list of values for a header name</li>
- * <li>{@link #set(String, String)} sets the header value to a single string value</li>
+ *     <li>{@link #getFirst(String)} 返回指定头名称对应的第一个值</li>
+ *     <li>{@link #add(String, String)} 为指定头名称添加新的头值</li>
+ *     <li>{@link #set(String, String)} 将头值设置为单个字符串（覆盖现有值）</li>
  * </ul>
  *
- * <p>Note that {@code HttpHeaders} generally treats header names in a case-insensitive manner.
+ * <p>需要注意：{@code HttpHeaders} 在处理头名称时通常不区分大小写。</p>
  *
  * @author Arjen Poutsma
  * @author Sebastien Deleuze

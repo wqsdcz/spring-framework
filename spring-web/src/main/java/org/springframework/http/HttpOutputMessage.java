@@ -20,11 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Represents an HTTP output message, consisting of {@linkplain #getHeaders() headers}
- * and a writable {@linkplain #getBody() body}.
- *
- * <p>Typically implemented by an HTTP request handle on the client side,
- * or an HTTP response handle on the server side.
+ * <p>表示一个 HTTP 输出消息，它由 {@linkplain #getHeaders() 头部} 和可写入的 {@linkplain #getBody() 主体} 组成。</p>
+ * <p>通常由【客户端的 HTTP 请求处理程序】或【服务器端的 HTTP 响应处理程序】来实现。</p>
  *
  * @author Arjen Poutsma
  * @since 3.0
@@ -32,9 +29,9 @@ import java.io.OutputStream;
 public interface HttpOutputMessage extends HttpMessage {
 
 	/**
-	 * Return the body of the message as an output stream.
-	 * @return the output stream body (never {@code null})
-	 * @throws IOException in case of I/O errors
+	 * 将消息的主体作为输出流返回。
+	 * @return 输出流主体（绝不会为 {@code null}）
+	 * @throws IOException 如果出现 I/O 错误则抛出此异常
 	 */
 	OutputStream getBody() throws IOException;
 

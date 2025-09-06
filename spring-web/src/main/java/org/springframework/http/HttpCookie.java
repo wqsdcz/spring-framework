@@ -20,6 +20,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 将一个 HTTP 会话 cookie 表示为一个名称 - 值对，与“Cookie”请求头的内容一致。
+ * 而 {@link ResponseCookie} 子类则具有“Set-Cookie”响应头中所期望的额外属性。
+ *
  * Represents an HTTP cookie as a name-value pair consistent with the content of
  * the "Cookie" request header. The {@link ResponseCookie} sub-class has the
  * additional attributes expected in the "Set-Cookie" response header.

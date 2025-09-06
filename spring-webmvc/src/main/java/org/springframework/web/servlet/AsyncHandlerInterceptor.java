@@ -22,6 +22,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 
 /**
+ * <p>扩展 {@code HandlerInterceptor} 接口，新增在异步请求处理开始后调用的回调方法。</p>
+ * <p>
+ *     当处理器启动异步请求时，{@link DispatcherServlet} 会退出而不像处理同步请求时那样调用 {@code postHandle} 和 {@code afterCompletion} 方法，
+ *     因为此时请求处理的结果（如 ModelAndView）很可能尚未准备就绪，而是由另一个线程并发产生。
+ *     在此类场景下，将改为调用 {@link #afterConcurrentHandlingStarted} 方法，允许实现类在执行诸如清理线程绑定属性等任务后再将线程释放给 Servlet 容器。
+ * </p>
+ * <p>
+ *     当异步处理完成时，请求会被分派给容器进行后续处理。
+ *     此时 {@code DispatcherServlet} 会调用 {@code preHandle}、{@code postHandle} 和 {@code afterCompletion} 方法。
+ *     为区分初始请求和异步处理完成后的后续分派，拦截器可检查 {@link javax.servlet.ServletRequest} 的 {@code javax.servlet.DispatcherType}
+ *     是 {@code "REQUEST"} 还是 {@code "ASYNC"}。
+ * <p>
+ * </p>
+ *     请注意，当异步请求超时或因网络错误完成时，{@code HandlerInterceptor} 实现可能需要执行某些操作。
+ *     在这种情况下，Servlet 容器不会进行分派，因此不会调用 {@code postHandle} 和 {@code afterCompletion} 方法。
+ *     此时，拦截器可以通过 {@link org.springframework.web.context.request.async.WebAsyncManager WebAsyncManager} 上的
+ *     {@code registerCallbackInterceptor} 和 {@code registerDeferredResultInterceptor} 方法注册以跟踪异步请求。
+ *     无论异步请求处理是否启动，都可以在每次请求时通过 {@code preHandle} 方法主动执行此操作。
+ * </p>
  * Extends {@code HandlerInterceptor} with a callback method invoked after the
  * start of asynchronous request handling.
  *
@@ -60,17 +79,12 @@ import org.springframework.web.method.HandlerMethod;
 public interface AsyncHandlerInterceptor extends HandlerInterceptor {
 
 	/**
-	 * Called instead of {@code postHandle} and {@code afterCompletion}
-	 * when the handler is being executed concurrently.
-	 * <p>Implementations may use the provided request and response but should
-	 * avoid modifying them in ways that would conflict with the concurrent
-	 * execution of the handler. A typical use of this method would be to
-	 * clean up thread-local variables.
-	 * @param request the current request
-	 * @param response the current response
-	 * @param handler the handler (or {@link HandlerMethod}) that started async
-	 * execution, for type and/or instance examination
-	 * @throws Exception in case of errors
+	 * <p>当处理器正在并发执行时，此方法将替代 {@code postHandle} 和 {@code afterCompletion} 方法被调用。</p>
+	 * <p>实现类可以使用提供的请求和响应对象，但应避免以与处理器并发执行相冲突的方式修改这些对象。此方法的典型用途是清理线程局部变量。</p>
+	 * @param request 当前请求对象
+	 * @param response 当前响应对象
+	 * @param handler 启动异步执行的处理器（或 {@link HandlerMethod}），用于类型和/或实例检查
+	 * @throws Exception 当处理过程中发生错误时
 	 */
 	default void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {

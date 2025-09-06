@@ -1120,16 +1120,13 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given class has a public method with the given signature,
-	 * and return it if available (else return {@code null}).
-	 * <p>In case of any signature specified, only returns the method if there is a
-	 * unique candidate, i.e. a single public method with the specified name.
-	 * <p>Essentially translates {@code NoSuchMethodException} to {@code null}.
-	 * @param clazz the clazz to analyze
-	 * @param methodName the name of the method
-	 * @param paramTypes the parameter types of the method
-	 * (may be {@code null} to indicate any signature)
-	 * @return the method, or {@code null} if not found
+	 * <p>判断给定的类中是否存在具有指定签名的公共方法，并在存在时返回该方法（否则返回 {@code null}）。</p>
+	 * <p>对于任何指定的签名，仅在存在唯一候选方法（即具有指定名称的单个公共方法）时才返回该方法。</p>
+	 * <p>实质上，将 {@code NoSuchMethodException} 转换为 {@code null}。</p>
+	 * @param clazz 要分析的类
+	 * @param methodName 方法的名称
+	 * @param paramTypes 方法的参数类型（可以为 {@code null} 表示任何签名）
+	 * @return 方法，若未找到则返回 {@code null}
 	 * @see Class#getMethod
 	 */
 	@Nullable

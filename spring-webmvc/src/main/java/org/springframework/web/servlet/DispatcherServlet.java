@@ -950,17 +950,17 @@ public class DispatcherServlet extends FrameworkServlet {
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
-				// Determine handler for the current request.
+				// 确定当前请求的处理器
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
-				// Determine handler adapter for the current request.
+				// 确定当前请求的处理器的适配器
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
-				// Process last-modified header, if supported by the handler.
+				// 如果处理器支持，则处理Last-Modified头。
 				String method = request.getMethod();
 				boolean isGet = "GET".equals(method);
 				if (isGet || "HEAD".equals(method)) {
@@ -977,7 +977,7 @@ public class DispatcherServlet extends FrameworkServlet {
 					return;
 				}
 
-				// Actually invoke the handler.
+				// 正真地调用处理器。
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1021,7 +1021,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Do we need view name translation?
+	 * 是否需要进行 视图名称转换？
 	 */
 	private void applyDefaultViewName(HttpServletRequest request, @Nullable ModelAndView mv) throws Exception {
 		if (mv != null && !mv.hasView()) {
@@ -1033,6 +1033,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 处理处理器选择及调用后的结果，该结果可能是需要被解析为ModelAndView对象的模型视图，也可能是需要被转换为ModelAndView的异常。
+	 *
 	 * Handle the result of handler selection and handler invocation, which is
 	 * either a ModelAndView or an Exception to be resolved to a ModelAndView.
 	 */
@@ -1097,13 +1099,14 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Convert the request into a multipart request, and make multipart resolver available.
-	 * <p>If no multipart resolver is set, simply use the existing request.
-	 * @param request current HTTP request
-	 * @return the processed request (multipart wrapper if necessary)
+	 * <p>将请求转换为多部分请求，并使多部分解析器可用。</p>
+	 * <p>如果未设置多部分解析器，则直接使用现有请求。</p>
+	 * @param request 当前HTTP请求
+	 * @return 处理后的请求（必要时使用多部分包装器）
 	 * @see MultipartResolver#resolveMultipart
 	 */
 	protected HttpServletRequest checkMultipart(HttpServletRequest request) throws MultipartException {
+		// 有multipart resolver可用，并且请求是 multipart request。
 		if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) {
 			if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
 				logger.debug("Request is already a MultipartHttpServletRequest - if not in a forward, " +
@@ -1128,12 +1131,12 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 			}
 		}
-		// If not returned before: return original request.
+		// 若前面的代码没有返回，则返回原始请求。
 		return request;
 	}
 
 	/**
-	 * Check "javax.servlet.error.exception" attribute for a multipart exception.
+	 * 检查"javax.servlet.error.exception"属性中是否存在多部分异常。
 	 */
 	private boolean hasMultipartException(HttpServletRequest request) {
 		Throwable error = (Throwable) request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE);
@@ -1162,10 +1165,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the HandlerExecutionChain for this request.
-	 * <p>Tries all handler mappings in order.
-	 * @param request current HTTP request
-	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
+	 * <p>返回当前请求的HandlerExecutionChain。</p>
+	 * <p>按顺序尝试所有处理器映射。</p>
+	 * @param request 当前HTTP请求
+	 * @return HandlerExecutionChain对象，如果找不到对应处理器则返回{@code null}
 	 */
 	@Nullable
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
@@ -1185,10 +1188,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * No handler found -> set appropriate HTTP response status.
-	 * @param request current HTTP request
-	 * @param response current HTTP response
-	 * @throws Exception if preparing the response failed
+	 * 未找到处理器 -> 设置相应的HTTP响应状态。
+	 * @param request 当前HTTP请求
+	 * @param response 当前HTTP响应
+	 * @throws Exception 如果准备响应失败
 	 */
 	protected void noHandlerFound(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (pageNotFoundLogger.isWarnEnabled()) {
@@ -1324,10 +1327,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Translate the supplied request into a default view name.
-	 * @param request current HTTP servlet request
-	 * @return the view name (or {@code null} if no default found)
-	 * @throws Exception if view name translation failed
+	 * 将提供的请求转换为默认视图名称。
+	 * @param request 当前HTTP servlet请求
+	 * @return 视图名称（如果未找到默认值则返回{@code null}）
+	 * @throws Exception 如果视图名称转换失败
 	 */
 	@Nullable
 	protected String getDefaultViewName(HttpServletRequest request) throws Exception {

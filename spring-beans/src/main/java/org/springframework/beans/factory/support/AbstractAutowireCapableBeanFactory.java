@@ -1741,7 +1741,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected void invokeInitMethods(String beanName, Object bean, @Nullable RootBeanDefinition mbd)
 			throws Throwable {
-
+		// 调用 InitializingBean 接口的初始化方法
 		boolean isInitializingBean = (bean instanceof InitializingBean);
 		if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
 			if (logger.isDebugEnabled()) {
@@ -1763,6 +1763,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		// 调用 定制化的 初始化方法
 		if (mbd != null && bean.getClass() != NullBean.class) {
 			String initMethodName = mbd.getInitMethodName();
 			if (StringUtils.hasLength(initMethodName) &&
@@ -1774,10 +1775,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	}
 
 	/**
-	 * Invoke the specified custom init method on the given bean.
-	 * Called by invokeInitMethods.
-	 * <p>Can be overridden in subclasses for custom resolution of init
-	 * methods with arguments.
+	 * <p>在给定的 bean 上调用指定的自定义初始化方法。</p>
+	 * <p>由 invokeInitMethods 方法调用。</p>
+	 * <p>在子类中可以重写此方法，以针对带有参数的初始化方法提供自定义的解析方式。</p>
 	 * @see #invokeInitMethods
 	 */
 	protected void invokeCustomInitMethod(String beanName, Object bean, RootBeanDefinition mbd)

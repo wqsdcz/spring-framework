@@ -22,23 +22,21 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
- * A builder for creating "Cache-Control" HTTP response headers.
+ * <p>用于创建“Cache-Control”HTTP响应头的构建器。</p>
  *
- * <p>Adding Cache-Control directives to HTTP responses can significantly improve the client
- * experience when interacting with a web application. This builder creates opinionated
- * "Cache-Control" headers with response directives only, with several use cases in mind.
- *
+ * <p>
+ *     向HTTP响应中添加Cache-Control指令可以显著改善客户端与Web应用交互时的体验。
+ *     该构建器创建仅包含响应指令的、经过定制化的“Cache-Control”头部，
+ *     主要涵盖以下几种用例：
+ * </p>
  * <ul>
- * <li>Caching HTTP responses with {@code CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS)}
- * will result in {@code Cache-Control: "max-age=3600"}</li>
- * <li>Preventing cache with {@code CacheControl cc = CacheControl.noStore()}
- * will result in {@code Cache-Control: "no-store"}</li>
- * <li>Advanced cases like {@code CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS).noTransform().cachePublic()}
- * will result in {@code Cache-Control: "max-age=3600, no-transform, public"}</li>
+ *     <li>通过{@code CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS)}设置HTTP响应缓存 将生成{@code Cache-Control: "max-age=3600"}</li>
+ *     <li>通过{@code CacheControl cc = CacheControl.noStore()}阻止缓存 将生成{@code Cache-Control: "no-store"}</li>
+ *     <li>高级用例如{@code CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS).noTransform().cachePublic()} 将生成{@code Cache-Control: "max-age=3600, no-transform, public"}</li>
  * </ul>
- *
- * <p>Note that to be efficient, Cache-Control headers should be written along HTTP validators
- * such as "Last-Modified" or "ETag" headers.
+ * <p>
+ *     请注意，为了提升效率，Cache-Control头部应该与HTTP验证器（如"Last-Modified"或"ETag"头部）配合使用。
+ * </p>
  *
  * @author Brian Clozel
  * @author Juergen Hoeller

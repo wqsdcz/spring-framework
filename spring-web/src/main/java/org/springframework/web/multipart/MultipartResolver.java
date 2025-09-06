@@ -85,24 +85,20 @@ import javax.servlet.http.HttpServletRequest;
 public interface MultipartResolver {
 
 	/**
-	 * Determine if the given request contains multipart content.
-	 * <p>Will typically check for content type "multipart/form-data", but the actually
-	 * accepted requests might depend on the capabilities of the resolver implementation.
-	 * @param request the servlet request to be evaluated
-	 * @return whether the request contains multipart content
+	 * <p>判断给定请求是否包含多部分内容。</p>
+	 * <p>通常将检查内容类型是否为"multipart/form-data"，但实际接受的请求可能取决于解析器实现的功能。</p>
+	 * @param request 需要被评估的servlet请求
+	 * @return 请求是否包含多部分内容
 	 */
 	boolean isMultipart(HttpServletRequest request);
 
 	/**
-	 * Parse the given HTTP request into multipart files and parameters,
-	 * and wrap the request inside a
-	 * {@link org.springframework.web.multipart.MultipartHttpServletRequest}
-	 * object that provides access to file descriptors and makes contained
-	 * parameters accessible via the standard ServletRequest methods.
-	 * @param request the servlet request to wrap (must be of a multipart content type)
-	 * @return the wrapped servlet request
-	 * @throws MultipartException if the servlet request is not multipart, or if
-	 * implementation-specific problems are encountered (such as exceeding file size limits)
+	 * 将给定的HTTP请求解析为多部分文件和参数，
+	 * 并将其包装为一个 {@link org.springframework.web.multipart.MultipartHttpServletRequest}对象，
+	 * 该对象提供对文件描述符的访问权限，并使包含的参数可通过标准ServletRequest方法进行访问。
+	 * @param request 需要包装的servlet请求（必须为多部分内容类型）
+	 * @return 包装后的servlet请求
+	 * @throws MultipartException 如果servlet请求不是多部分类型，或遇到实现特定问题（例如超出文件大小限制）
 	 * @see MultipartHttpServletRequest#getFile
 	 * @see MultipartHttpServletRequest#getFileNames
 	 * @see MultipartHttpServletRequest#getFileMap
@@ -113,9 +109,8 @@ public interface MultipartResolver {
 	MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException;
 
 	/**
-	 * Cleanup any resources used for the multipart handling,
-	 * like a storage for the uploaded files.
-	 * @param request the request to cleanup resources for
+	 * 清理用于多部分处理的任何资源，例如：上传文件的存储空间。
+	 * @param request 需要清理资源的请求
 	 */
 	void cleanupMultipart(MultipartHttpServletRequest request);
 

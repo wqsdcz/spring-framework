@@ -25,10 +25,8 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 
 /**
- * A "reactive" HTTP output message that accepts output as a {@link Publisher}.
- *
- * <p>Typically implemented by an HTTP request on the client-side or an
- * HTTP response on the server-side.
+ * <p>一种“响应式”的 HTTP 输出消息，它将输出以 {@link Publisher} 的形式进行接收。</p>
+ * <p>通常由【客户端的 HTTP 请求】或【服务器端的 HTTP 响应】来实现。</p>
  *
  * @author Arjen Poutsma
  * @author Sebastien Deleuze
@@ -53,17 +51,15 @@ public interface ReactiveHttpOutputMessage extends HttpMessage {
 	void beforeCommit(Supplier<? extends Mono<Void>> action);
 
 	/**
-	 * Whether the HttpOutputMessage is committed.
+	 * 是否提交HttpOutputMessage。
 	 */
 	boolean isCommitted();
 
 	/**
-	 * Use the given {@link Publisher} to write the body of the message to the
-	 * underlying HTTP layer.
-	 * @param body the body content publisher
-	 * @return a {@link Mono} that indicates completion or error
+	 * 使用给定的 {@link Publisher} 将消息的主体内容写入底层的 HTTP 层。
+	 * @param body 消息主体内容的发布者
+	 * @return 一个表示完成或错误的 {@link Mono} 对象
 	 */
-
 	Mono<Void> writeWith(Publisher<? extends DataBuffer> body);
 
 	/**

@@ -20,34 +20,33 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * Bootstrap listener to start up and shut down Spring's root {@link WebApplicationContext}.
- * Simply delegates to {@link ContextLoader} as well as to {@link ContextCleanupListener}.
+ * 用于启动和关闭Spring根{@link WebApplicationContext}的引导监听器。
+ * 直接委托给{@link ContextLoader}和{@link ContextCleanupListener}处理。
  *
- * <p>As of Spring 3.1, {@code ContextLoaderListener} supports injecting the root web
- * application context via the {@link #ContextLoaderListener(WebApplicationContext)}
- * constructor, allowing for programmatic configuration in Servlet 3.0+ environments.
- * See {@link org.springframework.web.WebApplicationInitializer} for usage examples.
+ * <p>自Spring 3.1起，{@code ContextLoaderListener}支持通过
+ * {@link #ContextLoaderListener(WebApplicationContext)}构造函数注入根Web应用上下文，允许在Servlet 3.0+环境中进行编程式配置。
+ * 使用示例请参阅{@link org.springframework.web.WebApplicationInitializer}。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
- * @since 17.02.2003
+ * @since 2003年2月17日
  * @see #setContextInitializers
  * @see org.springframework.web.WebApplicationInitializer
  */
 public class ContextLoaderListener extends ContextLoader implements ServletContextListener {
 
 	/**
-	 * Create a new {@code ContextLoaderListener} that will create a web application
-	 * context based on the "contextClass" and "contextConfigLocation" servlet
-	 * context-params. See {@link ContextLoader} superclass documentation for details on
-	 * default values for each.
-	 * <p>This constructor is typically used when declaring {@code ContextLoaderListener}
-	 * as a {@code <listener>} within {@code web.xml}, where a no-arg constructor is
-	 * required.
-	 * <p>The created application context will be registered into the ServletContext under
-	 * the attribute name {@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}
-	 * and the Spring application context will be closed when the {@link #contextDestroyed}
-	 * lifecycle method is invoked on this listener.
+	 * 创建一个新的{@code ContextLoaderListener}实例，该监听器将基于servlet上下文参数
+	 * "contextClass"和"contextConfigLocation"创建Web应用上下文。
+	 * 关于各参数的默认值，请参阅{@link ContextLoader}超类文档。
+	 *
+	 * <p>此构造函数通常在将{@code ContextLoaderListener}声明为{@code web.xml}中的
+	 * {@code <listener>}时使用，因为需要无参构造函数。
+	 *
+	 * <p>创建的应用上下文将以{@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}
+	 * 为属性名注册到ServletContext中，并且当在此监听器上调用{@link #contextDestroyed}
+	 * 生命周期方法时，Spring应用上下文将被关闭。
+	 *
 	 * @see ContextLoader
 	 * @see #ContextLoaderListener(WebApplicationContext)
 	 * @see #contextInitialized(ServletContextEvent)
@@ -57,36 +56,32 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	}
 
 	/**
-	 * Create a new {@code ContextLoaderListener} with the given application context. This
-	 * constructor is useful in Servlet 3.0+ environments where instance-based
-	 * registration of listeners is possible through the {@link javax.servlet.ServletContext#addListener}
-	 * API.
-	 * <p>The context may or may not yet be {@linkplain
-	 * org.springframework.context.ConfigurableApplicationContext#refresh() refreshed}. If it
-	 * (a) is an implementation of {@link ConfigurableWebApplicationContext} and
-	 * (b) has <strong>not</strong> already been refreshed (the recommended approach),
-	 * then the following will occur:
+	 * 使用指定的应用上下文创建新的 {@code ContextLoaderListener} 实例。
+	 * 此构造函数适用于 Servlet 3.0+ 环境，可通过 {@link javax.servlet.ServletContext#addListener}
+	 * API 实现基于实例的监听器注册。
+	 *
+	 * <p>传入的上下文可能尚未被 {@linkplain org.springframework.context.ConfigurableApplicationContext#refresh() 刷新}。
+	 * 如果该上下文同时满足：(a) 是 {@link ConfigurableWebApplicationContext} 的实现，且 (b) <strong>尚未</strong>
+	 * 被刷新（推荐方式），则将执行以下操作：
 	 * <ul>
-	 * <li>If the given context has not already been assigned an {@linkplain
-	 * org.springframework.context.ConfigurableApplicationContext#setId id}, one will be assigned to it</li>
-	 * <li>{@code ServletContext} and {@code ServletConfig} objects will be delegated to
-	 * the application context</li>
-	 * <li>{@link #customizeContext} will be called</li>
-	 * <li>Any {@link org.springframework.context.ApplicationContextInitializer ApplicationContextInitializer}s
-	 * specified through the "contextInitializerClasses" init-param will be applied.</li>
-	 * <li>{@link org.springframework.context.ConfigurableApplicationContext#refresh refresh()} will be called</li>
+	 * <li>如果给定上下文尚未分配 {@linkplain org.springframework.context.ConfigurableApplicationContext#setId ID}，
+	 *     将为其分配一个</li>
+	 * <li>将 {@code ServletContext} 和 {@code ServletConfig} 对象委托给应用上下文</li>
+	 * <li>调用 {@link #customizeContext} 方法</li>
+	 * <li>应用通过 "contextInitializerClasses" 初始化参数指定的任何
+	 *     {@link org.springframework.context.ApplicationContextInitializer ApplicationContextInitializer}</li>
+	 * <li>调用 {@link org.springframework.context.ConfigurableApplicationContext#refresh refresh()} 方法</li>
 	 * </ul>
-	 * If the context has already been refreshed or does not implement
-	 * {@code ConfigurableWebApplicationContext}, none of the above will occur under the
-	 * assumption that the user has performed these actions (or not) per his or her
-	 * specific needs.
-	 * <p>See {@link org.springframework.web.WebApplicationInitializer} for usage examples.
-	 * <p>In any case, the given application context will be registered into the
-	 * ServletContext under the attribute name {@link
-	 * WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE} and the Spring
-	 * application context will be closed when the {@link #contextDestroyed} lifecycle
-	 * method is invoked on this listener.
-	 * @param context the application context to manage
+	 * 如果上下文已被刷新或不实现 {@code ConfigurableWebApplicationContext} 接口，
+	 * 则不会执行上述任何操作，假定用户已根据特定需求执行（或未执行）这些操作。
+	 *
+	 * <p>使用示例请参阅 {@link org.springframework.web.WebApplicationInitializer}。
+	 *
+	 * <p>无论哪种情况，给定的应用上下文都将以 {@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}
+	 * 为属性名注册到 ServletContext 中，并且当在此监听器上调用 {@link #contextDestroyed} 生命周期方法时，
+	 * Spring 应用上下文将被关闭。
+	 *
+	 * @param context 要管理的应用上下文
 	 * @see #contextInitialized(ServletContextEvent)
 	 * @see #contextDestroyed(ServletContextEvent)
 	 */
@@ -96,7 +91,7 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 
 
 	/**
-	 * Initialize the root web application context.
+	 * 初始化根Web应用上下文。
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
@@ -105,7 +100,7 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 
 
 	/**
-	 * Close the root web application context.
+	 * 关闭根Web应用上下文。
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {

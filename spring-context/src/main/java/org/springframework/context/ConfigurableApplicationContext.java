@@ -182,9 +182,8 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	void close();
 
 	/**
-	 * Determine whether this application context is active, that is,
-	 * whether it has been refreshed at least once and has not been closed yet.
-	 * @return whether the context is still active
+	 * 判断此应用程序上下文是否处于活跃状态，即：是否至少已被刷新一次且尚未被关闭。
+	 * @return 上下文是否仍处于活跃状态
 	 * @see #refresh()
 	 * @see #close()
 	 * @see #getBeanFactory()

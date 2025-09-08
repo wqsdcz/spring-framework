@@ -266,9 +266,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	private static final Properties defaultStrategies;
 
 	static {
-		// Load default strategy implementations from properties file.
-		// This is currently strictly internal and not meant to be customized
-		// by application developers.
+		// 从properties文件中加载默认策略实现。当前，这是严格属于内部的实现，不意味着可由应用程序开发者自定义。
 		try {
 			ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
@@ -278,16 +276,16 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 	}
 
-	/** Detect all HandlerMappings or just expect "handlerMapping" bean? */
+	/** 检测所有HandlerMapping类型的bean，还是仅期望找到名为“handlerMapping”这个 bean 呢？ */
 	private boolean detectAllHandlerMappings = true;
 
-	/** Detect all HandlerAdapters or just expect "handlerAdapter" bean? */
+	/** 检测所有HandlerAdapter类型的bean，还是仅期望找到名为“handlerAdapter”这个 bean 呢？ */
 	private boolean detectAllHandlerAdapters = true;
 
-	/** Detect all HandlerExceptionResolvers or just expect "handlerExceptionResolver" bean? */
+	/** 检测所有HandlerExceptionResolver类型的bean，还是仅期望找到名为“handlerExceptionResolver”这个 bean 呢？ */
 	private boolean detectAllHandlerExceptionResolvers = true;
 
-	/** Detect all ViewResolvers or just expect "viewResolver" bean? */
+	/** 检测所有ViewResolver类型的bean，还是仅期望找到名为“viewResolver”这个 bean 呢？ */
 	private boolean detectAllViewResolvers = true;
 
 	/** Throw a NoHandlerFoundException if no Handler was found to process this request? **/
@@ -334,20 +332,22 @@ public class DispatcherServlet extends FrameworkServlet {
 
 
 	/**
-	 * Create a new {@code DispatcherServlet} that will create its own internal web
-	 * application context based on defaults and values provided through servlet
-	 * init-params. Typically used in Servlet 2.5 or earlier environments, where the only
-	 * option for servlet registration is through {@code web.xml} which requires the use
-	 * of a no-arg constructor.
-	 * <p>Calling {@link #setContextConfigLocation} (init-param 'contextConfigLocation')
-	 * will dictate which XML files will be loaded by the
-	 * {@linkplain #DEFAULT_CONTEXT_CLASS default XmlWebApplicationContext}
-	 * <p>Calling {@link #setContextClass} (init-param 'contextClass') overrides the
-	 * default {@code XmlWebApplicationContext} and allows for specifying an alternative class,
-	 * such as {@code AnnotationConfigWebApplicationContext}.
-	 * <p>Calling {@link #setContextInitializerClasses} (init-param 'contextInitializerClasses')
-	 * indicates which {@code ApplicationContextInitializer} classes should be used to
-	 * further configure the internal application context prior to refresh().
+	 * <p>
+	 *     创建一个新的{@code DispatcherServlet}实例，该实例将基于默认值及通过servlet初始化参数提供的值来创建其内部的Web应用程序上下文。
+	 *     通常用于Servlet 2.5或更早版本的环境，此类环境中注册servlet的唯一方式是通过{@code web.xml}配置文件，且要求使用无参构造函数。
+	 * </p>
+	 * <p>
+	 *     通过调用{@link #setContextConfigLocation}（初始化参数'contextConfigLocation'）
+	 *     可指定由 {@linkplain #DEFAULT_CONTEXT_CLASS 默认XmlWebApplicationContext} 加载的XML配置文件。
+	 * </p>
+	 * <p>
+	 *     通过调用{@link #setContextClass}（初始化参数'contextClass'）可覆盖默认的{@code XmlWebApplicationContext}，
+	 *     允许指定替代类（例如{@code AnnotationConfigWebApplicationContext}）。
+	 * </p>
+	 * <p>
+	 *     通过调用{@link #setContextInitializerClasses}（初始化参数'contextInitializerClasses'）
+	 *     可指定在refresh()方法执行前，应使用哪些{@code ApplicationContextInitializer}类 来进一步配置内部应用程序上下文。
+	 * </p>
 	 * @see #DispatcherServlet(WebApplicationContext)
 	 */
 	public DispatcherServlet() {
@@ -356,40 +356,36 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Create a new {@code DispatcherServlet} with the given web application context. This
-	 * constructor is useful in Servlet 3.0+ environments where instance-based registration
-	 * of servlets is possible through the {@link ServletContext#addServlet} API.
-	 * <p>Using this constructor indicates that the following properties / init-params
-	 * will be ignored:
-	 * <ul>
-	 * <li>{@link #setContextClass(Class)} / 'contextClass'</li>
-	 * <li>{@link #setContextConfigLocation(String)} / 'contextConfigLocation'</li>
-	 * <li>{@link #setContextAttribute(String)} / 'contextAttribute'</li>
-	 * <li>{@link #setNamespace(String)} / 'namespace'</li>
-	 * </ul>
-	 * <p>The given web application context may or may not yet be {@linkplain
-	 * ConfigurableApplicationContext#refresh() refreshed}. If it has <strong>not</strong>
-	 * already been refreshed (the recommended approach), then the following will occur:
-	 * <ul>
-	 * <li>If the given context does not already have a {@linkplain
-	 * ConfigurableApplicationContext#setParent parent}, the root application context
-	 * will be set as the parent.</li>
-	 * <li>If the given context has not already been assigned an {@linkplain
-	 * ConfigurableApplicationContext#setId id}, one will be assigned to it</li>
-	 * <li>{@code ServletContext} and {@code ServletConfig} objects will be delegated to
-	 * the application context</li>
-	 * <li>{@link #postProcessWebApplicationContext} will be called</li>
-	 * <li>Any {@code ApplicationContextInitializer}s specified through the
-	 * "contextInitializerClasses" init-param or through the {@link
-	 * #setContextInitializers} property will be applied.</li>
-	 * <li>{@link ConfigurableApplicationContext#refresh refresh()} will be called if the
-	 * context implements {@link ConfigurableApplicationContext}</li>
-	 * </ul>
-	 * If the context has already been refreshed, none of the above will occur, under the
-	 * assumption that the user has performed these actions (or not) per their specific
-	 * needs.
-	 * <p>See {@link org.springframework.web.WebApplicationInitializer} for usage examples.
-	 * @param webApplicationContext the context to use
+	 * <p>
+	 *     创建一个带有指定Web应用程序上下文的新{@code DispatcherServlet}实例。
+	 *     此构造函数在Servlet 3.0+环境中特别有用，该类环境支持通过{@link ServletContext#addServlet} API实现基于实例的servlet注册。
+	 * </p>
+	 * <p>
+	 *     使用此构造函数意味着以下属性/初始化参数将被忽略：
+	 *     <ul>
+	 *         <li>{@link #setContextClass(Class)} / 'contextClass'</li>
+	 *         <li>{@link #setContextConfigLocation(String)} / 'contextConfigLocation'</li>
+	 *         <li>{@link #setContextAttribute(String)} / 'contextAttribute'</li>
+	 *         <li>{@link #setNamespace(String)} / 'namespace'</li>
+	 *     </ul>
+	 * </p>
+	 * <p>
+	 *     给定的Web应用程序上下文可能尚未被{@linkplain ConfigurableApplicationContext#refresh() 刷新}。
+	 *     如果<strong>尚未</strong>刷新（推荐方式），则将执行以下操作：
+	 *     <ul>
+	 *         <li>如果指定上下文尚未设置{@linkplain ConfigurableApplicationContext#setParent 父级上下文}，根应用程序上下文将被设置为父级</li>
+	 *         <li>如果指定上下文尚未分配{@linkplain ConfigurableApplicationContext#setId ID}，系统将为其分配ID</li>
+	 *         <li>{@code ServletContext}和{@code ServletConfig}对象将委托给应用程序上下文</li>
+	 *         <li>将调用{@link #postProcessWebApplicationContext}方法</li>
+	 *         <li>将通过"contextInitializerClasses"初始化参数或{@link #setContextInitializers}属性指定的所有{@code ApplicationContextInitializer}都将被应用</li>
+	 *         <li>如果上下文实现了{@link ConfigurableApplicationContext}接口，将调用其{@link ConfigurableApplicationContext#refresh refresh()}方法</li>
+	 *     </ul>
+	 *     如果上下文已被刷新，则不会执行上述任何操作，系统将假定用户已根据实际需求执行（或未执行）这些操作。
+	 * </p>
+	 * <p>
+	 *     使用示例请参阅{@link org.springframework.web.WebApplicationInitializer}。
+	 * </p>
+	 * @param webApplicationContext 要使用的上下文
 	 * @see #initWebApplicationContext
 	 * @see #configureAndRefreshWebApplicationContext
 	 * @see org.springframework.web.WebApplicationInitializer
@@ -401,10 +397,8 @@ public class DispatcherServlet extends FrameworkServlet {
 
 
 	/**
-	 * Set whether to detect all HandlerMapping beans in this servlet's context. Otherwise,
-	 * just a single bean with name "handlerMapping" will be expected.
-	 * <p>Default is "true". Turn this off if you want this servlet to use a single
-	 * HandlerMapping, despite multiple HandlerMapping beans being defined in the context.
+	 * <p>设置是否检测此servlet上下文中的所有HandlerMapping bean。若关闭此选项，则只会查找名为"handlerMapping"的单个bean。</p>
+	 * <p>默认值为"true"。如果希望此servlet使用单个HandlerMapping（即使上下文中定义了多个HandlerMapping bean），请关闭此选项。</p>
 	 */
 	public void setDetectAllHandlerMappings(boolean detectAllHandlerMappings) {
 		this.detectAllHandlerMappings = detectAllHandlerMappings;
@@ -456,16 +450,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Set whether to perform cleanup of request attributes after an include request, that is,
-	 * whether to reset the original state of all request attributes after the DispatcherServlet
-	 * has processed within an include request. Otherwise, just the DispatcherServlet's own
-	 * request attributes will be reset, but not model attributes for JSPs or special attributes
-	 * set by views (for example, JSTL's).
-	 * <p>Default is "true", which is strongly recommended. Views should not rely on request attributes
-	 * having been set by (dynamic) includes. This allows JSP views rendered by an included controller
-	 * to use any model attributes, even with the same names as in the main JSP, without causing side
-	 * effects. Only turn this off for special needs, for example to deliberately allow main JSPs to
-	 * access attributes from JSP views rendered by an included controller.
+	 * <p>设置是否在执行包含请求后清理请求属性，即是否在DispatcherServlet处理包含请求后重置所有请求属性的原始状态。若设置为false，则仅重置DispatcherServlet自身的请求属性，但不会重置JSP的模型属性或视图设置的特殊属性（例如JSTL属性）。
+	 *
+	 * <p>默认值为"true"（强烈建议保留）。视图不应依赖通过（动态）包含设置的请求属性。这使得由被包含控制器渲染的JSP视图可以使用任何模型属性（即使与主JSP中的属性同名），而不会产生副作用。仅在有特殊需求时关闭此功能，例如刻意允许主JSP访问由被包含控制器渲染的JSP视图中的属性。
 	 */
 	public void setCleanupAfterInclude(boolean cleanupAfterInclude) {
 		this.cleanupAfterInclude = cleanupAfterInclude;
@@ -473,7 +460,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 
 	/**
-	 * This implementation calls {@link #initStrategies}.
+	 * 当前实现类中，实现为调用 {@link #initStrategies}。
 	 */
 	@Override
 	protected void onRefresh(ApplicationContext context) {
@@ -481,8 +468,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the strategy objects that this servlet uses.
-	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
+	 * <p>初始化此 servlet 所使用的策略对象。</p>
+	 * <p>在子类中可以对其进行重写以初始化更多的策略对象。</p>
 	 */
 	protected void initStrategies(ApplicationContext context) {
 		initMultipartResolver(context);
@@ -497,9 +484,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the MultipartResolver used by this class.
-	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
-	 * no multipart handling is provided.
+	 * <p>初始化此类使用的MultipartResolver（多部分解析器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义指定名称的bean，则不提供多部分处理功能。</p>
 	 */
 	private void initMultipartResolver(ApplicationContext context) {
 		try {
@@ -519,9 +505,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the LocaleResolver used by this class.
-	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
-	 * we default to AcceptHeaderLocaleResolver.
+	 * <p>初始化此类使用的LocaleResolver（区域解析器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义指定名称的bean，则默认使用AcceptHeaderLocaleResolver。</p>
 	 */
 	private void initLocaleResolver(ApplicationContext context) {
 		try {
@@ -531,7 +516,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		catch (NoSuchBeanDefinitionException ex) {
-			// We need to use the default.
+			// 我们需要使用的默认值。
 			this.localeResolver = getDefaultStrategy(context, LocaleResolver.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Unable to locate LocaleResolver with name '" + LOCALE_RESOLVER_BEAN_NAME +
@@ -541,9 +526,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the ThemeResolver used by this class.
-	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
-	 * we default to a FixedThemeResolver.
+	 * <p>初始化此类使用的ThemeResolver（主题解析器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义指定名称的bean，则默认使用FixedThemeResolver。</p>
 	 */
 	private void initThemeResolver(ApplicationContext context) {
 		try {
@@ -553,7 +537,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		catch (NoSuchBeanDefinitionException ex) {
-			// We need to use the default.
+			// 我们需要使用的默认值。
 			this.themeResolver = getDefaultStrategy(context, ThemeResolver.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Unable to locate ThemeResolver with name '" + THEME_RESOLVER_BEAN_NAME +
@@ -563,20 +547,19 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerMappings used by this class.
-	 * <p>If no HandlerMapping beans are defined in the BeanFactory for this namespace,
-	 * we default to BeanNameUrlHandlerMapping.
+	 * <p>初始化此类使用的HandlerMappings（处理器映射）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义任何HandlerMapping bean，则默认使用BeanNameUrlHandlerMapping。</p>
 	 */
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
 
 		if (this.detectAllHandlerMappings) {
-			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			// 查找ApplicationContext中的所有HandlerMapping，包括祖先上下文。
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
 			if (!matchingBeans.isEmpty()) {
 				this.handlerMappings = new ArrayList<>(matchingBeans.values());
-				// We keep HandlerMappings in sorted order.
+				// 我们将保持集合中，HandlerMapping的有序性。
 				AnnotationAwareOrderComparator.sort(this.handlerMappings);
 			}
 		}
@@ -586,12 +569,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				this.handlerMappings = Collections.singletonList(hm);
 			}
 			catch (NoSuchBeanDefinitionException ex) {
-				// Ignore, we'll add a default HandlerMapping later.
+				// 忽略这个异常，稍后我们将添加一个默认的HandlerMapping。
 			}
 		}
 
-		// Ensure we have at least one HandlerMapping, by registering
-		// a default HandlerMapping if no other mappings are found.
+		// 如果没有找到其他HandlerMapping，通过注册一个默认的HandlerMapping来确保我们至少有一个HandlerMapping。
 		if (this.handlerMappings == null) {
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isDebugEnabled()) {
@@ -601,20 +583,19 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerAdapters used by this class.
-	 * <p>If no HandlerAdapter beans are defined in the BeanFactory for this namespace,
-	 * we default to SimpleControllerHandlerAdapter.
+	 * <p>初始化此类使用的HandlerAdapters（处理器适配器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义任何HandlerAdapter bean，则默认使用SimpleControllerHandlerAdapter。</p>
 	 */
 	private void initHandlerAdapters(ApplicationContext context) {
 		this.handlerAdapters = null;
 
 		if (this.detectAllHandlerAdapters) {
-			// Find all HandlerAdapters in the ApplicationContext, including ancestor contexts.
+			// 查找ApplicationContext中的所有HandlerAdapter，包括祖先上下文。
 			Map<String, HandlerAdapter> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerAdapter.class, true, false);
 			if (!matchingBeans.isEmpty()) {
 				this.handlerAdapters = new ArrayList<>(matchingBeans.values());
-				// We keep HandlerAdapters in sorted order.
+				// 我们将保持集合中，HandlerAdapter的有序性。
 				AnnotationAwareOrderComparator.sort(this.handlerAdapters);
 			}
 		}
@@ -624,12 +605,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				this.handlerAdapters = Collections.singletonList(ha);
 			}
 			catch (NoSuchBeanDefinitionException ex) {
-				// Ignore, we'll add a default HandlerAdapter later.
+				// 忽略这个异常，稍后我们将添加一个默认的HandlerAdapter。
 			}
 		}
 
-		// Ensure we have at least some HandlerAdapters, by registering
-		// default HandlerAdapters if no other adapters are found.
+		// 如果没有找到其他HandlerAdapter，通过注册一个默认的HandlerAdapter来确保我们至少有一个HandlerAdapter。
 		if (this.handlerAdapters == null) {
 			this.handlerAdapters = getDefaultStrategies(context, HandlerAdapter.class);
 			if (logger.isDebugEnabled()) {
@@ -639,15 +619,14 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerExceptionResolver used by this class.
-	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
-	 * we default to no exception resolver.
+	 * <p>初始化此类使用的HandlerExceptionResolver（异常解析器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义指定名称的bean，则不提供任何异常解析器。</p>
 	 */
 	private void initHandlerExceptionResolvers(ApplicationContext context) {
 		this.handlerExceptionResolvers = null;
 
 		if (this.detectAllHandlerExceptionResolvers) {
-			// Find all HandlerExceptionResolvers in the ApplicationContext, including ancestor contexts.
+			// 查找ApplicationContext中的所有HandlerExceptionResolver，包括祖先上下文。
 			Map<String, HandlerExceptionResolver> matchingBeans = BeanFactoryUtils
 					.beansOfTypeIncludingAncestors(context, HandlerExceptionResolver.class, true, false);
 			if (!matchingBeans.isEmpty()) {
@@ -663,12 +642,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				this.handlerExceptionResolvers = Collections.singletonList(her);
 			}
 			catch (NoSuchBeanDefinitionException ex) {
-				// Ignore, no HandlerExceptionResolver is fine too.
+				// 忽略这个异常，稍后我们将添加一个默认的HandlerExceptionResolver。
 			}
 		}
 
-		// Ensure we have at least some HandlerExceptionResolvers, by registering
-		// default HandlerExceptionResolvers if no other resolvers are found.
+		// 如果没有找到其他HandlerExceptionResolver，通过注册一个默认的HandlerExceptionResolver来确保我们至少有一个HandlerExceptionResolver。
 		if (this.handlerExceptionResolvers == null) {
 			this.handlerExceptionResolvers = getDefaultStrategies(context, HandlerExceptionResolver.class);
 			if (logger.isDebugEnabled()) {
@@ -678,8 +656,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the RequestToViewNameTranslator used by this servlet instance.
-	 * <p>If no implementation is configured then we default to DefaultRequestToViewNameTranslator.
+	 * <p>初始化此servlet实例使用的RequestToViewNameTranslator（请求到视图名转换器）。</p>
+	 * <p>如果未配置任何实现，则默认使用DefaultRequestToViewNameTranslator。</p>
 	 */
 	private void initRequestToViewNameTranslator(ApplicationContext context) {
 		try {
@@ -690,7 +668,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		catch (NoSuchBeanDefinitionException ex) {
-			// We need to use the default.
+			// 我们需要使用的默认值。
 			this.viewNameTranslator = getDefaultStrategy(context, RequestToViewNameTranslator.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Unable to locate RequestToViewNameTranslator with name '" +
@@ -701,15 +679,14 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the ViewResolvers used by this class.
-	 * <p>If no ViewResolver beans are defined in the BeanFactory for this
-	 * namespace, we default to InternalResourceViewResolver.
+	 * <p>初始化此类使用的ViewResolvers（视图解析器）。</p>
+	 * <p>如果在此命名空间的BeanFactory中未定义任何ViewResolver bean，则默认使用InternalResourceViewResolver。</p>
 	 */
 	private void initViewResolvers(ApplicationContext context) {
 		this.viewResolvers = null;
 
 		if (this.detectAllViewResolvers) {
-			// Find all ViewResolvers in the ApplicationContext, including ancestor contexts.
+			// 查找ApplicationContext中的所有ViewResolver，包括祖先上下文。
 			Map<String, ViewResolver> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, ViewResolver.class, true, false);
 			if (!matchingBeans.isEmpty()) {
@@ -724,12 +701,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				this.viewResolvers = Collections.singletonList(vr);
 			}
 			catch (NoSuchBeanDefinitionException ex) {
-				// Ignore, we'll add a default ViewResolver later.
+				// 忽略这个异常，稍后我们将添加一个默认的ViewResolver。
 			}
 		}
 
-		// Ensure we have at least one ViewResolver, by registering
-		// a default ViewResolver if no other resolvers are found.
+		// 如果没有找到其他ViewResolver，通过注册一个默认的ViewResolver来确保我们至少有一个ViewResolver。
 		if (this.viewResolvers == null) {
 			this.viewResolvers = getDefaultStrategies(context, ViewResolver.class);
 			if (logger.isDebugEnabled()) {
@@ -739,9 +715,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the {@link FlashMapManager} used by this servlet instance.
-	 * <p>If no implementation is configured then we default to
-	 * {@code org.springframework.web.servlet.support.DefaultFlashMapManager}.
+	 * <p>初始化此servlet实例使用的{@link FlashMapManager}（FlashMap管理器）。</p>
+	 * <p>如果未配置任何实现，则默认使用{@code org.springframework.web.servlet.support.DefaultFlashMapManager}。</p>
 	 */
 	private void initFlashMapManager(ApplicationContext context) {
 		try {
@@ -751,7 +726,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		catch (NoSuchBeanDefinitionException ex) {
-			// We need to use the default.
+			// 我们需要使用的默认值。
 			this.flashMapManager = getDefaultStrategy(context, FlashMapManager.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Unable to locate FlashMapManager with name '" +
@@ -773,9 +748,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Obtain this servlet's MultipartResolver, if any.
-	 * @return the MultipartResolver used by this servlet, or {@code null} if none
-	 * (indicating that no multipart support is available)
+	 * <p>获取此servlet的MultipartResolver（如果存在）。</p>
+	 * @return 此servlet使用的MultipartResolver，如果不存在则返回{@code null}（指示不提供多部分支持）
 	 */
 	@Nullable
 	public final MultipartResolver getMultipartResolver() {
@@ -783,13 +757,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the configured {@link HandlerMapping} beans that were detected by
-	 * type in the {@link WebApplicationContext} or initialized based on the
-	 * default set of strategies from {@literal DispatcherServlet.properties}.
-	 * <p><strong>Note:</strong> This method may return {@code null} if invoked
-	 * prior to {@link #onRefresh(ApplicationContext)}.
-	 * @return an immutable list with the configured mappings, or {@code null}
-	 * if not initialized yet
+	 * <p>返回通过类型在{@link WebApplicationContext}中检测到或基于{@literal DispatcherServlet.properties}默认策略集合初始化的已配置{@link HandlerMapping} bean。</p>
+	 * <p><strong>注意：</strong>如果在{@link #onRefresh(ApplicationContext)}方法之前调用，此方法可能返回{@code null}。</p>
+	 * @return 包含已配置映射的不可修改列表，若尚未初始化则返回{@code null}
 	 * @since 5.0
 	 */
 	@Nullable
@@ -798,12 +768,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the default strategy object for the given strategy interface.
-	 * <p>The default implementation delegates to {@link #getDefaultStrategies},
-	 * expecting a single object in the list.
-	 * @param context the current WebApplicationContext
-	 * @param strategyInterface the strategy interface
-	 * @return the corresponding strategy object
+	 * <p>返回指定策略接口的默认策略对象。</p>
+	 * <p>默认实现委托给{@link #getDefaultStrategies}方法，并期望列表中包含单个对象。</p>
+	 * @param context 当前的WebApplicationContext
+	 * @param strategyInterface 策略接口
+	 * @return 对应的策略对象
 	 * @see #getDefaultStrategies
 	 */
 	protected <T> T getDefaultStrategy(ApplicationContext context, Class<T> strategyInterface) {
@@ -816,13 +785,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Create a List of default strategy objects for the given strategy interface.
-	 * <p>The default implementation uses the "DispatcherServlet.properties" file (in the same
-	 * package as the DispatcherServlet class) to determine the class names. It instantiates
-	 * the strategy objects through the context's BeanFactory.
-	 * @param context the current WebApplicationContext
-	 * @param strategyInterface the strategy interface
-	 * @return the List of corresponding strategy objects
+	 * <p>为指定策略接口创建默认策略对象列表。</p>
+	 * <p>默认实现使用与DispatcherServlet类同包下的"DispatcherServlet.properties"文件来确定类名，并通过上下文的BeanFactory实例化策略对象。</p>
+	 * @param context 当前的WebApplicationContext
+	 * @param strategyInterface 策略接口
+	 * @return 对应的策略对象列表
 	 */
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> getDefaultStrategies(ApplicationContext context, Class<T> strategyInterface) {
@@ -856,12 +823,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Create a default strategy.
-	 * <p>The default implementation uses
-	 * {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory#createBean}.
-	 * @param context the current WebApplicationContext
-	 * @param clazz the strategy implementation class to instantiate
-	 * @return the fully configured strategy instance
+	 * <p>创建默认策略实例。</p>
+	 * <p>默认实现使用{@link org.springframework.beans.factory.config.AutowireCapableBeanFactory#createBean}方法。</p>
+	 * @param context 当前的WebApplicationContext
+	 * @param clazz 需要实例化的策略实现类
+	 * @return 完整配置的策略实例
 	 * @see org.springframework.context.ApplicationContext#getAutowireCapableBeanFactory()
 	 * @see org.springframework.beans.factory.config.AutowireCapableBeanFactory#createBean
 	 */
@@ -1416,5 +1382,27 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		return uri;
 	}
-
+/**
+ * <p>定义了所有Servlet必须实现的方法。</p>
+ * <p>Servlet是一种运行在Web服务器内的小型Java程序，能够接收并响应Web客户端的请求（通常通过超文本传输协议HTTP）。</p>
+ * <p>
+ *     要实现此接口，可以编写扩展<code>javax.servlet.GenericServlet</code>的通用Servlet，
+ *     或扩展<code>javax.servlet.http.HttpServlet</code>的HTTP Servlet。
+ * </p>
+ * <p>
+ *     此接口定义了初始化Servlet、处理请求以及从服务器移除Servlet的方法，这些称为生命周期方法，按以下顺序调用：
+ *     <ol>
+ *         <li>构建Servlet实例，随后通过<code>init</code>方法进行初始化；
+ *         <li>处理客户端对<code>service</code>方法的所有调用；
+ *         <li>Servlet停止服务后，通过<code>destroy</code>方法销毁实例，最终被垃圾回收并终结。
+ *     </ol>
+ * </p>
+ * <p>
+ *     除生命周期方法外，本接口还提供<code>getServletConfig</code>方法（用于获取启动信息）
+ *     和 <code>getServletInfo</code>方法（用于返回Servlet基本信息，如作者、版本和版权声明）。
+ * </p>
+ * @author 多方贡献
+ * @see GenericServlet
+ * @see javax.servlet.http.HttpServlet
+ */
 }

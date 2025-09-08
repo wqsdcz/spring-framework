@@ -406,20 +406,19 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Set whether this servlet should dispatch an HTTP OPTIONS request to
-	 * the {@link #doService} method.
-	 * <p>Default in the {@code FrameworkServlet} is "false", applying
-	 * {@link javax.servlet.http.HttpServlet}'s default behavior (i.e.enumerating
-	 * all standard HTTP request methods as a response to the OPTIONS request).
-	 * Note however that as of 4.3 the {@code DispatcherServlet} sets this
-	 * property to "true" by default due to its built-in support for OPTIONS.
-	 * <p>Turn this flag on if you prefer OPTIONS requests to go through the
-	 * regular dispatching chain, just like other HTTP requests. This usually
-	 * means that your controllers will receive those requests; make sure
-	 * that those endpoints are actually able to handle an OPTIONS request.
-	 * <p>Note that HttpServlet's default OPTIONS processing will be applied
-	 * in any case if your controllers happen to not set the 'Allow' header
-	 * (as required for an OPTIONS response).
+	 * <p>设置是否应将HTTP OPTIONS请求分派至{@link #doService}方法处理。</p>
+	 * <p>
+	 *     {@code FrameworkServlet}中的默认值为"false"，即采用{@link javax.servlet.http.HttpServlet}的默认行为
+	 *     （枚举所有标准HTTP请求方法作为OPTIONS请求的响应）。
+	 *     但请注意，自4.3版本起，{@code DispatcherServlet}因其内置对OPTIONS请求的支持，默认将此属性设置为"true"。
+	 * </p>
+	 * <p>
+	 *     若希望OPTIONS请求像其他HTTP请求一样经过常规分派链处理，请启用此标志。
+	 *     这通常意味着控制器将接收这些请求，请确保相关端点确实能够处理OPTIONS请求。
+	 * </p>
+	 * <p>
+	 *     请注意，若控制器未按OPTIONS响应要求设置'Allow'头部，在任何情况下都将采用HttpServlet的默认OPTIONS处理逻辑。
+	 * </p>
 	 */
 	public void setDispatchOptionsRequest(boolean dispatchOptionsRequest) {
 		this.dispatchOptionsRequest = dispatchOptionsRequest;

@@ -532,7 +532,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			wac = createWebApplicationContext(rootContext);
 		}
 
-		/** 如果 WebApplicationContext 没有刷新过，那么需要执行刷新操作 */
+		/** 如果 onRefresh 没有被调用过，那么需要执行刷新操作 */
 		if (!this.refreshEventReceived) {
 			// Either the context is not a ConfigurableApplicationContext with refresh
 			// support or the context injected at construction time had already been

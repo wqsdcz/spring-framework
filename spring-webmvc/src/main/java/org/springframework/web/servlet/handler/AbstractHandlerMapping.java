@@ -339,15 +339,15 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 
 
 	/**
-	 * Look up a handler for the given request, falling back to the default
-	 * handler if no specific one is found.
-	 * @param request current HTTP request
-	 * @return the corresponding handler instance, or the default handler
+	 * 查找给定请求对应的处理器，若未找到特定处理器则回退到默认处理器。
+	 * @param request 当前HTTP请求
+	 * @return 对应的处理器实例，或默认处理器
 	 * @see #getHandlerInternal
 	 */
 	@Override
 	@Nullable
 	public final HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+		// 获取 handler
 		Object handler = getHandlerInternal(request);
 		if (handler == null) {
 			handler = getDefaultHandler();
@@ -360,8 +360,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			String handlerName = (String) handler;
 			handler = obtainApplicationContext().getBean(handlerName);
 		}
-
+		// 创建HandlerExecutionChain实例
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
+		// Cors
 		if (CorsUtils.isCorsRequest(request)) {
 			CorsConfiguration globalConfig = this.globalCorsConfigSource.getCorsConfiguration(request);
 			CorsConfiguration handlerConfig = getCorsConfiguration(handler, request);

@@ -133,7 +133,7 @@ public class ContextLoader {
 
 
 	/**
-	 * Map from (thread context) ClassLoader to corresponding 'current' WebApplicationContext.
+	 * 从 ClassLoader（在线程上下文中的）到 “当前”WebApplicationContext实例 之间的映射。
 	 */
 	private static final Map<ClassLoader, WebApplicationContext> currentContextPerThread =
 			new ConcurrentHashMap<>(1);
@@ -158,16 +158,16 @@ public class ContextLoader {
 
 
 	/**
-	 * 创建一个新的{@code ContextLoader}实例，该实例将基于servlet上下文参数
-	 * "contextClass"和"contextConfigLocation"创建Web应用上下文。
+	 * 创建一个新的{@code ContextLoader}实例，
+	 * 该实例将基于servlet上下文参数"contextClass"和"contextConfigLocation"创建Web应用上下文。
 	 * 关于各参数的默认值，请参阅类级别文档。
 	 *
-	 * <p>此构造函数通常在将{@code ContextLoaderListener}子类声明为
-	 * {@code web.xml}中的{@code <listener>}时使用，因为需要无参构造函数。
+	 * <p>
+	 *     此构造函数通常在将{@code ContextLoaderListener}子类声明为{@code web.xml}中的{@code <listener>}时使用，因为需要无参构造函数。
 	 *
-	 * <p>创建的应用上下文将以{@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}
-	 * 为属性名注册到ServletContext中，子类可以在容器关闭时自由调用
-	 * {@link #closeWebApplicationContext}方法来关闭应用上下文。
+	 * <p>
+	 *     创建的应用上下文将以 {@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE} 为属性名注册到ServletContext中，
+	 *     {@code ContextLoader}的子类可以在容器关闭时自由调用 {@link #closeWebApplicationContext} 方法来关闭应用上下文。
 	 *
 	 * @see #ContextLoader(WebApplicationContext)
 	 * @see #initWebApplicationContext(ServletContext)
@@ -178,8 +178,7 @@ public class ContextLoader {
 
 	/**
 	 * 使用给定的应用上下文创建新的{@code ContextLoader}实例。
-	 * 此构造函数适用于Servlet 3.0+环境，其中可通过{@link ServletContext#addListener} API
-	 * 实现基于实例的监听器注册。
+	 * 此构造函数适用于Servlet 3.0+环境，其中可通过{@link ServletContext#addListener} API 实现基于实例的监听器注册。
 	 *
 	 * <p>给定的上下文可能尚未被{@linkplain ConfigurableApplicationContext#refresh() 刷新}。
 	 * 如果该上下文同时满足：(a) 是{@link ConfigurableWebApplicationContext}的实现，且(b) <strong>尚未</strong>
@@ -196,9 +195,9 @@ public class ContextLoader {
 	 *
 	 * <p>使用示例请参阅{@link org.springframework.web.WebApplicationInitializer}。
 	 *
-	 * <p>无论哪种情况，给定的应用上下文都将以{@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}
-	 * 为属性名注册到ServletContext中，子类可以在容器关闭时自由调用{@link #closeWebApplicationContext}
-	 * 方法来关闭应用上下文。
+	 * <p>
+	 *     无论哪种情况，给定的应用上下文都将以{@link WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE}为属性名注册到ServletContext中，
+	 *     {@code ContextLoader}的子类可以在容器关闭时自由调用{@link #closeWebApplicationContext}方法来关闭应用上下文。
 	 *
 	 * @param context 要管理的应用上下文
 	 * @see #initWebApplicationContext(ServletContext)
@@ -244,9 +243,9 @@ public class ContextLoader {
 		}
 
 		Log logger = LogFactory.getLog(ContextLoader.class);
-		servletContext.log("Initializing Spring root WebApplicationContext");
+		servletContext.log("正在初始化 Spring 的 root WebApplicationContext 实例");
 		if (logger.isInfoEnabled()) {
-			logger.info("Root WebApplicationContext: initialization started");
+			logger.info("Root WebApplicationContext: 初始化开始");
 		}
 		long startTime = System.currentTimeMillis();
 
@@ -352,14 +351,13 @@ public class ContextLoader {
 
 	protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac, ServletContext sc) {
 		if (ObjectUtils.identityToString(wac).equals(wac.getId())) {
-			// The application context id is still set to its original default value
-			// -> assign a more useful id based on available information
+			// 如果应用程序上下文的 ID 仍被设置为其原始默认值，那么基于现有信息分配一个更有用的 ID
 			String idParam = sc.getInitParameter(CONTEXT_ID_PARAM);
 			if (idParam != null) {
 				wac.setId(idParam);
 			}
 			else {
-				// Generate default id...
+				// 生成默认id ...
 				wac.setId(ConfigurableWebApplicationContext.APPLICATION_CONTEXT_ID_PREFIX +
 						ObjectUtils.getDisplayString(sc.getContextPath()));
 			}
@@ -371,9 +369,8 @@ public class ContextLoader {
 			wac.setConfigLocation(configLocationParam);
 		}
 
-		// The wac environment's #initPropertySources will be called in any case when the context
-		// is refreshed; do it eagerly here to ensure servlet property sources are in place for
-		// use in any post-processing or initialization that occurs below prior to #refresh
+		// 无论何时刷新上下文，wac 环境的 #initPropertySources 方法都会被调用；
+		// 在此处应主动调用该方法，以确保在 #refresh 之前进行的任何后续处理或初始化中，都有可用的 servlet 属性源。
 		ConfigurableEnvironment env = wac.getEnvironment();
 		if (env instanceof ConfigurableWebEnvironment) {
 			((ConfigurableWebEnvironment) env).initPropertySources(sc, null);

@@ -599,11 +599,11 @@ public abstract class ObjectUtils {
 	// Convenience methods for toString output
 	//---------------------------------------------------------------------
 
+
 	/**
-	 * Return a String representation of an object's overall identity.
-	 * @param obj the object (may be {@code null})
-	 * @return the object's identity as String representation,
-	 * or an empty String if the object was {@code null}
+	 * 返回对象整体标识的字符串表示形式。
+	 * @param obj 目标对象（允许为 {@code null}）
+	 * @return 对象的字符串标识，若对象为 {@code null} 则返回空字符串
 	 */
 	public static String identityToString(@Nullable Object obj) {
 		if (obj == null) {
@@ -613,21 +613,19 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a hex String form of an object's identity hash code.
-	 * @param obj the object
-	 * @return the object's identity code in hex notation
+	 * 返回对象标识哈希码的十六进制字符串形式。
+	 * @param obj 目标对象
+	 * @return 对象标识哈希码的十六进制表示
 	 */
 	public static String getIdentityHexString(Object obj) {
 		return Integer.toHexString(System.identityHashCode(obj));
 	}
 
 	/**
-	 * Return a content-based String representation if {@code obj} is
-	 * not {@code null}; otherwise returns an empty String.
-	 * <p>Differs from {@link #nullSafeToString(Object)} in that it returns
-	 * an empty String rather than "null" for a {@code null} value.
-	 * @param obj the object to build a display String for
-	 * @return a display String representation of {@code obj}
+	 * 当 {@code obj} 非空时返回基于内容的字符串表示形式；否则返回空字符串。
+	 * <p>与 {@link #nullSafeToString(Object)} 的区别在于：对于 {@code null} 值，本方法返回空字符串而非 "null"。
+	 * @param obj 需要生成显示字符串的对象
+	 * @return 对象的显示字符串表示形式
 	 * @see #nullSafeToString(Object)
 	 */
 	public static String getDisplayString(@Nullable Object obj) {
@@ -638,21 +636,21 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Determine the class name for the given object.
-	 * <p>Returns a {@code "null"} String if {@code obj} is {@code null}.
-	 * @param obj the object to introspect (may be {@code null})
-	 * @return the corresponding class name
+	 * 确定给定对象的类名。
+	 * <p>如果 {@code obj} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param obj 要内省的对象（允许为 {@code null}）
+	 * @return 对应的类名
 	 */
 	public static String nullSafeClassName(@Nullable Object obj) {
 		return (obj != null ? obj.getClass().getName() : NULL_STRING);
 	}
 
 	/**
-	 * Return a String representation of the specified Object.
-	 * <p>Builds a String representation of the contents in case of an array.
-	 * Returns a {@code "null"} String if {@code obj} is {@code null}.
-	 * @param obj the object to build a String representation for
-	 * @return a String representation of {@code obj}
+	 * 返回指定对象的字符串表示形式。
+	 * <p>对于数组，将构建其内容的字符串表示形式。
+	 * 如果 {@code obj} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param obj 需要构建字符串表示形式的对象
+	 * @return 对象的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable Object obj) {
 		if (obj == null) {
@@ -693,13 +691,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable Object[] array) {
 		if (array == null) {
@@ -724,13 +722,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable boolean[] array) {
 		if (array == null) {
@@ -756,13 +754,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable byte[] array) {
 		if (array == null) {
@@ -787,13 +785,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable char[] array) {
 		if (array == null) {
@@ -818,13 +816,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable double[] array) {
 		if (array == null) {
@@ -850,13 +848,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable float[] array) {
 		if (array == null) {
@@ -882,13 +880,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable int[] array) {
 		if (array == null) {
@@ -913,13 +911,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable long[] array) {
 		if (array == null) {
@@ -944,13 +942,13 @@ public abstract class ObjectUtils {
 	}
 
 	/**
-	 * Return a String representation of the contents of the specified array.
-	 * <p>The String representation consists of a list of the array's elements,
-	 * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
-	 * by the characters {@code ", "} (a comma followed by a space).
-	 * Returns a {@code "null"} String if {@code array} is {@code null}.
-	 * @param array the array to build a String representation for
-	 * @return a String representation of {@code array}
+	 * 返回指定数组内容的字符串表示形式。
+	 * <p>
+	 *     字符串表示形式由数组元素列表组成，包含在大括号（{@code "{}"}）中。
+	 *     相邻元素由字符 {@code ", "}（逗号后跟空格）分隔。
+	 *     如果 {@code array} 为 {@code null}，则返回字符串 {@code "null"}。
+	 * @param array 需要构建字符串表示形式的数组
+	 * @return 数组的字符串表示形式
 	 */
 	public static String nullSafeToString(@Nullable short[] array) {
 		if (array == null) {

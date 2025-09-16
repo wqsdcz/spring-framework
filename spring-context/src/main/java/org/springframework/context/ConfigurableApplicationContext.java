@@ -182,7 +182,7 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	void close();
 
 	/**
-	 * 判断此应用程序上下文是否处于活跃状态，即：是否至少已被刷新一次且尚未被关闭。
+	 * 判断此【应用程序上下文】是否处于激活状态，即：是否至少已被刷新一次且尚未被关闭。
 	 * @return 上下文是否仍处于活跃状态
 	 * @see #refresh()
 	 * @see #close()

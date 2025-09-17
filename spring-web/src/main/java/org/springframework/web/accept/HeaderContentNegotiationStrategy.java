@@ -27,7 +27,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
- * A {@code ContentNegotiationStrategy} that checks the 'Accept' request header.
+ * 一种检查 'Accept' 请求头的 {@code ContentNegotiationStrategy} 实现。
  *
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
@@ -37,7 +37,7 @@ public class HeaderContentNegotiationStrategy implements ContentNegotiationStrat
 
 	/**
 	 * {@inheritDoc}
-	 * @throws HttpMediaTypeNotAcceptableException if the 'Accept' header cannot be parsed
+	 * @throws HttpMediaTypeNotAcceptableException 如果无法解析 'Accept' 请求头
 	 */
 	@Override
 	public List<MediaType> resolveMediaTypes(NativeWebRequest request)

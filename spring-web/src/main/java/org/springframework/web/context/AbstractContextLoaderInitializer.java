@@ -27,12 +27,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.WebApplicationInitializer;
 
 /**
- * Convenient base class for {@link WebApplicationInitializer} implementations
- * that register a {@link ContextLoaderListener} in the servlet context.
+ * 用于实现{@link WebApplicationInitializer}的便利基类，
+ * 在Servlet上下文中注册{@link ContextLoaderListener}。
  *
- * <p>The only method required to be implemented by subclasses is
- * {@link #createRootApplicationContext()}, which gets invoked from
- * {@link #registerContextLoaderListener(ServletContext)}.
+ * <p>
+ *     子类需要实现的唯一方法是{@link #createRootApplicationContext()}，
+ *     该方法将从{@link #registerContextLoaderListener(ServletContext)}中调用。
  *
  * @author Arjen Poutsma
  * @author Chris Beams
@@ -41,7 +41,7 @@ import org.springframework.web.WebApplicationInitializer;
  */
 public abstract class AbstractContextLoaderInitializer implements WebApplicationInitializer {
 
-	/** Logger available to subclasses */
+	/** 可用于子类的日志记录器 */
 	protected final Log logger = LogFactory.getLog(getClass());
 
 
@@ -51,10 +51,10 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 	}
 
 	/**
-	 * Register a {@link ContextLoaderListener} against the given servlet context. The
-	 * {@code ContextLoaderListener} is initialized with the application context returned
-	 * from the {@link #createRootApplicationContext()} template method.
-	 * @param servletContext the servlet context to register the listener against
+	 * 向给定的ServletContext中注册一个{@link ContextLoaderListener}。
+	 * 该{@code ContextLoaderListener}使用从模板方法{@link #createRootApplicationContext()}返回的ApplicationContext进行初始化。
+	 *
+	 * @param servletContext 要注册监听器的servlet上下文
 	 */
 	protected void registerContextLoaderListener(ServletContext servletContext) {
 		WebApplicationContext rootAppContext = createRootApplicationContext();
@@ -64,28 +64,27 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 			servletContext.addListener(listener);
 		}
 		else {
-			logger.debug("No ContextLoaderListener registered, as " +
-					"createRootApplicationContext() did not return an application context");
+			logger.debug("因为createRootApplicationContext()方法没有返回ApplicationContext对象，所以本方法未注册 ContextLoaderListener。");
 		}
 	}
 
 	/**
-	 * Create the "<strong>root</strong>" application context to be provided to the
-	 * {@code ContextLoaderListener}.
-	 * <p>The returned context is delegated to
-	 * {@link ContextLoaderListener#ContextLoaderListener(WebApplicationContext)} and will
-	 * be established as the parent context for any {@code DispatcherServlet} application
-	 * contexts. As such, it typically contains middle-tier services, data sources, etc.
-	 * @return the root application context, or {@code null} if a root context is not
-	 * desired
+	 * 创建要提供给{@code ContextLoaderListener}的 "<strong>root</strong>" ApplicationContext。
+	 * <p>
+	 *     返回的ApplicationContext对象将通过{@link ContextLoaderListener#ContextLoaderListener(WebApplicationContext)}方法传入，
+	 *     并将其作为所有{@code DispatcherServlet}内的ApplicationContext对象的"<strong>父</strong>"ApplicationContext。
+	 *     因此，它通常包含中间层服务、数据源等组件。
+	 *
+	 * @return 根应用上下文，如果不需要根上下文，则可返回{@code null}
 	 * @see org.springframework.web.servlet.support.AbstractDispatcherServletInitializer
 	 */
 	@Nullable
 	protected abstract WebApplicationContext createRootApplicationContext();
 
 	/**
-	 * Specify application context initializers to be applied to the root application
-	 * context that the {@code ContextLoaderListener} is being created with.
+	 * 获取应用于 <strong>root</strong>" ApplicationContext的ApplicationContextInitializer对象集合。
+	 * <strong>root</strong>" ApplicationContext是创建{@code ContextLoaderListener}时指定的那个上下文。
+	 *
 	 * @since 4.2
 	 * @see #createRootApplicationContext()
 	 * @see ContextLoaderListener#setContextInitializers

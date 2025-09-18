@@ -16,20 +16,17 @@
 package org.springframework.web.context.request;
 
 /**
- * Extends {@code WebRequestInterceptor} with a callback method invoked during
- * asynchronous request handling.
+ * 扩展了 {@code WebRequestInterceptor} 接口，提供了在异步请求处理期间调用的回调方法。
  *
- * <p>When a handler starts asynchronous request handling, the DispatcherServlet
- * exits without invoking {@code postHandle} and {@code afterCompletion}, as it
- * normally does, since the results of request handling (e.g. ModelAndView) are
- * not available in the current thread and handling is not yet complete.
- * In such scenarios, the {@link #afterConcurrentHandlingStarted(WebRequest)}
- * method is invoked instead allowing implementations to perform tasks such as
- * cleaning up thread bound attributes.
+ * <p>
+ *     当处理器开始异步请求处理时，
+ *     DispatcherServlet 将退出而不调用{@code postHandle} 和 {@code afterCompletion} 方法（这与常规处理不同），
+ *     因为请求处理的结果（例如 ModelAndView）在当前线程中不可用且处理尚未完成。
+ *     在此类场景中，将调用 {@link #afterConcurrentHandlingStarted(WebRequest)} 方法，允许实现执行诸如清理线程绑定属性等任务。
  *
- * <p>When asynchronous handling completes, the request is dispatched to the
- * container for further processing. At this stage the DispatcherServlet invokes
- * {@code preHandle}, {@code postHandle} and {@code afterCompletion} as usual.
+ * <p>
+ *     当异步处理完成时，请求将被分派到容器进行进一步处理。
+ *     在此阶段，DispatcherServlet 会像平常一样调用 {@code preHandle}、{@code postHandle} 和 {@code afterCompletion} 方法。
  *
  * @author Rossen Stoyanchev
  * @since 3.2
@@ -39,10 +36,9 @@ package org.springframework.web.context.request;
 public interface AsyncWebRequestInterceptor extends WebRequestInterceptor{
 
 	/**
-	 * Called instead of {@code postHandle} and {@code afterCompletion}, when the
-	 * handler started handling the request concurrently.
+	 * 当处理器开始并发处理请求时，此方法将被调用，以替代 {@code postHandle} 和 {@code afterCompletion} 方法。
 	 *
-	 * @param request the current request
+	 * @param request 当前请求
 	 */
 	void afterConcurrentHandlingStarted(WebRequest request);
 

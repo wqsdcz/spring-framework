@@ -24,16 +24,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 /**
- * Holder class to expose the web request in the form of a thread-bound
- * {@link RequestAttributes} object. The request will be inherited
- * by any child threads spawned by the current thread if the
- * {@code inheritable} flag is set to {@code true}.
+ * 用于以线程绑定的 {@link RequestAttributes} 对象形式暴露Web请求的持有者类。
+ * 如果 {@code inheritable} 标志设置为 {@code true}，当前线程创建的任何子线程都将继承该请求。
  *
- * <p>Use {@link RequestContextListener} or
- * {@link org.springframework.web.filter.RequestContextFilter} to expose
- * the current web request. Note that
- * {@link org.springframework.web.servlet.DispatcherServlet}
- * already exposes the current request by default.
+ * <p>
+ *     使用 {@link RequestContextListener} 或 {@link org.springframework.web.filter.RequestContextFilter} 来暴露当前Web请求。
+ *     注意{@link org.springframework.web.servlet.DispatcherServlet}默认已经暴露了当前请求。
  *
  * @author Juergen Hoeller
  * @author Rod Johnson
@@ -55,7 +51,7 @@ public abstract class RequestContextHolder  {
 
 
 	/**
-	 * Reset the RequestAttributes for the current thread.
+	 * 重置当前线程的 RequestAttributes。
 	 */
 	public static void resetRequestAttributes() {
 		requestAttributesHolder.remove();
@@ -63,9 +59,9 @@ public abstract class RequestContextHolder  {
 	}
 
 	/**
-	 * Bind the given RequestAttributes to the current thread,
-	 * <i>not</i> exposing it as inheritable for child threads.
-	 * @param attributes the RequestAttributes to expose
+	 * 将给定的 RequestAttributes 绑定到当前线程，<i>不</i>将其暴露为可被子线程继承的属性。
+	 *
+	 * @param attributes 要暴露的 RequestAttributes
 	 * @see #setRequestAttributes(RequestAttributes, boolean)
 	 */
 	public static void setRequestAttributes(@Nullable RequestAttributes attributes) {
@@ -73,11 +69,10 @@ public abstract class RequestContextHolder  {
 	}
 
 	/**
-	 * Bind the given RequestAttributes to the current thread.
-	 * @param attributes the RequestAttributes to expose,
-	 * or {@code null} to reset the thread-bound context
-	 * @param inheritable whether to expose the RequestAttributes as inheritable
-	 * for child threads (using an {@link InheritableThreadLocal})
+	 * 将给定的 RequestAttributes 绑定到当前线程。
+	 *
+	 * @param attributes 要暴露的 RequestAttributes，或 {@code null} 以重置线程绑定的上下文
+	 * @param inheritable 是否将 RequestAttributes 暴露为可被子线程继承的属性（使用 {@link InheritableThreadLocal}）
 	 */
 	public static void setRequestAttributes(@Nullable RequestAttributes attributes, boolean inheritable) {
 		if (attributes == null) {
@@ -96,9 +91,9 @@ public abstract class RequestContextHolder  {
 	}
 
 	/**
-	 * Return the RequestAttributes currently bound to the thread.
-	 * @return the RequestAttributes currently bound to the thread,
-	 * or {@code null} if none bound
+	 * 返回当前绑定到线程的 RequestAttributes。
+	 *
+	 * @return 当前绑定到线程的 RequestAttributes，如果未绑定则返回 {@code null}
 	 */
 	@Nullable
 	public static RequestAttributes getRequestAttributes() {
@@ -110,12 +105,13 @@ public abstract class RequestContextHolder  {
 	}
 
 	/**
-	 * Return the RequestAttributes currently bound to the thread.
-	 * <p>Exposes the previously bound RequestAttributes instance, if any.
-	 * Falls back to the current JSF FacesContext, if any.
-	 * @return the RequestAttributes currently bound to the thread
-	 * @throws IllegalStateException if no RequestAttributes object
-	 * is bound to the current thread
+	 * 返回当前绑定到线程的 RequestAttributes。
+	 * <p>
+	 *     暴露先前绑定的 RequestAttributes 实例（如果存在）。
+	 *     如果不存在，则回退到当前的 JSF FacesContext（如果可用）。
+	 *
+	 * @return 当前绑定到线程的 RequestAttributes
+	 * @throws IllegalStateException 如果没有 RequestAttributes 对象绑定到当前线程
 	 * @see #setRequestAttributes
 	 * @see ServletRequestAttributes
 	 * @see FacesRequestAttributes
@@ -141,8 +137,8 @@ public abstract class RequestContextHolder  {
 
 
 	/**
-	 * Inner class to avoid hard-coded JSF dependency.
- 	 */
+	 * 用于避免硬编码JSF依赖的内部类。
+	 */
 	private static class FacesRequestAttributesFactory {
 
 		@Nullable

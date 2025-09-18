@@ -32,12 +32,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
- * Defines callback methods to customize the Java-based configuration for
- * Spring MVC enabled via {@code @EnableWebMvc}.
+ * 定义回调方法，用于通过{@code @EnableWebMvc}启用Spring MVC时，自定义其基于Java的配置。
  *
- * <p>{@code @EnableWebMvc}-annotated configuration classes may implement
- * this interface to be called back and given a chance to customize the
- * default configuration.
+ * <p>
+ *     被{@code @EnableWebMvc}注解的配置类可以实现此接口，以便在初始化时被回调并有机会自定义默认配置。
  *
  * @author Rossen Stoyanchev
  * @author Keith Donald
@@ -47,13 +45,13 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public interface WebMvcConfigurer {
 
 	/**
-	 * Helps with configuring HandlerMappings path matching options such as trailing slash match,
-	 * suffix registration, path matcher and path helper.
-	 * Configured path matcher and path helper instances are shared for:
+	 * 辅助配置HandlerMappings的路径匹配选项，
+	 * 例如：尾部斜杠匹配、后缀注册、路径匹配器（path matcher）和路径助手（path helper）。
+	 * 已配置的路径匹配器和路径助手实例将在以下组件间共享：
 	 * <ul>
-	 * <li>RequestMappings</li>
-	 * <li>ViewControllerMappings</li>
-	 * <li>ResourcesMappings</li>
+	 * <li>请求映射（RequestMappings）</li>
+	 * <li>视图控制器映射（ViewControllerMappings）</li>
+	 * <li>资源映射（ResourcesMappings）</li>
 	 * </ul>
 	 * @since 4.0.3
 	 */
@@ -61,52 +59,45 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
-	 * Configure content negotiation options.
+	 * 配置内容协商选项。
 	 */
 	default void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 	}
 
 	/**
-	 * Configure asynchronous request handling options.
+	 * 配置异步请求处理选项。
 	 */
 	default void configureAsyncSupport(AsyncSupportConfigurer configurer) {
 	}
 
 	/**
-	 * Configure a handler to delegate unhandled requests by forwarding to the
-	 * Servlet container's "default" servlet. A common use case for this is when
-	 * the {@link DispatcherServlet} is mapped to "/" thus overriding the
-	 * Servlet container's default handling of static resources.
+	 * 通过将未处理的请求转发到Servlet容器的"默认"Servlet来配置处理程序。
+	 * 一个常见的使用场景是当{@link DispatcherServlet}被映射到"/"时，此时会覆盖Servlet容器对静态资源的默认处理。
 	 */
 	default void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 	}
 
 	/**
-	 * Add {@link Converter}s and {@link Formatter}s in addition to the ones
-	 * registered by default.
+	 * 添加除默认注册外额外的{@link Converter}和{@link Formatter}。
 	 */
 	default void addFormatters(FormatterRegistry registry) {
 	}
 
 	/**
-	 * Add Spring MVC lifecycle interceptors for pre- and post-processing of
-	 * controller method invocations and resource handler requests.
-	 * Interceptors can be registered to apply to all requests or be limited
-	 * to a subset of URL patterns.
+	 * 添加Spring MVC生命周期拦截器，用于控制器方法调用和资源处理器请求的预处理和后处理。
+	 * 拦截器可注册为适用于所有请求，或仅限于URL模式的子集。
 	 */
 	default void addInterceptors(InterceptorRegistry registry) {
 	}
 
 	/**
-	 * Add handlers to serve static resources such as images, js, and, css
-	 * files from specific locations under web application root, the classpath,
-	 * and others.
+	 * 添加处理程序以提供静态资源服务（如图片、js和css文件），这些资源可来自Web应用程序根目录下的特定位置、类路径等其他位置。
 	 */
 	default void addResourceHandlers(ResourceHandlerRegistry registry) {
 	}
 
 	/**
-	 * Configure cross origin requests processing.
+	 * 配置跨域请求处理。
 	 * @since 4.2
 	 */
 	default void addCorsMappings(CorsRegistry registry) {

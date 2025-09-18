@@ -20,58 +20,25 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.lang.Nullable;
 
 /**
- * <p>
- *     策略接口，由 {@link ConfigurableBeanFactory} 使用，用于表示一个目标作用域，用于存放 Bean 实例。
- *     这允许通过自定义的、使用 {@link ConfigurableBeanFactory#registerScope(String, Scope) 特定键} 注册的进一步作用域，
- *     来扩展 BeanFactory 的标准作用域
- *     {@link ConfigurableBeanFactory#SCOPE_SINGLETON "singleton"}（单例） 和
- *     {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE "prototype"}（原型）。
- * </p>
- * <p>
- *     {@link org.springframework.context.ApplicationContext} 的实现，
- *     例如：{@link org.springframework.web.context.WebApplicationContext}（Web应用上下文），
- *     可以基于此 SPI（Service Provider Interface）注册特定于其环境的附加标准作用域，
- *     例如：{@link org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST "request"}（请求）和
- *     {@link org.springframework.web.context.WebApplicationContext#SCOPE_SESSION "session"}（会话）。
- * </p>
- * <p>
- *     尽管其主要用途是在 Web 环境中扩展作用域， 但此 SPI 是完全通用的：
- *     它提供了从任何底层存储机制（例如 HTTP Session 或自定义的会话机制）中 获取（get）和存放（put）对象的能力。
- *     传入此类的 {@code get} 和 {@code remove} 方法的名称将用于 标识当前作用域中的目标对象。
- * </p>
- * <p>
- *     {@code Scope} 的实现需要是线程安全的。
- *     一个 {@code Scope} 实例（除非它显式地需要感知其所属的 BeanFactory）可以同时被多个 bean 工厂使用，
- *     并且可以由任意数量的线程从任意数量的工厂并发访问该 {@code Scope}。
- * </p>
+ * {@link ConfigurableBeanFactory} 使用的策略接口，代表用于持有bean实例的目标作用域。
+ * 这允许通过{@link ConfigurableBeanFactory#registerScope(String, Scope) 特定键}注册自定义作用域，
+ * 从而扩展BeanFactory的标准作用域{@link ConfigurableBeanFactory#SCOPE_SINGLETON "singleton"}
+ * 和 {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE "prototype"}。
  *
- * Strategy interface used by a {@link ConfigurableBeanFactory},
- * representing a target scope to hold bean instances in.
- * This allows for extending the BeanFactory's standard scopes
- * {@link ConfigurableBeanFactory#SCOPE_SINGLETON "singleton"} and
- * {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE "prototype"}
- * with custom further scopes, registered for a
- * {@link ConfigurableBeanFactory#registerScope(String, Scope) specific key}.
+ * <p>
+ *     {@link org.springframework.context.ApplicationContext} 实现（如{@link org.springframework.web.context.WebApplicationContext}）
+ *     可基于此SPI注册特定于其环境的附加标准作用域，例如：
+ *     {@link org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST "request"}
+ *     和{@link org.springframework.web.context.WebApplicationContext#SCOPE_SESSION "session"}。
  *
- * <p>{@link org.springframework.context.ApplicationContext} implementations
- * such as a {@link org.springframework.web.context.WebApplicationContext}
- * may register additional standard scopes specific to their environment,
- * e.g. {@link org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST "request"}
- * and {@link org.springframework.web.context.WebApplicationContext#SCOPE_SESSION "session"},
- * based on this Scope SPI.
+ * <p>
+ *     尽管其主要用途是在Web环境中扩展作用域，但此SPI是完全通用的：
+ *     它提供了从任何底层存储机制（如HTTP会话或自定义会话机制）获取和存储对象的能力。
+ *     传入此类{@code get}和{@code remove}方法的名称将标识当前作用域中的目标对象。
  *
- * <p>Even if its primary use is for extended scopes in a web environment,
- * this SPI is completely generic: It provides the ability to get and put
- * objects from any underlying storage mechanism, such as an HTTP session
- * or a custom conversation mechanism. The name passed into this class's
- * {@code get} and {@code remove} methods will identify the
- * target object in the current scope.
- *
- * <p>{@code Scope} implementations are expected to be thread-safe.
- * One {@code Scope} instance can be used with multiple bean factories
- * at the same time, if desired (unless it explicitly wants to be aware of
- * the containing BeanFactory), with any number of threads accessing
- * the {@code Scope} concurrently from any number of factories.
+ * <p>
+ *     {@code Scope} 实现应确保线程安全。
+ *     一个{@code Scope}实例可同时用于多个bean工厂（除非显式需要感知包含的BeanFactory），允许多个线程从任意数量的工厂并发访问该{@code Scope}。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -85,63 +52,56 @@ import org.springframework.lang.Nullable;
 public interface Scope {
 
 	/**
-	 * Return the object with the given name from the underlying scope,
-	 * {@link org.springframework.beans.factory.ObjectFactory#getObject() creating it}
-	 * if not found in the underlying storage mechanism.
-	 * <p>This is the central operation of a Scope, and the only operation
-	 * that is absolutely required.
-	 * @param name the name of the object to retrieve
-	 * @param objectFactory the {@link ObjectFactory} to use to create the scoped
-	 * object if it is not present in the underlying storage mechanism
-	 * @return the desired object (never {@code null})
-	 * @throws IllegalStateException if the underlying scope is not currently active
+	 * 从底层作用域返回指定名称的对象，如果在底层存储机制中未找到，则通过{@link org.springframework.beans.factory.ObjectFactory#getObject()}创建该对象。
+	 *
+	 * <p>
+	 *     这是作用域的核心操作，也是唯一必须实现的操作。
+	 *
+	 * @param name 要检索的对象名称
+	 * @param objectFactory 用于在底层存储机制中不存在时创建作用域对象的{@link ObjectFactory}
+	 * @return 所需对象（永不返回{@code null}）
+	 * @throws IllegalStateException 如果底层作用域当前未处于活动状态
 	 */
 	Object get(String name, ObjectFactory<?> objectFactory);
 
 	/**
-	 * Remove the object with the given {@code name} from the underlying scope.
-	 * <p>Returns {@code null} if no object was found; otherwise
-	 * returns the removed {@code Object}.
-	 * <p>Note that an implementation should also remove a registered destruction
-	 * callback for the specified object, if any. It does, however, <i>not</i>
-	 * need to <i>execute</i> a registered destruction callback in this case,
-	 * since the object will be destroyed by the caller (if appropriate).
-	 * <p><b>Note: This is an optional operation.</b> Implementations may throw
-	 * {@link UnsupportedOperationException} if they do not support explicitly
-	 * removing an object.
-	 * @param name the name of the object to remove
-	 * @return the removed object, or {@code null} if no object was present
-	 * @throws IllegalStateException if the underlying scope is not currently active
+	 * 从底层作用域中移除指定名称 {@code name} 的对象。
+	 *
+	 * <p>
+	 *     如果未找到对象则返回 {@code null}；否则返回被移除的 {@code Object}。
+	 *
+	 * <p>
+	 *     注意：
+	 *     实现方应同时移除该对象注册的销毁回调（如果存在）。
+	 *     但在此场景下<i>不需要</i>执行已注册的销毁回调，因为对象将由调用方负责销毁（如适用）。
+	 *
+	 * <p>
+	 *     <b>注意：此为可选操作。</b>
+	 *     如果实现不支持显式移除对象，可以抛出 {@link UnsupportedOperationException}。
+	 *
+	 * @param name 要移除的对象名称
+	 * @return 被移除的对象，如果不存在则返回 {@code null}
+	 * @throws IllegalStateException 如果底层作用域当前未处于活动状态
 	 * @see #registerDestructionCallback
 	 */
 	@Nullable
 	Object remove(String name);
 
 	/**
-	 * Register a callback to be executed on destruction of the specified
-	 * object in the scope (or at destruction of the entire scope, if the
-	 * scope does not destroy individual objects but rather only terminates
-	 * in its entirety).
-	 * <p><b>Note: This is an optional operation.</b> This method will only
-	 * be called for scoped beans with actual destruction configuration
-	 * (DisposableBean, destroy-method, DestructionAwareBeanPostProcessor).
-	 * Implementations should do their best to execute a given callback
-	 * at the appropriate time. If such a callback is not supported by the
-	 * underlying runtime environment at all, the callback <i>must be
-	 * ignored and a corresponding warning should be logged</i>.
-	 * <p>Note that 'destruction' refers to automatic destruction of
-	 * the object as part of the scope's own lifecycle, not to the individual
-	 * scoped object having been explicitly removed by the application.
-	 * If a scoped object gets removed via this facade's {@link #remove(String)}
-	 * method, any registered destruction callback should be removed as well,
-	 * assuming that the removed object will be reused or manually destroyed.
-	 * @param name the name of the object to execute the destruction callback for
-	 * @param callback the destruction callback to be executed.
-	 * Note that the passed-in Runnable will never throw an exception,
-	 * so it can safely be executed without an enclosing try-catch block.
-	 * Furthermore, the Runnable will usually be serializable, provided
-	 * that its target object is serializable as well.
-	 * @throws IllegalStateException if the underlying scope is not currently active
+	 * 注册在作用域内指定对象销毁时（或在作用域整体销毁时——如果该作用域不销毁单个对象而仅整体终止）执行的回调函数。
+	 * <p>
+	 *     <b>注意：此为可选操作。</b>
+	 *     本方法仅针对具有实际销毁配置的作用域bean（如DisposableBean、destroy-method、DestructionAwareBeanPostProcessor）调用。
+	 *     实现方应确保在适当时机执行给定的回调。如果底层运行时环境完全不支持此类回调，则<i>必须忽略该回调并记录相应警告</i>。
+	 *
+	 * <p>
+	 *     请注意：'销毁'指的是作为作用域自身生命周期一部分的对象自动销毁，而非应用程序显式移除单个作用域对象。
+	 *     如果通过此门面的{@link #remove(String)}方法移除作用域对象，则应同时移除所有已注册的销毁回调——此处假定被移除的对象将被重用或手动销毁。
+	 *
+	 * @param name     要执行销毁回调的对象名称
+	 * @param callback 要执行的销毁回调。注意传入的Runnable永远不会抛出异常，因此可安全执行而无需包裹try-catch块。
+	 *                 此外，只要目标对象可序列化，该Runnable通常也可序列化。
+	 * @throws IllegalStateException 如果底层作用域当前未处于活动状态
 	 * @see org.springframework.beans.factory.DisposableBean
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getDestroyMethodName()
 	 * @see DestructionAwareBeanPostProcessor
@@ -149,29 +109,29 @@ public interface Scope {
 	void registerDestructionCallback(String name, Runnable callback);
 
 	/**
-	 * Resolve the contextual object for the given key, if any.
-	 * E.g. the HttpServletRequest object for key "request".
-	 * @param key the contextual key
-	 * @return the corresponding object, or {@code null} if none found
-	 * @throws IllegalStateException if the underlying scope is not currently active
+	 * 解析指定键对应的上下文对象（如果存在）。
+	 * 例如：键为"request"时返回HttpServletRequest对象。
+	 *
+	 * @param key 上下文键
+	 * @return 对应的对象，未找到时返回 {@code null}
+	 * @throws IllegalStateException 如果底层作用域当前未处于活动状态
 	 */
 	@Nullable
 	Object resolveContextualObject(String key);
 
 	/**
-	 * Return the <em>conversation ID</em> for the current underlying scope, if any.
-	 * <p>The exact meaning of the conversation ID depends on the underlying
-	 * storage mechanism. In the case of session-scoped objects, the
-	 * conversation ID would typically be equal to (or derived from) the
-	 * {@link javax.servlet.http.HttpSession#getId() session ID}; in the
-	 * case of a custom conversation that sits within the overall session,
-	 * the specific ID for the current conversation would be appropriate.
-	 * <p><b>Note: This is an optional operation.</b> It is perfectly valid to
-	 * return {@code null} in an implementation of this method if the
-	 * underlying storage mechanism has no obvious candidate for such an ID.
-	 * @return the conversation ID, or {@code null} if there is no
-	 * conversation ID for the current scope
-	 * @throws IllegalStateException if the underlying scope is not currently active
+	 * 返回当前底层作用域的<em>会话ID</em>（如果存在）。
+	 * <p>
+	 *     会话ID的具体含义取决于底层存储机制。
+	 *     对于会话作用域的对象，会话ID通常等于（或派生自）{@link javax.servlet.http.HttpSession#getId() 会话ID}；
+	 *     对于位于整体会话内的自定义会话，则应返回当前会话的特定ID。
+	 *
+	 * <p>
+	 *     <b>注意：此为可选操作。</b>
+	 *     如果底层存储机制没有明显的ID候选，在此方法的实现中返回{@code null}是完全有效的。
+	 *
+	 * @return 会话ID，如果当前作用域没有会话ID则返回 {@code null}
+	 * @throws IllegalStateException 如果底层作用域当前未处于活动状态
 	 */
 	@Nullable
 	String getConversationId();

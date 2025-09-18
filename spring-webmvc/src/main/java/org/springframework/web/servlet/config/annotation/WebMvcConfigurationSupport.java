@@ -99,68 +99,59 @@ import org.springframework.web.servlet.view.ViewResolverComposite;
 import org.springframework.web.util.UrlPathHelper;
 
 /**
- * This is the main class providing the configuration behind the MVC Java config.
- * It is typically imported by adding {@link EnableWebMvc @EnableWebMvc} to an
- * application {@link Configuration @Configuration} class. An alternative more
- * advanced option is to extend directly from this class and override methods as
- * necessary, remembering to add {@link Configuration @Configuration} to the
- * subclass and {@link Bean @Bean} to overridden {@link Bean @Bean} methods.
- * For more details see the javadoc of {@link EnableWebMvc @EnableWebMvc}.
+ * 这是提供MVC Java配置的核心类。
+ * 通常通过在应用程序的{@link Configuration @Configuration}类上添加{@link EnableWebMvc @EnableWebMvc}来导入。
+ * 另一个更高级的选项是直接继承此类，并根据需要重写方法，记得在子类上添加{@link Configuration @Configuration}注解，
+ * 并在重写的{@link Bean @Bean}方法上添加{@link Bean @Bean}注解。
+ * 更多详细信息请参阅{@link EnableWebMvc @EnableWebMvc}的Java文档。
  *
- * <p>This class registers the following {@link HandlerMapping HandlerMappings}:</p>
+ * <p>此类注册以下{@link HandlerMapping 处理器映射}：</p>
  * <ul>
  * <li>{@link RequestMappingHandlerMapping}
- * ordered at 0 for mapping requests to annotated controller methods.
+ * 顺序为0，用于将请求映射到带注解的控制器方法。
  * <li>{@link HandlerMapping}
- * ordered at 1 to map URL paths directly to view names.
+ * 顺序为1，用于将URL路径直接映射到视图名称。
  * <li>{@link BeanNameUrlHandlerMapping}
- * ordered at 2 to map URL paths to controller bean names.
+ * 顺序为2，用于将URL路径映射到控制器bean名称。
  * <li>{@link HandlerMapping}
- * ordered at {@code Integer.MAX_VALUE-1} to serve static resource requests.
+ * 顺序为{@code Integer.MAX_VALUE-1}，用于处理静态资源请求。
  * <li>{@link HandlerMapping}
- * ordered at {@code Integer.MAX_VALUE} to forward requests to the default servlet.
+ * 顺序为{@code Integer.MAX_VALUE}，用于将请求转发到默认Servlet。
  * </ul>
  *
- * <p>Registers these {@link HandlerAdapter HandlerAdapters}:
+ * <p>注册以下{@link HandlerAdapter 处理器适配器}：
  * <ul>
  * <li>{@link RequestMappingHandlerAdapter}
- * for processing requests with annotated controller methods.
+ * 用于处理带有注解控制器方法的请求。
  * <li>{@link HttpRequestHandlerAdapter}
- * for processing requests with {@link HttpRequestHandler HttpRequestHandlers}.
+ * 用于处理{@link HttpRequestHandler HttpRequestHandlers}的请求。
  * <li>{@link SimpleControllerHandlerAdapter}
- * for processing requests with interface-based {@link Controller Controllers}.
+ * 用于处理基于接口的{@link Controller 控制器}的请求。
  * </ul>
  *
- * <p>Registers a {@link HandlerExceptionResolverComposite} with this chain of
- * exception resolvers:
+ * <p>注册一个{@link HandlerExceptionResolverComposite}，包含以下异常解析器链：
  * <ul>
- * <li>{@link ExceptionHandlerExceptionResolver} for handling exceptions through
- * {@link org.springframework.web.bind.annotation.ExceptionHandler} methods.
- * <li>{@link ResponseStatusExceptionResolver} for exceptions annotated with
- * {@link org.springframework.web.bind.annotation.ResponseStatus}.
- * <li>{@link DefaultHandlerExceptionResolver} for resolving known Spring
- * exception types
+ * <li>{@link ExceptionHandlerExceptionResolver} 用于通过
+ * {@link org.springframework.web.bind.annotation.ExceptionHandler}方法处理异常。
+ * <li>{@link ResponseStatusExceptionResolver} 用于处理带有
+ * {@link org.springframework.web.bind.annotation.ResponseStatus}注解的异常。
+ * <li>{@link DefaultHandlerExceptionResolver} 用于解析已知的Spring异常类型。
  * </ul>
  *
- * <p>Registers an {@link AntPathMatcher} and a {@link UrlPathHelper}
- * to be used by:
+ * <p>注册{@link AntPathMatcher}和{@link UrlPathHelper}，供以下组件使用：
  * <ul>
- * <li>the {@link RequestMappingHandlerMapping},
- * <li>the {@link HandlerMapping} for ViewControllers
- * <li>and the {@link HandlerMapping} for serving resources
+ * <li>{@link RequestMappingHandlerMapping}
+ * <li>用于视图控制器的{@link HandlerMapping}
+ * <li>以及用于提供资源的{@link HandlerMapping}
  * </ul>
- * Note that those beans can be configured with a {@link PathMatchConfigurer}.
+ * 注意这些bean可以通过{@link PathMatchConfigurer}进行配置。
  *
- * <p>Both the {@link RequestMappingHandlerAdapter} and the
- * {@link ExceptionHandlerExceptionResolver} are configured with default
- * instances of the following by default:
+ * <p>{@link RequestMappingHandlerAdapter}和{@link ExceptionHandlerExceptionResolver}默认都配置了以下默认实例：
  * <ul>
- * <li>a {@link ContentNegotiationManager}
- * <li>a {@link DefaultFormattingConversionService}
- * <li>an {@link org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean}
- * if a JSR-303 implementation is available on the classpath
- * <li>a range of {@link HttpMessageConverter HttpMessageConverters} depending on the third-party
- * libraries available on the classpath.
+ * <li>{@link ContentNegotiationManager}
+ * <li>{@link DefaultFormattingConversionService}
+ * <li>{@link org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean}（如果类路径上有JSR-303实现）
+ * <li>一系列{@link HttpMessageConverter 消息转换器}（具体取决于类路径上可用的第三方库）
  * </ul>
  *
  * @author Rossen Stoyanchev
@@ -236,7 +227,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 
 	/**
-	 * Set the Spring {@link ApplicationContext}, e.g. for resource loading.
+	 * 设置Spring的{@link ApplicationContext}，例如：用于资源加载。
 	 */
 	@Override
 	public void setApplicationContext(@Nullable ApplicationContext applicationContext) {
@@ -244,7 +235,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Return the associated Spring {@link ApplicationContext}.
+	 * 返回关联的Spring {@link ApplicationContext}。
 	 * @since 4.2
 	 */
 	@Nullable
@@ -253,8 +244,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Set the {@link javax.servlet.ServletContext}, e.g. for resource handling,
-	 * looking up file extensions, etc.
+	 * 设置{@link javax.servlet.ServletContext}，例如：用于资源处理、查找文件扩展名等。
 	 */
 	@Override
 	public void setServletContext(@Nullable ServletContext servletContext) {
@@ -262,7 +252,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Return the associated {@link javax.servlet.ServletContext}.
+	 * 返回关联的{@link javax.servlet.ServletContext}。
 	 * @since 4.2
 	 */
 	@Nullable
@@ -272,8 +262,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 
 	/**
-	 * Return a {@link RequestMappingHandlerMapping} ordered at 0 for mapping
-	 * requests to annotated controllers.
+	 * 返回一个顺序为0的{@link RequestMappingHandlerMapping}，用于将请求映射到带注解的控制器。
 	 */
 	@Bean
 	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
@@ -311,8 +300,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Protected method for plugging in a custom subclass of
-	 * {@link RequestMappingHandlerMapping}.
+	 * 用于接入自定义 {@link RequestMappingHandlerMapping} 子类的受保护方法。
 	 * @since 4.0
 	 */
 	protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
@@ -320,9 +308,8 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Provide access to the shared handler interceptors used to configure
-	 * {@link HandlerMapping} instances with.
-	 * <p>This method cannot be overridden; use {@link #addInterceptors} instead.
+	 * 提供对用于配置 {@link HandlerMapping} 实例的共享处理器拦截器的访问。
+	 * <p>此方法不可被重写；请使用 {@link #addInterceptors} 方法替代。
 	 */
 	protected final Object[] getInterceptors() {
 		if (this.interceptors == null) {
@@ -336,16 +323,15 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Override this method to add Spring MVC interceptors for
-	 * pre- and post-processing of controller invocation.
+	 * 重写此方法以添加用于控制器调用前后处理的Spring MVC拦截器。
 	 * @see InterceptorRegistry
 	 */
 	protected void addInterceptors(InterceptorRegistry registry) {
 	}
 
 	/**
-	 * Callback for building the {@link PathMatchConfigurer}.
-	 * Delegates to {@link #configurePathMatch}.
+	 * 用于构建 {@link PathMatchConfigurer} 的回调方法。
+	 * 实际委托给 {@link #configurePathMatch} 方法处理。
 	 * @since 4.1
 	 */
 	protected PathMatchConfigurer getPathMatchConfigurer() {
@@ -357,7 +343,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Override this method to configure path matching options.
+	 * 重写此方法以配置路径匹配选项。
 	 * @since 4.0.3
 	 * @see PathMatchConfigurer
 	 */
@@ -365,10 +351,8 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Return a global {@link PathMatcher} instance for path matching
-	 * patterns in {@link HandlerMapping HandlerMappings}.
-	 * This instance can be configured using the {@link PathMatchConfigurer}
-	 * in {@link #configurePathMatch(PathMatchConfigurer)}.
+	 * 返回用于在{@link HandlerMapping HandlerMappings}中进行路径模式匹配的全局{@link PathMatcher}实例。
+	 * 该实例可通过在{@link #configurePathMatch(PathMatchConfigurer)}中使用的{@link PathMatchConfigurer}进行配置。
 	 * @since 4.1
 	 */
 	@Bean

@@ -23,52 +23,49 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.lang.Nullable;
 
 /**
- * Interface to be implemented by configurable web application contexts.
- * Supported by {@link ContextLoader} and
- * {@link org.springframework.web.servlet.FrameworkServlet}.
+ * 可由可配置的Web应用上下文实现的接口。
+ * 由{@link ContextLoader}和{@link org.springframework.web.servlet.FrameworkServlet}支持。
  *
- * <p>Note: The setters of this interface need to be called before an
- * invocation of the {@link #refresh} method inherited from
- * {@link org.springframework.context.ConfigurableApplicationContext}.
- * They do not cause an initialization of the context on their own.
+ * <p>
+ *     注意：此接口的setter方法必须在调用{@link #refresh}方法
+ *     （从{@link org.springframework.context.ConfigurableApplicationContext}继承的）之前调用。
+ *     它们不会自行引起上下文的初始化。
  *
  * @author Juergen Hoeller
- * @since 05.12.2003
+ * @since 2003年12月5日
  * @see #refresh
  * @see ContextLoader#createWebApplicationContext
  * @see org.springframework.web.servlet.FrameworkServlet#createWebApplicationContext
  */
 public interface ConfigurableWebApplicationContext extends WebApplicationContext, ConfigurableApplicationContext {
 
-	/**
-	 * Prefix for ApplicationContext ids that refer to context path and/or servlet name.
-	 */
+	/** 用于表示 ApplicationContext ID 的前缀，这些ID指的是上下文路径和/或 servlet 名称。 */
 	String APPLICATION_CONTEXT_ID_PREFIX = WebApplicationContext.class.getName() + ":";
 
+
 	/**
-	 * Name of the ServletConfig environment bean in the factory.
+	 * 工厂中ServletConfig环境bean的名称。
 	 * @see javax.servlet.ServletConfig
 	 */
 	String SERVLET_CONFIG_BEAN_NAME = "servletConfig";
 
 
 	/**
-	 * Set the ServletContext for this web application context.
-	 * <p>Does not cause an initialization of the context: refresh needs to be
-	 * called after the setting of all configuration properties.
+	 * 设置此 WebApplicationContext 的 ServletContext。
+	 * <p>不会导致上下文的初始化：需要在设置所有配置属性后调用refresh方法。
 	 * @see #refresh()
 	 */
 	void setServletContext(@Nullable ServletContext servletContext);
 
 	/**
-	 * Set the ServletConfig for this web application context.
-	 * Only called for a WebApplicationContext that belongs to a specific Servlet.
+	 * 设置此 WebApplicationContext 的 ServletConfig。
+	 * 仅适用于属于特定Servlet的WebApplicationContext。
 	 * @see #refresh()
 	 */
 	void setServletConfig(@Nullable ServletConfig servletConfig);
 
 	/**
-	 * Return the ServletConfig for this web application context, if any.
+	 * 返回此 WebApplicationContext 的ServletConfig（如果存在）。
 	 */
 	@Nullable
 	ServletConfig getServletConfig();

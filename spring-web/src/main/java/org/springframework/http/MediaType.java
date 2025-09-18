@@ -36,8 +36,7 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * A subclass of {@link MimeType} that adds support for quality parameters
- * as defined in the HTTP specification.
+ * {@link MimeType} 的子类，增加了对 HTTP 规范中定义的质量参数（quality parameters）的支持。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller

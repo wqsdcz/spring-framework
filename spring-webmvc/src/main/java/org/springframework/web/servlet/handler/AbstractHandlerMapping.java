@@ -69,7 +69,10 @@ import org.springframework.web.util.UrlPathHelper;
  *      - 非MappedInterceptor类型：一定会添加到HandlerExecutionChain对象中；
  *      -   MappedInterceptor类型：如果MappedInterceptor对象的url模式和请求的lookupPath匹配，才被添加到HandlerExecutionChain对象中；
  *   5) 经过上述步骤HandlerExecutionChain对象已经构建完成了。但是对于CORS请求来说还需要做一些额外的处理。
- *   6) 如果是CORS请求（请求头Origin有值），
+ *   6) 如果是CORS请求（请求头Origin有值），则合并全局、局部的Cors配置；根据CORS请求的类型进行如下处理：
+ *      - CORS实际请求：基于CORS配置创建一个CorsInterceptor对象，并添加到HandlerExecutionChain对象中。
+ *   	- CORS预检请求：基于CORS配置创建一个PreFlightHandler对象(预检请求的处理器)，在与原有拦截器集合一起作为参数，
+ *                     重新创建一个新的HandlerExecutionChain对象，替换原有的HandlerExecutionChain对象。
  *
  *
  * @author Juergen Hoeller

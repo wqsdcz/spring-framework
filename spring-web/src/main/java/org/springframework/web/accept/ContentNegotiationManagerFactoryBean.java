@@ -34,55 +34,48 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.ServletContextAware;
 
 /**
- * Factory to create a {@code ContentNegotiationManager} and configure it with
- * one or more {@link ContentNegotiationStrategy} instances.
+ * 用于创建{@code ContentNegotiationManager}并通过一个或多个{@link ContentNegotiationStrategy}实例进行配置的工厂。
  *
- * <p>As of 5.0 you can set the exact strategies to use via
- * {@link #setStrategies(List)}.
+ * <p>从5.0版本开始，您可以通过{@link #setStrategies(List)}方法设置要使用的具体策略。</p>
  *
- * <p>As an alternative you can also rely on the set of defaults described below
- * which can be turned on or off or customized through the methods of this
- * builder:
+ * <p>作为替代方案，您也可以依赖下面描述的一组默认配置（可通过本构建器的方法开启、关闭或自定义）：</p>
  *
  * <table>
  * <tr>
- * <th>Property Setter</th>
- * <th>Underlying Strategy</th>
- * <th>Default Setting</th>
+ * <th>属性设置方法</th>
+ * <th>底层策略</th>
+ * <th>默认设置</th>
  * </tr>
  * <tr>
  * <td>{@link #setFavorPathExtension}</td>
- * <td>{@link PathExtensionContentNegotiationStrategy Path Extension strategy}</td>
- * <td>On</td>
+ * <td>{@link PathExtensionContentNegotiationStrategy 路径扩展策略}</td>
+ * <td>开启</td>
  * </tr>
  * <tr>
  * <td>{@link #setFavorParameter favorParameter}</td>
- * <td>{@link ParameterContentNegotiationStrategy Parameter strategy}</td>
- * <td>Off</td>
+ * <td>{@link ParameterContentNegotiationStrategy 参数策略}</td>
+ * <td>关闭</td>
  * </tr>
  * <tr>
  * <td>{@link #setIgnoreAcceptHeader ignoreAcceptHeader}</td>
- * <td>{@link HeaderContentNegotiationStrategy Header strategy}</td>
- * <td>On</td>
+ * <td>{@link HeaderContentNegotiationStrategy 头部策略}</td>
+ * <td>开启</td>
  * </tr>
  * <tr>
  * <td>{@link #setDefaultContentType defaultContentType}</td>
- * <td>{@link FixedContentNegotiationStrategy Fixed content strategy}</td>
- * <td>Not set</td>
+ * <td>{@link FixedContentNegotiationStrategy 固定内容策略}</td>
+ * <td>未设置</td>
  * </tr>
  * <tr>
  * <td>{@link #setDefaultContentTypeStrategy defaultContentTypeStrategy}</td>
  * <td>{@link ContentNegotiationStrategy}</td>
- * <td>Not set</td>
+ * <td>未设置</td>
  * </tr>
  * </table>
  *
- * <strong>Note:</strong> if you must use URL-based content type resolution,
- * the use of a query parameter is simpler and preferable to the use of a path
- * extension since the latter can cause issues with URI variables, path
- * parameters, and URI decoding. Consider setting {@link #setFavorPathExtension}
- * to {@literal false} or otherwise set the strategies to use explicitly via
- * {@link #setStrategies(List)}.
+ * <strong>注意：</strong>如果必须使用基于URL的内容类型解析，
+ * 使用查询参数比使用路径扩展更简单且更可取，因为后者可能会导致URI变量、路径参数和URI解码问题。
+ * 考虑将{@link #setFavorPathExtension}设置为{@literal false}，或通过{@link #setStrategies(List)}显式设置要使用的策略。
  *
  * @author Rossen Stoyanchev
  * @author Brian Clozel
@@ -121,11 +114,13 @@ public class ContentNegotiationManagerFactoryBean
 
 
 	/**
-	 * Set the exact list of strategies to use.
-	 * <p><strong>Note:</strong> use of this method is mutually exclusive with
-	 * use of all other setters in this class which customize a default, fixed
-	 * set of strategies. See class level doc for more details.
-	 * @param strategies the strategies to use
+	 * 设置要使用的具体策略列表。
+	 * <p>
+	 *     <strong>注意：</strong>
+	 *     此方法与类中所有其他用于定制默认固定策略集的setter方法互斥。
+	 *     更多详细信息请参阅类级别文档。
+	 *
+	 * @param strategies 要使用的策略
 	 * @since 5.0
 	 */
 	public void setStrategies(@Nullable List<ContentNegotiationStrategy> strategies) {
@@ -133,27 +128,23 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Whether the path extension in the URL path should be used to determine
-	 * the requested media type.
-	 * <p>By default this is set to {@code true} in which case a request
-	 * for {@code /hotels.pdf} will be interpreted as a request for
-	 * {@code "application/pdf"} regardless of the 'Accept' header.
+	 * 是否应该使用URL路径中的路径扩展名来确定所请求的媒体类型。
+	 * <p>
+	 *     默认情况下，该值设置为{@code true}。
+	 *     在这种情况下，对{@code /hotels.pdf}的请求将被解释为对{@code "application/pdf"}的请求，而无论'Accept'头信息如何。
 	 */
 	public void setFavorPathExtension(boolean favorPathExtension) {
 		this.favorPathExtension = favorPathExtension;
 	}
 
 	/**
-	 * Add a mapping from a key, extracted from a path extension or a query
-	 * parameter, to a MediaType. This is required in order for the parameter
-	 * strategy to work. Any extensions explicitly registered here are also
-	 * whitelisted for the purpose of Reflected File Download attack detection
-	 * (see Spring Framework reference documentation for more details on RFD
-	 * attack protection).
-	 * <p>The path extension strategy will also try to use
-	 * {@link ServletContext#getMimeType} and
-	 * {@link org.springframework.http.MediaTypeFactory} to resolve path extensions.
-	 * @param mediaTypes media type mappings
+	 * 添加键(从路径扩展名或查询参数中提取的)到MediaType的映射。
+	 * 这是参数策略正常工作所必需的。
+	 * 此处显式注册的任何扩展名也会被加入白名单，用于反射文件下载攻击检测（有关RFD攻击防护的更多详细信息，请参阅Spring Framework参考文档）。
+	 * <p>
+	 *     路径扩展策略还会尝试使用{@link ServletContext#getMimeType}和{@link org.springframework.http.MediaTypeFactory}来解析路径扩展名。
+	 *
+	 * @param mediaTypes 媒体类型映射
 	 * @see #addMediaType(String, MediaType)
 	 * @see #addMediaTypes(Map)
 	 */
@@ -168,7 +159,7 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * An alternative to {@link #setMediaTypes} for use in Java code.
+	 * 用于在Java代码中替代{@link #setMediaTypes}的方法。
 	 * @see #setMediaTypes
 	 * @see #addMediaTypes
 	 */
@@ -177,7 +168,7 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * An alternative to {@link #setMediaTypes} for use in Java code.
+	 * 用于在Java代码中替代{@link #setMediaTypes}的方法。
 	 * @see #setMediaTypes
 	 * @see #addMediaType
 	 */
@@ -188,18 +179,16 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Whether to ignore requests with path extension that cannot be resolved
-	 * to any media type. Setting this to {@code false} will result in an
-	 * {@code HttpMediaTypeNotAcceptableException} if there is no match.
-	 * <p>By default this is set to {@code true}.
+	 * 是否忽略无法解析到任何媒体类型的路径扩展名请求。
+	 * 将此设置为 {@code false} 时，如果没有匹配的媒体类型，将会抛出{@code HttpMediaTypeNotAcceptableException} 异常。
+	 * <p>默认情况下，此值设置为 {@code true}。
 	 */
 	public void setIgnoreUnknownPathExtensions(boolean ignore) {
 		this.ignoreUnknownPathExtensions = ignore;
 	}
 
 	/**
-	 * @deprecated as of 5.0, in favor of {@link #setUseRegisteredExtensionsOnly(boolean)}, which
-	 * has reverse behavior.
+	 * @deprecated 从5.0版本开始废弃，推荐使用 {@link #setUseRegisteredExtensionsOnly(boolean)}，该新方法具有相反的行为逻辑。
 	 */
 	@Deprecated
 	public void setUseJaf(boolean useJaf) {
@@ -207,11 +196,9 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * When {@link #setFavorPathExtension favorPathExtension} or
-	 * {@link #setFavorParameter(boolean)} is set, this property determines
-	 * whether to use only registered {@code MediaType} mappings or to allow
-	 * dynamic resolution, e.g. via {@link MediaTypeFactory}.
-	 * <p>By default this is not set in which case dynamic resolution is on.
+	 * 当设置了 {@link #setFavorPathExtension 偏好路径扩展} 或 {@link #setFavorParameter(boolean) 偏好参数} 时，
+	 * 此属性决定是仅使用注册的 {@code MediaType} 映射，还是允许动态解析（例如: 通过 {@link MediaTypeFactory}）。
+	 * <p>默认情况下未设置此属性，此时动态解析处于开启状态。
 	 */
 	public void setUseRegisteredExtensionsOnly(boolean useRegisteredExtensionsOnly) {
 		this.useRegisteredExtensionsOnly = useRegisteredExtensionsOnly;
@@ -222,10 +209,9 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Whether a request parameter ("format" by default) should be used to
-	 * determine the requested media type. For this option to work you must
-	 * register {@link #setMediaTypes media type mappings}.
-	 * <p>By default this is set to {@code false}.
+	 * 是否应使用请求参数（默认为"format"）来确定所请求的媒体类型。
+	 * 要使此选项生效，必须注册 {@link #setMediaTypes 媒体类型映射}。
+	 * <p>默认情况下，此选项设置为 {@code false}。
 	 * @see #setParameterName
 	 */
 	public void setFavorParameter(boolean favorParameter) {
@@ -233,8 +219,8 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Set the query parameter name to use when {@link #setFavorParameter} is on.
-	 * <p>The default parameter name is {@code "format"}.
+	 * 设置当启用 {@link #setFavorParameter} 时使用的查询参数名称。
+	 * <p>默认参数名为 {@code "format"}。
 	 */
 	public void setParameterName(String parameterName) {
 		Assert.notNull(parameterName, "parameterName is required");
@@ -242,16 +228,16 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Whether to disable checking the 'Accept' request header.
-	 * <p>By default this value is set to {@code false}.
+	 * 是否禁用检查 'Accept' 请求头。
+	 * <p>默认情况下该值设置为 {@code false}。
 	 */
 	public void setIgnoreAcceptHeader(boolean ignoreAcceptHeader) {
 		this.ignoreAcceptHeader = ignoreAcceptHeader;
 	}
 
 	/**
-	 * Set the default content type to use when no content type is requested.
-	 * <p>By default this is not set.
+	 * 设置当未请求内容类型时使用的默认内容类型。
+	 * <p>默认情况下此值为未设置状态。
 	 * @see #setDefaultContentTypeStrategy
 	 */
 	public void setDefaultContentType(MediaType contentType) {
@@ -259,8 +245,8 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Set the default content types to use when no content type is requested.
-	 * <p>By default this is not set.
+	 * 设置当未请求内容类型时使用的默认内容类型列表。
+	 * <p>默认情况下此值为未设置状态。
 	 * @see #setDefaultContentTypeStrategy
 	 * @since 5.0
 	 */
@@ -269,9 +255,8 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Set a custom {@link ContentNegotiationStrategy} to use to determine
-	 * the content type to use when no content type is requested.
-	 * <p>By default this is not set.
+	 * 设置自定义的 {@link ContentNegotiationStrategy}，用于在未请求内容类型时确定要使用的内容类型。
+	 * <p>默认情况下此值为未设置状态。
 	 * @see #setDefaultContentType
 	 * @since 4.1.2
 	 */
@@ -280,7 +265,7 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Invoked by Spring to inject the ServletContext.
+	 * 由 Spring 调用以注入 ServletContext。
 	 */
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -294,7 +279,7 @@ public class ContentNegotiationManagerFactoryBean
 	}
 
 	/**
-	 * Actually build the {@link ContentNegotiationManager}.
+	 * 实际构建 {@link ContentNegotiationManager} 的方法。
 	 * @since 5.0
 	 */
 	public ContentNegotiationManager build() {

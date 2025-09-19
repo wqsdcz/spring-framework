@@ -31,16 +31,16 @@ import java.util.TreeSet;
 import org.springframework.lang.Nullable;
 
 /**
- * Represents a MIME Type, as originally defined in RFC 2046 and subsequently
- * used in other Internet protocols including HTTP.
+ * 表示MIME类型，最初在RFC 2046中定义，随后被用于包括HTTP在内的其他互联网协议。
  *
- * <p>This class, however, does not contain support for the q-parameters used
- * in HTTP content negotiation. Those can be found in the subclass
- * {@code org.springframework.http.MediaType} in the {@code spring-web} module.
+ * <p>
+ *     然而，此类不支持HTTP内容协商中使用的q参数。
+ *     这些功能可以在{@code spring-web}模块中的子类{@code org.springframework.http.MediaType}中找到。
  *
- * <p>Consists of a {@linkplain #getType() type} and a {@linkplain #getSubtype() subtype}.
- * Also has functionality to parse MIME Type values from a {@code String} using
- * {@link #valueOf(String)}. For more parsing options see {@link MimeTypeUtils}.
+ * <p>
+ *     由{@linkplain #getType() 类型}和{@linkplain #getSubtype() 子类型}组成。
+ *     还具有使用{@link #valueOf(String)}从{@code String}解析MIME类型值的功能。
+ *     更多解析选项请参见{@link MimeTypeUtils}。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
@@ -104,44 +104,43 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 
 
 	/**
-	 * Create a new {@code MimeType} for the given primary type.
-	 * <p>The {@linkplain #getSubtype() subtype} is set to <code>"&#42;"</code>,
-	 * and the parameters are empty.
-	 * @param type the primary type
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 为给定的主类型创建一个新的 {@code MimeType}。
+	 * <p>{@linkplain #getSubtype() 子类型} 设置为 <code>"&#42;"</code>，并且参数为空。
+	 * @param type 主类型
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 */
 	public MimeType(String type) {
 		this(type, WILDCARD_TYPE);
 	}
 
 	/**
-	 * Create a new {@code MimeType} for the given primary type and subtype.
-	 * <p>The parameters are empty.
-	 * @param type the primary type
-	 * @param subtype the subtype
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 为给定的主类型和子类型创建一个新的 {@code MimeType}。
+	 * <p>参数为空。
+	 * @param type 主类型
+	 * @param subtype 子类型
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 */
 	public MimeType(String type, String subtype) {
 		this(type, subtype, Collections.emptyMap());
 	}
 
 	/**
-	 * Create a new {@code MimeType} for the given type, subtype, and character set.
-	 * @param type the primary type
-	 * @param subtype the subtype
-	 * @param charset the character set
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 为给定的类型、子类型和字符集创建一个新的 {@code MimeType}。
+	 * @param type 主类型
+	 * @param subtype 子类型
+	 * @param charset 字符集
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 */
 	public MimeType(String type, String subtype, Charset charset) {
 		this(type, subtype, Collections.singletonMap(PARAM_CHARSET, charset.name()));
 	}
 
 	/**
-	 * Copy-constructor that copies the type, subtype, parameters of the given {@code MimeType},
-	 * and allows to set the specified character set.
-	 * @param other the other MimeType
-	 * @param charset the character set
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 复制给定 {@code MimeType} 的类型、子类型和参数的拷贝构造方法，并允许设置指定的字符集。
+	 *
+	 * @param other 另一个 MimeType
+	 * @param charset 字符集
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 * @since 4.3
 	 */
 	public MimeType(MimeType other, Charset charset) {
@@ -149,22 +148,23 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	}
 
 	/**
-	 * Copy-constructor that copies the type and subtype of the given {@code MimeType},
-	 * and allows for different parameter.
-	 * @param other the other MimeType
-	 * @param parameters the parameters (may be {@code null})
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 拷贝构造方法，复制给定 {@code MimeType} 的类型和子类型，并允许使用不同的参数。
+	 *
+	 * @param other 另一个 MimeType
+	 * @param parameters 参数（可为 {@code null}）
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 */
 	public MimeType(MimeType other, @Nullable Map<String, String> parameters) {
 		this(other.getType(), other.getSubtype(), parameters);
 	}
 
 	/**
-	 * Create a new {@code MimeType} for the given type, subtype, and parameters.
-	 * @param type the primary type
-	 * @param subtype the subtype
-	 * @param parameters the parameters (may be {@code null})
-	 * @throws IllegalArgumentException if any of the parameters contains illegal characters
+	 * 为给定的类型、子类型和参数，创建一个新的 {@code MimeType}。
+	 *
+	 * @param type 主类型
+	 * @param subtype 子类型
+	 * @param parameters 参数（可为 {@code null}）
+	 * @throws IllegalArgumentException 如果任何参数包含非法字符
 	 */
 	public MimeType(String type, String subtype, @Nullable Map<String, String> parameters) {
 		Assert.hasLength(type, "'type' must not be empty");
@@ -187,10 +187,9 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	}
 
 	/**
-	 * Checks the given token string for illegal characters, as defined in RFC 2616,
-	 * section 2.2.
-	 * @throws IllegalArgumentException in case of illegal characters
-	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-2.2">HTTP 1.1, section 2.2</a>
+	 * 检查给定的令牌字符串是否包含RFC 2616 第2.2节中定义的非法字符。
+	 * @throws IllegalArgumentException 如果存在非法字符
+	 * @see <a href="https://tools.ietf.org/html/rfc2616#section-2.2">HTTP 1.1, 第2.2节</a>
 	 */
 	private void checkToken(String token) {
 		for (int i = 0; i < token.length(); i++) {

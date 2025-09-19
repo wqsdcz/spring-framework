@@ -503,14 +503,12 @@ public class AntPathMatcher implements PathMatcher {
 	}
 
 	/**
-	 * Combine two patterns into a new pattern.
-	 * <p>This implementation simply concatenates the two patterns, unless
-	 * the first pattern contains a file extension match (e.g., {@code *.html}).
-	 * In that case, the second pattern will be merged into the first. Otherwise,
-	 * an {@code IllegalArgumentException} will be thrown.
-	 * <h3>Examples</h3>
+	 * 将两个模式合并为一个新模式。
+	 * <p>此实现简单地将两个模式连接，除非第一个模式包含文件扩展名匹配（例如 {@code *.html}）。
+	 * 在这种情况下，第二个模式将被合并到第一个模式中。否则将抛出 {@code IllegalArgumentException}。
+	 * <h3>示例</h3>
 	 * <table border="1">
-	 * <tr><th>Pattern 1</th><th>Pattern 2</th><th>Result</th></tr>
+	 * <tr><th>模式1</th><th>模式2</th><th>结果</th></tr>
 	 * <tr><td>{@code null}</td><td>{@code null}</td><td>&nbsp;</td></tr>
 	 * <tr><td>/hotels</td><td>{@code null}</td><td>/hotels</td></tr>
 	 * <tr><td>{@code null}</td><td>/hotels</td><td>/hotels</td></tr>
@@ -525,10 +523,10 @@ public class AntPathMatcher implements PathMatcher {
 	 * <tr><td>/*.html</td><td>/hotels</td><td>/hotels.html</td></tr>
 	 * <tr><td>/*.html</td><td>/*.txt</td><td>{@code IllegalArgumentException}</td></tr>
 	 * </table>
-	 * @param pattern1 the first pattern
-	 * @param pattern2 the second pattern
-	 * @return the combination of the two patterns
-	 * @throws IllegalArgumentException if the two patterns cannot be combined
+	 * @param pattern1 第一个模式
+	 * @param pattern2 第二个模式
+	 * @return 两个模式合并后的结果
+	 * @throws IllegalArgumentException 如果两个模式无法合并
 	 */
 	@Override
 	public String combine(String pattern1, String pattern2) {

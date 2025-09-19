@@ -28,8 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.WebUtils;
 
 /**
- * A logical conjunction (' && ') request condition that matches a request against
- * a set parameter expressions with syntax defined in {@link RequestMapping#params()}.
+ * 一种逻辑与（' && '）请求条件，用于将请求与一组参数表达式进行匹配，参数表达式的语法在 {@link RequestMapping#params()} 中定义。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -41,9 +40,9 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 
 	/**
-	 * Create a new instance from the given param expressions.
-	 * @param params expressions with syntax defined in {@link RequestMapping#params()};
-	 * 	if 0, the condition will match to every request.
+	 * 根据给定的参数表达式创建新实例。
+	 * @param params 符合 {@link RequestMapping#params()} 语法定义的表达式；
+	 *               如果为0，则该条件将匹配所有请求。
 	 */
 	public ParamsRequestCondition(String... params) {
 		this(parseExpressions(params));
@@ -64,7 +63,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 
 	/**
-	 * Return the contained request parameter expressions.
+	 * 返回包含的请求参数表达式。
 	 */
 	public Set<NameValueExpression<String>> getExpressions() {
 		return new LinkedHashSet<>(this.expressions);
@@ -81,8 +80,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	}
 
 	/**
-	 * Returns a new instance with the union of the param expressions
-	 * from "this" and the "other" instance.
+	 * 返回一个新实例，包含"this"和"other"实例中参数表达式的并集。
 	 */
 	@Override
 	public ParamsRequestCondition combine(ParamsRequestCondition other) {
@@ -92,8 +90,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	}
 
 	/**
-	 * Returns "this" instance if the request matches all param expressions;
-	 * or {@code null} otherwise.
+	 * 如果请求匹配所有参数表达式，则返回"this"实例；否则返回{@code null}。
 	 */
 	@Override
 	@Nullable
@@ -107,15 +104,16 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	}
 
 	/**
-	 * Returns:
+	 * 返回比较结果：
 	 * <ul>
-	 * <li>0 if the two conditions have the same number of parameter expressions
-	 * <li>Less than 0 if "this" instance has more parameter expressions
-	 * <li>Greater than 0 if the "other" instance has more parameter expressions
+	 *     <li>如果两个条件具有相同数量的参数表达式，返回0</li>
+	 *     <li>如果"this"实例具有更多参数表达式，返回小于0的值</li>
+	 *     <li>如果"other"实例具有更多参数表达式，返回大于0的值</li>
 	 * </ul>
-	 * <p>It is assumed that both instances have been obtained via
-	 * {@link #getMatchingCondition(HttpServletRequest)} and each instance
-	 * contains the matching parameter expressions only or is otherwise empty.
+	 *
+	 * <p>
+	 *     假定两个实例都是通过{@link #getMatchingCondition(HttpServletRequest)}获取的，
+	 *     且每个实例仅包含匹配的参数表达式，或者为空。
 	 */
 	@Override
 	public int compareTo(ParamsRequestCondition other, HttpServletRequest request) {
@@ -124,7 +122,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 
 	/**
-	 * Parses and matches a single param expression to a request.
+	 * 解析单个参数表达式并与请求进行匹配。
 	 */
 	static class ParamExpression extends AbstractNameValueExpression<String> {
 

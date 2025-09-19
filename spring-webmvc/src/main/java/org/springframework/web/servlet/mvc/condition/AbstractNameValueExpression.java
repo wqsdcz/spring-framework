@@ -22,9 +22,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Supports "name=value" style expressions as described in:
- * {@link org.springframework.web.bind.annotation.RequestMapping#params()} and
- * {@link org.springframework.web.bind.annotation.RequestMapping#headers()}.
+ * 支持在以下注解中描述的"name=value"样式表达式：
+ * {@link org.springframework.web.bind.annotation.RequestMapping#params()} 和
+ * {@link org.springframework.web.bind.annotation.RequestMapping#headers()}。
  *
  * @author Rossen Stoyanchev
  * @author Arjen Poutsma

@@ -55,7 +55,7 @@ import org.springframework.web.util.UrlPathHelper;
  *
  * 笔记部分：
  * 1、可以访问到ApplicationContext和ServletContext，因为间接实现了ApplicationContextAware、ServletContextAware 两个接口
- * 2、ApplicationContextAware、ServletContextAware 两个接口，引出了两个初始化方法。
+ * 2、ApplicationContextAware、ServletContextAware 两个接口，引出了两个初始化方法，在注入相关依赖时，使用相关依赖去初始化HandlerMapping。
  * 3、多个AbstractHandlerMapping子类对象之间是有序的，因为实现了Ordered接口
  * 4、定义了获取handler的基本流程，如下：
  *   1) 获取抽象层面的handler。如果handler没有获取到，则获取默认handler。如果还是没有获取到，则返回null。

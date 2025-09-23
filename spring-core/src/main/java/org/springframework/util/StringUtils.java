@@ -718,17 +718,16 @@ public abstract class StringUtils {
 	}
 
 	/**
-	 * Decode the given encoded URI component value. Based on the following rules:
+	 * 对给定的已编码URI组件值进行解码。基于以下规则：
 	 * <ul>
-	 * <li>Alphanumeric characters {@code "a"} through {@code "z"}, {@code "A"} through {@code "Z"},
-	 * and {@code "0"} through {@code "9"} stay the same.</li>
-	 * <li>Special characters {@code "-"}, {@code "_"}, {@code "."}, and {@code "*"} stay the same.</li>
-	 * <li>A sequence "{@code %<i>xy</i>}" is interpreted as a hexadecimal representation of the character.</li>
+	 * <li>字母数字字符 {@code "a"} 到 {@code "z"}、{@code "A"} 到 {@code "Z"}、和 {@code "0"} 到 {@code "9"} 保持不变。</li>
+	 * <li>特殊字符 {@code "-"}、{@code "_"}、{@code "."} 和 {@code "*"} 保持不变。</li>
+	 * <li>序列 "{@code %<i>xy</i>}" 被解释为字符的十六进制表示。</li>
 	 * </ul>
-	 * @param source the encoded String
-	 * @param charset the character set
-	 * @return the decoded value
-	 * @throws IllegalArgumentException when the given source contains invalid encoded sequences
+	 * @param source 已编码的字符串
+	 * @param charset 字符集
+	 * @return 解码后的值
+	 * @throws IllegalArgumentException 当给定的源包含无效的编码序列时抛出
 	 * @since 5.0
 	 * @see java.net.URLDecoder#decode(String, String)
 	 */

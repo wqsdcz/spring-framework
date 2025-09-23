@@ -329,12 +329,12 @@ public abstract class UriUtils {
 
 
 	/**
-	 * Decode the given encoded URI component.
-	 * <p>See {@link StringUtils#uriDecode(String, Charset)} for the decoding rules.
-	 * @param source the encoded String
-	 * @param encoding the character encoding to use
-	 * @return the decoded value
-	 * @throws IllegalArgumentException when the given source contains invalid encoded sequences
+	 * 对给定的已编码URI组件进行解码。
+	 * <p>有关解码规则，请参阅{@link StringUtils#uriDecode(String, Charset)}。
+	 * @param source 已编码的字符串
+	 * @param encoding 要使用的字符编码
+	 * @return 解码后的值
+	 * @throws IllegalArgumentException 当给定的源包含无效的编码序列时抛出
 	 * @see StringUtils#uriDecode(String, Charset)
 	 * @see java.net.URLDecoder#decode(String, String)
 	 */

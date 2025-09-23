@@ -706,18 +706,15 @@ public abstract class WebUtils {
 	}
 
 	/**
-	 * Check if the request is a same-origin one, based on {@code Origin}, {@code Host},
-	 * {@code Forwarded}, {@code X-Forwarded-Proto}, {@code X-Forwarded-Host} and
-	 * @code X-Forwarded-Port} headers.
-	 * <p><strong>Note:</strong> this method uses values from "Forwarded"
-	 * (<a href="https://tools.ietf.org/html/rfc7239">RFC 7239</a>),
-	 * "X-Forwarded-Host", "X-Forwarded-Port", and "X-Forwarded-Proto" headers,
-	 * if present, in order to reflect the client-originated address.
-	 * Consider using the {@code ForwardedHeaderFilter} in order to choose from a
-	 * central place whether to extract and use, or to discard such headers.
-	 * See the Spring Framework reference for more on this filter.
-	 * @return {@code true} if the request is a same-origin one, {@code false} in case
-	 * of cross-origin request
+	 * 基于 {@code Origin}、{@code Host}、{@code Forwarded}、{@code X-Forwarded-Proto}、
+	 * {@code X-Forwarded-Host} 和 {@code X-Forwarded-Port} 头部检查请求是否为同源请求。
+	 *
+	 * <p><strong>注意：</strong>此方法使用 "Forwarded"（<a href="https://tools.ietf.org/html/rfc7239">RFC 7239</a>）、
+	 * "X-Forwarded-Host"、"X-Forwarded-Port" 和 "X-Forwarded-Proto" 头部的值（如果存在），
+	 * 以反映客户端原始地址。建议使用 {@code ForwardedHeaderFilter} 来统一选择是否提取和使用此类头部，
+	 * 或将其丢弃。有关此过滤器的更多信息，请参阅 Spring Framework 参考文档。
+	 *
+	 * @return 如果请求是同源请求则返回 {@code true}，跨域请求返回 {@code false}
 	 * @since 4.2
 	 */
 	public static boolean isSameOrigin(HttpRequest request) {

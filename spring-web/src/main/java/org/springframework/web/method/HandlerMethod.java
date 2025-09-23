@@ -78,7 +78,7 @@ public class HandlerMethod {
 
 
 	/**
-	 * Create an instance from a bean instance and a method.
+	 * 通过Bean实例和方法创建配置实例。
 	 */
 	public HandlerMethod(Object bean, Method method) {
 		Assert.notNull(bean, "Bean is required");
@@ -93,8 +93,8 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Create an instance from a bean instance, method name, and parameter types.
-	 * @throws NoSuchMethodException when the method cannot be found
+	 * 通过Bean实例、方法名和参数类型创建配置实例。
+	 * @throws NoSuchMethodException 当找不到方法时抛出
 	 */
 	public HandlerMethod(Object bean, String methodName, Class<?>... parameterTypes) throws NoSuchMethodException {
 		Assert.notNull(bean, "Bean is required");
@@ -109,9 +109,8 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Create an instance from a bean name, a method, and a {@code BeanFactory}.
-	 * The method {@link #createWithResolvedBean()} may be used later to
-	 * re-create the {@code HandlerMethod} with an initialized bean.
+	 * 通过Bean名称、方法和{@code BeanFactory}创建配置实例。
+	 * 后续可使用{@link #createWithResolvedBean()}方法重新创建带有初始化Bean的{@code HandlerMethod}。
 	 */
 	public HandlerMethod(String beanName, BeanFactory beanFactory, Method method) {
 		Assert.hasText(beanName, "Bean name is required");
@@ -131,7 +130,7 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Copy constructor for use in subclasses.
+	 * 用于子类的拷贝构造函数。
 	 */
 	protected HandlerMethod(HandlerMethod handlerMethod) {
 		Assert.notNull(handlerMethod, "HandlerMethod is required");
@@ -147,7 +146,7 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Re-create HandlerMethod with the resolved handler.
+	 * 使用已解析的处理器重新创建HandlerMethod。
 	 */
 	private HandlerMethod(HandlerMethod handlerMethod, Object handler) {
 		Assert.notNull(handlerMethod, "HandlerMethod is required");

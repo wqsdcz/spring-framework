@@ -39,14 +39,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.util.WebUtils;
 
 /**
- * The default implementation of {@link CorsProcessor}, as defined by the
- * <a href="https://www.w3.org/TR/cors/">CORS W3C recommendation</a>.
+ * {@link CorsProcessor} 的默认实现，遵循<a href="https://www.w3.org/TR/cors/">CORS W3C 推荐规范</a>的定义。
  *
- * <p>Note that when input {@link CorsConfiguration} is {@code null}, this
- * implementation does not reject simple or actual requests outright but simply
- * avoid adding CORS headers to the response. CORS processing is also skipped
- * if the response already contains CORS headers, or if the request is detected
- * as a same-origin one.
+ * <p>
+ *     请注意，当输入的 {@link CorsConfiguration} 为 {@code null} 时，
+ *     此实现不会直接拒绝简单请求或实际请求，而只是避免向响应添加 CORS 头部。
+ *     如果响应已包含 CORS 头部，或检测到请求为同源请求，则会跳过 CORS 处理。
  *
  * @author Sebastien Deleuze
  * @author Rossen Stoyanchev
@@ -61,34 +59,39 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	@SuppressWarnings("resource")
 	public boolean processRequest(@Nullable CorsConfiguration config, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-
+		// 非CORS请求，直接返回true
 		if (!CorsUtils.isCorsRequest(request)) {
 			return true;
 		}
 
+		// response 中已经有 CORS 头部，直接返回true
 		ServletServerHttpResponse serverResponse = new ServletServerHttpResponse(response);
 		if (responseHasCors(serverResponse)) {
 			logger.debug("Skip CORS processing: response already contains \"Access-Control-Allow-Origin\" header");
 			return true;
 		}
 
+		// request是同源的，直接返回true
 		ServletServerHttpRequest serverRequest = new ServletServerHttpRequest(request);
 		if (WebUtils.isSameOrigin(serverRequest)) {
 			logger.debug("Skip CORS processing: request is from same origin");
 			return true;
 		}
 
+		// 没有 CORS配置 时，的默认行为。
 		boolean preFlightRequest = CorsUtils.isPreFlightRequest(request);
 		if (config == null) {
 			if (preFlightRequest) {
+				// 如果没有CORS配置，禁止【非简单请求】的预检请求。
 				rejectRequest(serverResponse);
 				return false;
 			}
 			else {
+				// 如果没有CORS配置，允许简单请求。
 				return true;
 			}
 		}
-
+		// 有 CORS配置 时，依照配置处理。
 		return handleInternal(serverRequest, serverResponse, config, preFlightRequest);
 	}
 
@@ -103,9 +106,8 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	}
 
 	/**
-	 * Invoked when one of the CORS checks failed.
-	 * The default implementation sets the response status to 403 and writes
-	 * "Invalid CORS request" to the response.
+	 * 当 CORS 检查失败时调用。
+	 * 默认实现会将响应状态设置为 403 并在响应中写入 "Invalid CORS request"（无效的 CORS 请求）。
 	 */
 	protected void rejectRequest(ServerHttpResponse response) throws IOException {
 		response.setStatusCode(HttpStatus.FORBIDDEN);
@@ -113,7 +115,7 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	}
 
 	/**
-	 * Handle the given request.
+	 * 处理给定的请求；
 	 */
 	protected boolean handleInternal(ServerHttpRequest request, ServerHttpResponse response,
 			CorsConfiguration config, boolean preFlightRequest) throws IOException {
@@ -125,12 +127,14 @@ public class DefaultCorsProcessor implements CorsProcessor {
 		responseHeaders.addAll(HttpHeaders.VARY, Arrays.asList(HttpHeaders.ORIGIN,
 				HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS));
 
+		// 拦截不被允许的源
 		if (allowOrigin == null) {
 			logger.debug("Rejecting CORS request because '" + requestOrigin + "' origin is not allowed");
 			rejectRequest(response);
 			return false;
 		}
 
+		// 拦截不被允许的方法（预检请求的方法来自于Access-Control-Request-Method头，简单请求和实际请求的方法来自于请求行）
 		HttpMethod requestMethod = getMethodToUse(request, preFlightRequest);
 		List<HttpMethod> allowMethods = checkMethods(config, requestMethod);
 		if (allowMethods == null) {
@@ -139,6 +143,7 @@ public class DefaultCorsProcessor implements CorsProcessor {
 			return false;
 		}
 
+		// 拦截不被允许的Header（预检请求的Header来自于Access-Control-Request-Headers头，简单请求和实际请求的方法来自于请求头部分）
 		List<String> requestHeaders = getHeadersToUse(request, preFlightRequest);
 		List<String> allowHeaders = checkHeaders(config, requestHeaders);
 		if (preFlightRequest && allowHeaders == null) {
@@ -150,10 +155,12 @@ public class DefaultCorsProcessor implements CorsProcessor {
 		responseHeaders.setAccessControlAllowOrigin(allowOrigin);
 
 		if (preFlightRequest) {
+			// 为预检请求设置允许的方法
 			responseHeaders.setAccessControlAllowMethods(allowMethods);
 		}
 
 		if (preFlightRequest && !allowHeaders.isEmpty()) {
+			// 为预检请求设置允许的header
 			responseHeaders.setAccessControlAllowHeaders(allowHeaders);
 		}
 
@@ -174,9 +181,7 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	}
 
 	/**
-	 * Check the origin and determine the origin for the response. The default
-	 * implementation simply delegates to
-	 * {@link org.springframework.web.cors.CorsConfiguration#checkOrigin(String)}.
+	 * 检查源并确定响应的源。默认实现直接委托给{@link org.springframework.web.cors.CorsConfiguration#checkOrigin(String)} 方法。
 	 */
 	@Nullable
 	protected String checkOrigin(CorsConfiguration config, @Nullable String requestOrigin) {
@@ -184,9 +189,8 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	}
 
 	/**
-	 * Check the HTTP method and determine the methods for the response of a
-	 * pre-flight request. The default implementation simply delegates to
-	 * {@link org.springframework.web.cors.CorsConfiguration#checkHttpMethod(HttpMethod)}.
+	 * 检查HTTP方法并确定预检请求响应中的允许方法。
+	 * 默认实现直接委托给{@link org.springframework.web.cors.CorsConfiguration#checkHttpMethod(HttpMethod)}方法。
 	 */
 	@Nullable
 	protected List<HttpMethod> checkMethods(CorsConfiguration config, @Nullable HttpMethod requestMethod) {
@@ -199,9 +203,8 @@ public class DefaultCorsProcessor implements CorsProcessor {
 	}
 
 	/**
-	 * Check the headers and determine the headers for the response of a
-	 * pre-flight request. The default implementation simply delegates to
-	 * {@link org.springframework.web.cors.CorsConfiguration#checkOrigin(String)}.
+	 * 检查头部并确定预检请求响应中的允许头部。
+	 * 默认实现直接委托给{@link org.springframework.web.cors.CorsConfiguration#checkOrigin(String)}方法。
 	 */
 	@Nullable
 	protected List<String> checkHeaders(CorsConfiguration config, List<String> requestHeaders) {

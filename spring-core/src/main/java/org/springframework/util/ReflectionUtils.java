@@ -56,8 +56,7 @@ public abstract class ReflectionUtils {
 			(method -> !method.isBridge());
 
 	/**
-	 * Pre-built MethodFilter that matches all non-bridge non-synthetic methods
-	 * which are not declared on {@code java.lang.Object}.
+	 * 预构建的MethodFilter，匹配所有非桥接非合成方法，且不在{@code java.lang.Object}中声明的方法。
 	 * @since 3.0.5
 	 */
 	public static final MethodFilter USER_DECLARED_METHODS =
@@ -390,14 +389,12 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * Perform the given callback operation on all matching methods of the given
-	 * class and superclasses (or given interface and super-interfaces).
-	 * <p>The same named method occurring on subclass and superclass will appear
-	 * twice, unless excluded by the specified {@link MethodFilter}.
-	 * @param clazz the class to introspect
-	 * @param mc the callback to invoke for each method
-	 * @param mf the filter that determines the methods to apply the callback to
-	 * @throws IllegalStateException if introspection fails
+	 * 在给定类及其超类（或给定接口及其超接口）的所有匹配方法上执行指定的回调操作。
+	 * <p>子类和超类中出现的同名方法将会出现两次，除非被指定的{@link MethodFilter}排除。
+	 * @param clazz 要内省的类型
+	 * @param mc 为每个方法调用的回调
+	 * @param mf 确定哪些方法应用回调的过滤器
+	 * @throws IllegalStateException 如果内省失败
 	 */
 	public static void doWithMethods(Class<?> clazz, MethodCallback mc, @Nullable MethodFilter mf) {
 		// Keep backing up the inheritance hierarchy.

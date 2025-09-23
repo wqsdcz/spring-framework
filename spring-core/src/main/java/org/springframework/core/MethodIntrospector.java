@@ -28,11 +28,10 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Defines the algorithm for searching for metadata-associated methods exhaustively
- * including interfaces and parent classes while also dealing with parameterized methods
- * as well as common scenarios encountered with interface and class-based proxies.
+ * 定义了用于全面搜索元数据关联方法的算法，包括接口和父类，
+ * 同时处理参数化方法以及接口和基于类的代理中遇到的常见场景。
  *
- * <p>Typically, but not necessarily, used for finding annotated handler methods.
+ * <p>通常但不一定用于查找带注解的处理方法。
  *
  * @author Juergen Hoeller
  * @author Rossen Stoyanchev
@@ -41,15 +40,16 @@ import org.springframework.util.ReflectionUtils;
 public abstract class MethodIntrospector {
 
 	/**
-	 * Select methods on the given target type based on the lookup of associated metadata.
-	 * <p>Callers define methods of interest through the {@link MetadataLookup} parameter,
-	 * allowing to collect the associated metadata into the result map.
-	 * @param targetType the target type to search methods on
-	 * @param metadataLookup a {@link MetadataLookup} callback to inspect methods of interest,
-	 * returning non-null metadata to be associated with a given method if there is a match,
-	 * or {@code null} for no match
-	 * @return the selected methods associated with their metadata (in the order of retrieval),
-	 * or an empty map in case of no match
+	 * 基于关联元数据的查找，在给定目标类型上选择方法。
+	 * <p>
+	 *     调用者通过{@link MetadataLookup}参数定义感兴趣的方法，
+	 *     允许将关联的元数据收集到结果映射中。
+	 * @param targetType 要搜索方法的目标类型
+	 * @param metadataLookup 用于检查感兴趣方法的{@link MetadataLookup}回调，
+	 *                       如果匹配则返回与给定方法关联的非空元数据，
+	 *                       如果不匹配则返回{@code null}
+	 * @return 与其元数据关联的选定方法（按检索顺序），
+	 *         如果没有匹配项则返回空映射
 	 */
 	public static <T> Map<Method, T> selectMethods(Class<?> targetType, final MetadataLookup<T> metadataLookup) {
 		final Map<Method, T> methodMap = new LinkedHashMap<>();

@@ -31,10 +31,9 @@ import java.util.Map;
 import org.springframework.lang.Nullable;
 
 /**
- * Simple utility class for working with the reflection API and handling
- * reflection exceptions.
+ * 用于操作反射API和处理反射异常的简单工具类。
  *
- * <p>Only intended for internal use.
+ * <p>仅限内部使用。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -47,9 +46,9 @@ import org.springframework.lang.Nullable;
 public abstract class ReflectionUtils {
 
 	/**
-	 * Pre-built MethodFilter that matches all non-bridge methods.
+	 * 预建的 MethodFilter，用于匹配所有非桥接方法。
 	 * @since 3.0
-	 * @deprecated as of 5.0.11, in favor of a custom {@link MethodFilter}
+	 * @deprecated 自5.0.11版本起，推荐使用自定义的{@link MethodFilter}替代
 	 */
 	@Deprecated
 	public static final MethodFilter NON_BRIDGED_METHODS =
@@ -63,14 +62,14 @@ public abstract class ReflectionUtils {
 			(method -> !method.isBridge() && !method.isSynthetic() && method.getDeclaringClass() != Object.class);
 
 	/**
-	 * Pre-built FieldFilter that matches all non-static, non-final fields.
+	 * 预建的 FieldFilter，用于匹配所有非静态、非 final 字段。
 	 */
 	public static final FieldFilter COPYABLE_FIELDS =
 			(field -> !(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())));
 
 
 	/**
-	 * Naming prefix for CGLIB-renamed methods.
+	 * CGLIB 重命名方法的命名前缀。
 	 * @see #isCglibRenamedMethod
 	 */
 	private static final String CGLIB_RENAMED_METHOD_PREFIX = "CGLIB$";
@@ -81,27 +80,24 @@ public abstract class ReflectionUtils {
 
 
 	/**
-	 * Cache for {@link Class#getDeclaredMethods()} plus equivalent default methods
-	 * from Java 8 based interfaces, allowing for fast iteration.
+	 * 用于缓存 {@link Class#getDeclaredMethods()} 以及Java 8基于接口的等效默认方法，以便快速迭代。
 	 */
 	private static final Map<Class<?>, Method[]> declaredMethodsCache = new ConcurrentReferenceHashMap<>(256);
 
 	/**
-	 * Cache for {@link Class#getDeclaredFields()}, allowing for fast iteration.
+	 * 用于缓存 {@link Class#getDeclaredFields()}，以便快速迭代。
 	 */
 	private static final Map<Class<?>, Field[]> declaredFieldsCache = new ConcurrentReferenceHashMap<>(256);
 
 
-	// Exception handling
+	// 对异常的处理
 
 	/**
-	 * Handle the given reflection exception. Should only be called if no
-	 * checked exception is expected to be thrown by the target method.
-	 * <p>Throws the underlying RuntimeException or Error in case of an
-	 * InvocationTargetException with such a root cause. Throws an
-	 * IllegalStateException with an appropriate message or
-	 * UndeclaredThrowableException otherwise.
-	 * @param ex the reflection exception to handle
+	 * 处理给定的反射异常。仅当目标方法不预期抛出受检异常时才应调用。
+	 * <p>
+	 *     如果 InvocationTargetException 的根本原因是 RuntimeException 或 Error，则直接抛出；
+	 *     否则抛出包含适当错误信息的 IllegalStateException 或 UndeclaredThrowableException。
+	 * @param ex 需要处理的反射异常
 	 */
 	public static void handleReflectionException(Exception ex) {
 		if (ex instanceof NoSuchMethodException) {
@@ -120,26 +116,21 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * Handle the given invocation target exception. Should only be called if no
-	 * checked exception is expected to be thrown by the target method.
-	 * <p>Throws the underlying RuntimeException or Error in case of such a root
-	 * cause. Throws an UndeclaredThrowableException otherwise.
-	 * @param ex the invocation target exception to handle
+	 * 处理给定的调用目标异常。仅当目标方法不预期抛出受检异常时才应调用。
+	 * <p>如果根本原因是 RuntimeException 或 Error，则直接抛出；
+	 * 否则抛出 UndeclaredThrowableException。
+	 * @param ex 需要处理的调用目标异常
 	 */
 	public static void handleInvocationTargetException(InvocationTargetException ex) {
 		rethrowRuntimeException(ex.getTargetException());
 	}
 
 	/**
-	 * Rethrow the given {@link Throwable exception}, which is presumably the
-	 * <em>target exception</em> of an {@link InvocationTargetException}.
-	 * Should only be called if no checked exception is expected to be thrown
-	 * by the target method.
-	 * <p>Rethrows the underlying exception cast to a {@link RuntimeException} or
-	 * {@link Error} if appropriate; otherwise, throws an
-	 * {@link UndeclaredThrowableException}.
-	 * @param ex the exception to rethrow
-	 * @throws RuntimeException the rethrown exception
+	 * 重新抛出给定的 {@link Throwable 异常}，该异常假定为 {@link InvocationTargetException} 的<em>目标异常</em>。
+	 * 仅当目标方法不预期抛出受检异常时才应调用。
+	 * <p>如果适当，将底层异常转换为 {@link RuntimeException} 或 {@link Error} 重新抛出；否则抛出 {@link UndeclaredThrowableException}。
+	 * @param ex 要重新抛出的异常
+	 * @throws RuntimeException 重新抛出的异常
 	 */
 	public static void rethrowRuntimeException(Throwable ex) {
 		if (ex instanceof RuntimeException) {
@@ -152,15 +143,11 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * Rethrow the given {@link Throwable exception}, which is presumably the
-	 * <em>target exception</em> of an {@link InvocationTargetException}.
-	 * Should only be called if no checked exception is expected to be thrown
-	 * by the target method.
-	 * <p>Rethrows the underlying exception cast to an {@link Exception} or
-	 * {@link Error} if appropriate; otherwise, throws an
-	 * {@link UndeclaredThrowableException}.
-	 * @param ex the exception to rethrow
-	 * @throws Exception the rethrown exception (in case of a checked exception)
+	 * 重新抛出给定的 {@link Throwable 异常}，该异常假定为{@link InvocationTargetException} 的<em>目标异常</em>。
+	 * 仅当目标方法不预期抛出受检异常时才应调用。
+	 * <p>如果适当，将底层异常转换为 {@link Exception} 或 {@link Error} 重新抛出；否则抛出 {@link UndeclaredThrowableException}。
+	 * @param ex 要重新抛出的异常
+	 * @throws Exception 重新抛出的异常（如果是受检异常）
 	 */
 	public static void rethrowException(Throwable ex) throws Exception {
 		if (ex instanceof Exception) {
@@ -173,14 +160,14 @@ public abstract class ReflectionUtils {
 	}
 
 
-	// Constructor handling
+	// 对构造函数的处理
 
 	/**
-	 * Obtain an accessible constructor for the given class and parameters.
-	 * @param clazz the clazz to check
-	 * @param parameterTypes the parameter types of the desired constructor
-	 * @return the constructor reference
-	 * @throws NoSuchMethodException if no such constructor exists
+	 * 获取给定类和参数的可访问构造方法。
+	 * @param clazz 要检查的类
+	 * @param parameterTypes 所需构造方法的参数类型
+	 * @return 构造方法引用
+	 * @throws NoSuchMethodException 如果不存在这样的构造方法
 	 * @since 5.0
 	 */
 	public static <T> Constructor<T> accessibleConstructor(Class<T> clazz, Class<?>... parameterTypes)
@@ -192,11 +179,10 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * Make the given constructor accessible, explicitly setting it accessible
-	 * if necessary. The {@code setAccessible(true)} method is only called
-	 * when actually necessary, to avoid unnecessary conflicts with a JVM
-	 * SecurityManager (if active).
-	 * @param ctor the constructor to make accessible
+	 * 使给定构造函数可访问，必要时显式设置其可访问性。
+	 * 仅在确实必要时才调用 {@code setAccessible(true)} 方法，
+	 * 以避免与 JVM 安全管理器（如果激活）产生不必要的冲突。
+	 * @param ctor 要使其可访问的构造函数
 	 * @see java.lang.reflect.Constructor#setAccessible
 	 */
 	@SuppressWarnings("deprecation")  // on JDK 9
@@ -208,31 +194,21 @@ public abstract class ReflectionUtils {
 	}
 
 
-	// Method handling
+	// 对方法的处理
 
 	/**
-	 * Attempt to find a {@link Method} on the supplied class with the supplied name
-	 * and no parameters. Searches all superclasses up to {@code Object}.
-	 * <p>Returns {@code null} if no {@link Method} can be found.
-	 * @param clazz the class to introspect
-	 * @param name the name of the method
-	 * @return the Method object, or {@code null} if none found
+	 * 尝试在提供的类及其所有超类（直至 {@code Object}）中查找指定名称的无参数 {@link Method}。
+	 * <p>如果找不到对应的 {@link Method} 则返回 {@code null}。
+	 * @param clazz 要内省的类
+	 * @param name 方法名称
+	 * @return 方法对象，如果未找到则返回 {@code null}
 	 */
 	@Nullable
 	public static Method findMethod(Class<?> clazz, String name) {
 		return findMethod(clazz, name, new Class<?>[0]);
 	}
 
-	/**
-	 * Attempt to find a {@link Method} on the supplied class with the supplied name
-	 * and parameter types. Searches all superclasses up to {@code Object}.
-	 * <p>Returns {@code null} if no {@link Method} can be found.
-	 * @param clazz the class to introspect
-	 * @param name the name of the method
-	 * @param paramTypes the parameter types of the method
-	 * (may be {@code null} to indicate any signature)
-	 * @return the Method object, or {@code null} if none found
-	 */
+
 	@Nullable
 	public static Method findMethod(Class<?> clazz, String name, @Nullable Class<?>... paramTypes) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -251,15 +227,7 @@ public abstract class ReflectionUtils {
 		return null;
 	}
 
-	/**
-	 * Invoke the specified {@link Method} against the supplied target object with no arguments.
-	 * The target object can be {@code null} when invoking a static {@link Method}.
-	 * <p>Thrown exceptions are handled via a call to {@link #handleReflectionException}.
-	 * @param method the method to invoke
-	 * @param target the target object to invoke the method on
-	 * @return the invocation result, if any
-	 * @see #invokeMethod(java.lang.reflect.Method, Object, Object[])
-	 */
+
 	@Nullable
 	public static Object invokeMethod(Method method, @Nullable Object target) {
 		return invokeMethod(method, target, new Object[0]);
@@ -601,7 +569,7 @@ public abstract class ReflectionUtils {
 	}
 
 
-	// Field handling
+	// 对字段的处理
 
 	/**
 	 * Attempt to find a {@link Field field} on the supplied {@link Class} with the
@@ -815,7 +783,7 @@ public abstract class ReflectionUtils {
 	}
 
 
-	// Cache handling
+	// 对缓存的处理
 
 	/**
 	 * Clear the internal method/field cache.
@@ -828,56 +796,56 @@ public abstract class ReflectionUtils {
 
 
 	/**
-	 * Action to take on each method.
+	 * 对每个方法执行的操作。
 	 */
 	@FunctionalInterface
 	public interface MethodCallback {
 
 		/**
-		 * Perform an operation using the given method.
-		 * @param method the method to operate on
+		 * 使用给定方法执行操作。
+		 * @param method 要操作的方法
 		 */
 		void doWith(Method method) throws IllegalArgumentException, IllegalAccessException;
 	}
 
 
 	/**
-	 * Callback optionally used to filter methods to be operated on by a method callback.
+	 * 回调接口，选择性地用于过滤MethodCallback所要操作的方法。
 	 */
 	@FunctionalInterface
 	public interface MethodFilter {
 
 		/**
-		 * Determine whether the given method matches.
-		 * @param method the method to check
+		 * 判断给定方法是否匹配。
+		 * @param method 要检查的方法
 		 */
 		boolean matches(Method method);
 	}
 
 
 	/**
-	 * Callback interface invoked on each field in the hierarchy.
+	 * 在层次结构中的每个字段上调用的回调接口。
 	 */
 	@FunctionalInterface
 	public interface FieldCallback {
 
 		/**
-		 * Perform an operation using the given field.
-		 * @param field the field to operate on
+		 * 使用给定字段执行操作。
+		 * @param field 要操作的字段
 		 */
 		void doWith(Field field) throws IllegalArgumentException, IllegalAccessException;
 	}
 
 
 	/**
-	 * Callback optionally used to filter fields to be operated on by a field callback.
+	 * 回调函数，选择性地用于过滤FieldCallback所要操作的字段。
 	 */
 	@FunctionalInterface
 	public interface FieldFilter {
 
 		/**
-		 * Determine whether the given field matches.
-		 * @param field the field to check
+		 * 判断给定字段是否匹配。
+		 * @param field 要检查的字段
 		 */
 		boolean matches(Field field);
 	}

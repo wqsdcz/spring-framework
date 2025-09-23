@@ -39,10 +39,13 @@ import org.springframework.lang.Nullable;
  */
 public class MappingMediaTypeFileExtensionResolver implements MediaTypeFileExtensionResolver {
 
+	/** 已注册的MediaType */
 	private final ConcurrentMap<String, MediaType> mediaTypes = new ConcurrentHashMap<>(64);
 
+	/** MediaType 到 文件扩展名 的映射 */
 	private final ConcurrentMap<MediaType, List<String>> fileExtensions = new ConcurrentHashMap<>(64);
 
+	/** 支持的所以文件扩展名 */
 	private final List<String> allFileExtensions = new CopyOnWriteArrayList<>();
 
 

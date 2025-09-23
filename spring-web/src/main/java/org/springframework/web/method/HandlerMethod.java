@@ -35,15 +35,13 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Encapsulates information about a handler method consisting of a
- * {@linkplain #getMethod() method} and a {@linkplain #getBean() bean}.
- * Provides convenient access to method parameters, the method return value,
- * method annotations, etc.
+ * 封装了关于处理器方法的信息，包含一个{@linkplain #getMethod() 方法}和一个{@linkplain #getBean() bean}。
+ * 提供了对方法参数、方法返回值、方法注解等的便捷访问。
  *
- * <p>The class may be created with a bean instance or with a bean name
- * (e.g. lazy-init bean, prototype bean). Use {@link #createWithResolvedBean()}
- * to obtain a {@code HandlerMethod} instance with a bean instance resolved
- * through the associated {@link BeanFactory}.
+ * <p>
+ *     该类可以通过bean实例或bean名称（例如延迟初始化bean、原型bean）创建。
+ *     使用{@link #createWithResolvedBean()}可通过关联的{@link BeanFactory}解析bean实例，
+ *     获取具有解析后bean实例的{@code HandlerMethod}实例。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -80,7 +78,7 @@ public class HandlerMethod {
 
 
 	/**
-	 * Create an instance from a bean instance and a method.
+	 * 通过Bean实例和方法创建配置实例。
 	 */
 	public HandlerMethod(Object bean, Method method) {
 		Assert.notNull(bean, "Bean is required");
@@ -95,8 +93,8 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Create an instance from a bean instance, method name, and parameter types.
-	 * @throws NoSuchMethodException when the method cannot be found
+	 * 通过Bean实例、方法名和参数类型创建配置实例。
+	 * @throws NoSuchMethodException 当找不到方法时抛出
 	 */
 	public HandlerMethod(Object bean, String methodName, Class<?>... parameterTypes) throws NoSuchMethodException {
 		Assert.notNull(bean, "Bean is required");
@@ -111,9 +109,8 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Create an instance from a bean name, a method, and a {@code BeanFactory}.
-	 * The method {@link #createWithResolvedBean()} may be used later to
-	 * re-create the {@code HandlerMethod} with an initialized bean.
+	 * 通过Bean名称、方法和{@code BeanFactory}创建配置实例。
+	 * 后续可使用{@link #createWithResolvedBean()}方法重新创建带有初始化Bean的{@code HandlerMethod}。
 	 */
 	public HandlerMethod(String beanName, BeanFactory beanFactory, Method method) {
 		Assert.hasText(beanName, "Bean name is required");
@@ -133,7 +130,7 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Copy constructor for use in subclasses.
+	 * 用于子类的拷贝构造函数。
 	 */
 	protected HandlerMethod(HandlerMethod handlerMethod) {
 		Assert.notNull(handlerMethod, "HandlerMethod is required");
@@ -149,7 +146,7 @@ public class HandlerMethod {
 	}
 
 	/**
-	 * Re-create HandlerMethod with the resolved handler.
+	 * 使用已解析的处理器重新创建HandlerMethod。
 	 */
 	private HandlerMethod(HandlerMethod handlerMethod, Object handler) {
 		Assert.notNull(handlerMethod, "HandlerMethod is required");

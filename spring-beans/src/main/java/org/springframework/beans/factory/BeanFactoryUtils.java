@@ -168,16 +168,16 @@ public abstract class BeanFactoryUtils {
 	}
 
 	/**
-	 * Get all bean names for the given type, including those defined in ancestor
-	 * factories. Will return unique names in case of overridden bean definitions.
-	 * <p>Does consider objects created by FactoryBeans, which means that FactoryBeans
-	 * will get initialized. If the object created by the FactoryBean doesn't match,
-	 * the raw FactoryBean itself will be matched against the type.
-	 * <p>This version of {@code beanNamesForTypeIncludingAncestors} automatically
-	 * includes prototypes and FactoryBeans.
-	 * @param lbf the bean factory
-	 * @param type the type that beans must match (as a {@code Class})
-	 * @return the array of matching bean names, or an empty array if none
+	 * 获取给定类型的所有Bean名称（包括祖先工厂中定义的Bean）。
+	 * 若存在Bean定义覆盖的情况，将返回唯一的名称。
+	 * <p>
+	 *     会考虑由FactoryBeans创建的对象，这意味着FactoryBeans将被初始化。
+	 *     如果FactoryBean创建的对象不匹配，则将原始FactoryBean本身与类型进行匹配。
+	 * <p>
+	 *     此版本的{@code beanNamesForTypeIncludingAncestors}自动包含原型和FactoryBeans。
+	 * @param lbf Bean工厂
+	 * @param type Bean必须匹配的类型（作为{@code Class}）
+	 * @return 匹配的Bean名称数组，如果没有则返回空数组
 	 * @see ListableBeanFactory#getBeanNamesForType(Class)
 	 */
 	public static String[] beanNamesForTypeIncludingAncestors(ListableBeanFactory lbf, Class<?> type) {
@@ -195,24 +195,20 @@ public abstract class BeanFactoryUtils {
 	}
 
 	/**
-	 * Get all bean names for the given type, including those defined in ancestor
-	 * factories. Will return unique names in case of overridden bean definitions.
-	 * <p>Does consider objects created by FactoryBeans if the "allowEagerInit"
-	 * flag is set, which means that FactoryBeans will get initialized. If the
-	 * object created by the FactoryBean doesn't match, the raw FactoryBean itself
-	 * will be matched against the type. If "allowEagerInit" is not set,
-	 * only raw FactoryBeans will be checked (which doesn't require initialization
-	 * of each FactoryBean).
-	 * @param lbf the bean factory
-	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
-	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
-	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
-	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
-	 * eagerly initialized to determine their type: So be aware that passing in "true"
-	 * for this flag will initialize FactoryBeans and "factory-bean" references.
-	 * @param type the type that beans must match
-	 * @return the array of matching bean names, or an empty array if none
+	 * 获取给定类型的所有Bean名称（包括祖先工厂中定义的Bean）。
+	 * 若存在Bean定义覆盖的情况，将返回唯一的名称。
+	 * <p>
+	 *     如果设置了"allowEagerInit"标志，会考虑由FactoryBeans创建的对象，这意味着FactoryBeans将被初始化。
+	 *     如果FactoryBean创建的对象不匹配，则将原始FactoryBean本身与类型进行匹配。
+	 *     如果未设置"allowEagerInit"，则仅检查原始FactoryBean（这不需要初始化每个FactoryBean）。
+	 * @param lbf Bean工厂
+	 * @param includeNonSingletons 是否也包括原型或作用域bean，还是仅包含单例（同样适用于FactoryBeans）
+	 * @param allowEagerInit 是否为了类型检查而初始化<i>懒加载单例</i>和<i>由FactoryBeans创建的对象</i>
+	 *                      （或通过具有"factory-bean"引用的工厂方法创建的对象）。
+	 *                      注意：FactoryBeans需要急切初始化以确定其类型：因此请注意，
+	 *                      为此标志传递"true"将初始化FactoryBeans和"factory-bean"引用。
+	 * @param type Bean必须匹配的类型
+	 * @return 匹配的Bean名称数组，如果没有则返回空数组
 	 * @see ListableBeanFactory#getBeanNamesForType(Class, boolean, boolean)
 	 */
 	public static String[] beanNamesForTypeIncludingAncestors(

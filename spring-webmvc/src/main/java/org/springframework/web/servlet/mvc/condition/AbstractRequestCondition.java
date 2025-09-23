@@ -22,36 +22,32 @@ import java.util.Iterator;
 import org.springframework.lang.Nullable;
 
 /**
- * A base class for {@link RequestCondition} types providing implementations of
- * {@link #equals(Object)}, {@link #hashCode()}, and {@link #toString()}.
+ * {@link RequestCondition} 类型的抽象基类，提供{@link #equals(Object)}、{@link #hashCode()} 和 {@link #toString()} 的默认实现。
  *
  * @author Rossen Stoyanchev
  * @since 3.1
- * @param <T> the type of objects that this RequestCondition can be combined
- * with and compared to
+ * @param <T> 可与此 RequestCondition 进行组合和比较的对象类型
  */
 public abstract class AbstractRequestCondition<T extends AbstractRequestCondition<T>> implements RequestCondition<T> {
 
 	/**
-	 * Indicates whether this condition is empty, i.e. whether or not it
-	 * contains any discrete items.
-	 * @return {@code true} if empty; {@code false} otherwise
+	 * 指示该条件是否为空，即是否包含任何离散项。
+	 * @return 如果为空则返回 {@code true}；否则返回 {@code false}
 	 */
 	public boolean isEmpty() {
 		return getContent().isEmpty();
 	}
 
 	/**
-	 * Return the discrete items a request condition is composed of.
-	 * <p>For example URL patterns, HTTP request methods, param expressions, etc.
-	 * @return a collection of objects (never {@code null})
+	 * 返回该请求条件所包含的离散项集合。
+	 * <p>例如：URL模式、HTTP请求方法、参数表达式等。
+	 * @return 对象集合（永远不为 {@code null}）
 	 */
 	protected abstract Collection<?> getContent();
 
 	/**
-	 * The notation to use when printing discrete items of content.
-	 * <p>For example {@code " || "} for URL patterns or {@code " && "}
-	 * for param expressions.
+	 * 当打印内容的离散项时使用的分隔符符号。
+	 * <p>例如：URL模式使用 {@code " || "}，参数表达式使用 {@code " && "}。
 	 */
 	protected abstract String getToStringInfix();
 

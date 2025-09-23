@@ -42,10 +42,21 @@ import java.util.Set;
 import org.springframework.lang.Nullable;
 
 /**
+ * 单词本：
+ * primitive 原始的、原生的、基本的、简陋的、本能的、初始的、自然的
+ * primitive type 原始类型
+ * present 存在的、在场的、现在时的
+ * Visible 可见的
+ * Necessary 必要的、不可避免的
+ * resolve 解决、转化、分解、消散
+ * Assignable 可分配的、可转让的、可赋值的、可指定的
+ * Composite 混合的，复合的、综合的
+ * Qualified 有限制的，胜任的，有资格的
+ * Available 有效的，可用的
+ * Specific 明确的，具体的，特定的，
+ *
  * 各种{@code java.lang.Class}工具方法。
  * 主要用于框架内部使用。
- * Miscellaneous {@code java.lang.Class} utility methods.
- * Mainly for internal use within the framework.
  *
  * @author Juergen Hoeller
  * @author Keith Donald
@@ -57,58 +68,57 @@ import org.springframework.lang.Nullable;
  */
 public abstract class ClassUtils {
 
-	/** Suffix for array class names: "[]" */
+	/** 数组类名的后缀："[]" */
 	public static final String ARRAY_SUFFIX = "[]";
 
-	/** Prefix for internal array class names: "[" */
+	/** 内部的数组类名的前缀："[" */
 	private static final String INTERNAL_ARRAY_PREFIX = "[";
 
-	/** Prefix for internal non-primitive array class names: "[L" */
+	/** 内部的非基本类型数组类名的前缀："[L" */
 	private static final String NON_PRIMITIVE_ARRAY_PREFIX = "[L";
 
-	/** The package separator character: '.' */
+	/** 包分隔符：'.' */
 	private static final char PACKAGE_SEPARATOR = '.';
 
-	/** The path separator character: '/' */
+	/** 路径分隔符：'/' */
 	private static final char PATH_SEPARATOR = '/';
 
-	/** The inner class separator character: '$' */
+	/** 内部类分隔符：'$' */
 	private static final char INNER_CLASS_SEPARATOR = '$';
 
-	/** The CGLIB class separator: "$$" */
+	/** CGLIB 类分隔符："$$" */
 	public static final String CGLIB_CLASS_SEPARATOR = "$$";
 
-	/** The ".class" file suffix */
+	/** ".class" 文件后缀 */
 	public static final String CLASS_FILE_SUFFIX = ".class";
 
 
 	/**
-	 * Map with primitive wrapper type as key and corresponding primitive
-	 * type as value, for example: Integer.class -> int.class.
+	 * 以【基本类型的包装类】为键，【对应基本类型】为值的映射，
+	 * 例如：Integer.class -> int.class。
 	 */
 	private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new IdentityHashMap<>(8);
 
 	/**
-	 * Map with primitive type as key and corresponding wrapper
-	 * type as value, for example: int.class -> Integer.class.
+	 * 以【基本类型】为键，【对应包装类】为值的映射，
+	 * 例如：int.class -> Integer.class。
 	 */
 	private static final Map<Class<?>, Class<?>> primitiveTypeToWrapperMap = new IdentityHashMap<>(8);
 
 	/**
-	 * Map with primitive type name as key and corresponding primitive
-	 * type as value, for example: "int" -> "int.class".
+	 * 以【基本类型名称】为键，【对应基本类型】为值的映射，
+	 * 例如："int" -> "int.class"。
 	 */
 	private static final Map<String, Class<?>> primitiveTypeNameMap = new HashMap<>(32);
 
 	/**
-	 * Map with common Java language class name as key and corresponding Class as value.
-	 * Primarily for efficient deserialization of remote invocations.
+	 * 以【常见Java语言类名】为键，【对应Class】为值的映射。
+	 * 主要用于远程调用的高效反序列化。
 	 */
 	private static final Map<String, Class<?>> commonClassCache = new HashMap<>(64);
 
 	/**
-	 * Common Java language interfaces which are supposed to be ignored
-	 * when searching for 'primary' user-level interfaces.
+	 * 常见的Java语言接口，在搜索'主要（primary）'用户级接口时应被忽略。
 	 */
 	private static final Set<Class<?>> javaLanguageInterfaces;
 
@@ -155,7 +165,7 @@ public abstract class ClassUtils {
 
 
 	/**
-	 * Register the given common classes with the ClassUtils cache.
+	 * 将给定的常见类注册到ClassUtils缓存中。
 	 */
 	private static void registerCommonClasses(Class<?>... commonClasses) {
 		for (Class<?> clazz : commonClasses) {
@@ -164,16 +174,13 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the default ClassLoader to use: typically the thread context
-	 * ClassLoader, if available; the ClassLoader that loaded the ClassUtils
-	 * class will be used as fallback.
-	 * <p>Call this method if you intend to use the thread context ClassLoader
-	 * in a scenario where you clearly prefer a non-null ClassLoader reference:
-	 * for example, for class path resource loading (but not necessarily for
-	 * {@code Class.forName}, which accepts a {@code null} ClassLoader
-	 * reference as well).
-	 * @return the default ClassLoader (only {@code null} if even the system
-	 * ClassLoader isn't accessible)
+	 * 返回要使用的默认ClassLoader：通常是线程上下文ClassLoader（如果可用）；
+	 * 将使用加载ClassUtils类的ClassLoader作为后备。
+	 * <p>
+	 *     在明确希望使用非空ClassLoader引用的场景中调用此方法，
+	 *     例如：用于类路径资源加载（但不一定用于{@code Class.forName}，
+	 *     它也接受{@code null} ClassLoader引用）。
+	 * @return 默认ClassLoader（即使系统ClassLoader不可访问时也只会返回{@code null}）
 	 * @see Thread#getContextClassLoader()
 	 * @see ClassLoader#getSystemClassLoader()
 	 */
@@ -184,18 +191,18 @@ public abstract class ClassUtils {
 			cl = Thread.currentThread().getContextClassLoader();
 		}
 		catch (Throwable ex) {
-			// Cannot access thread context ClassLoader - falling back...
+			// 无法访问线程上下文ClassLoader - 回退到...
 		}
 		if (cl == null) {
-			// No thread context class loader -> use class loader of this class.
+            // 没有线程上下文类加载器 -> 使用此类的类加载器
 			cl = ClassUtils.class.getClassLoader();
 			if (cl == null) {
-				// getClassLoader() returning null indicates the bootstrap ClassLoader
+                // getClassLoader()返回null表示启动类加载器
 				try {
 					cl = ClassLoader.getSystemClassLoader();
 				}
 				catch (Throwable ex) {
-					// Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+					// 无法访问系统类加载器 - 好吧，也许调用者可以接受null...
 				}
 			}
 		}
@@ -203,11 +210,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Override the thread context ClassLoader with the environment's bean ClassLoader
-	 * if necessary, i.e. if the bean ClassLoader is not equivalent to the thread
-	 * context ClassLoader already.
-	 * @param classLoaderToUse the actual ClassLoader to use for the thread context
-	 * @return the original thread context ClassLoader, or {@code null} if not overridden
+	 * 如有必要，使用环境中的bean类加载器覆盖线程上下文类加载器，即当bean类加载器与当前线程上下文类加载器不一致时。
+	 * @param classLoaderToUse 用于线程上下文实际使用的类加载器
+	 * @return 原始线程上下文类加载器，如果未被覆盖则返回{@code null}
 	 */
 	@Nullable
 	public static ClassLoader overrideThreadContextClassLoader(@Nullable ClassLoader classLoaderToUse) {
@@ -223,16 +228,13 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Replacement for {@code Class.forName()} that also returns Class instances
-	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
-	 * Furthermore, it is also capable of resolving inner class names in Java source
-	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
-	 * @param name the name of the Class
-	 * @param classLoader the class loader to use
-	 * (may be {@code null}, which indicates the default class loader)
-	 * @return a class instance for the supplied name
-	 * @throws ClassNotFoundException if the class was not found
-	 * @throws LinkageError if the class file could not be loaded
+	 * 替代{@code Class.forName()}的方法，同时支持基本类型（如"int"）和数组类名（如"String[]")返回Class实例。
+	 * 此外，还能够解析Java源码风格的内部类名（例如"java.lang.Thread.State"而非"java.lang.Thread$State"）。
+	 * @param name 类名称
+	 * @param classLoader 使用的类加载器（可为{@code null}，表示使用默认类加载器）
+	 * @return 对应名称的类实例
+	 * @throws ClassNotFoundException 如果类未找到
+	 * @throws LinkageError 如果类文件无法加载
 	 * @see Class#forName(String, boolean, ClassLoader)
 	 */
 	public static Class<?> forName(String name, @Nullable ClassLoader classLoader)
@@ -293,17 +295,12 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Resolve the given class name into a Class instance. Supports
-	 * primitives (like "int") and array class names (like "String[]").
-	 * <p>This is effectively equivalent to the {@code forName}
-	 * method with the same arguments, with the only difference being
-	 * the exceptions thrown in case of class loading failure.
-	 * @param className the name of the Class
-	 * @param classLoader the class loader to use
-	 * (may be {@code null}, which indicates the default class loader)
-	 * @return a class instance for the supplied name
-	 * @throws IllegalArgumentException if the class name was not resolvable
-	 * (that is, the class could not be found or the class file could not be loaded)
+	 * 将给定的类名解析为Class实例。支持基本类型（如"int"）和数组类名（如"String[]"）。
+	 * <p>这实际上等同于具有相同参数的{@code forName}方法，唯一区别在于类加载失败时抛出的异常不同。
+	 * @param className 类名称
+	 * @param classLoader 使用的类加载器（可为{@code null}，表示使用默认类加载器）
+	 * @return 对应名称的类实例
+	 * @throws IllegalArgumentException 如果类名无法解析（即找不到类或无法加载类文件）
 	 * @see #forName(String, ClassLoader)
 	 */
 	public static Class<?> resolveClassName(String className, @Nullable ClassLoader classLoader)
@@ -321,13 +318,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the {@link Class} identified by the supplied name is present
-	 * and can be loaded. Will return {@code false} if either the class or
-	 * one of its dependencies is not present or cannot be loaded.
-	 * @param className the name of the class to check
-	 * @param classLoader the class loader to use
-	 * (may be {@code null} which indicates the default class loader)
-	 * @return whether the specified class is present
+	 * 判断指定名称的{@link Class}是否存在并可被加载。
+	 * 如果该类或其依赖项不存在或无法加载，将返回{@code false}。
+	 * @param className 要检查的类名称
+	 * @param classLoader 使用的类加载器（可为{@code null}，表示使用默认类加载器）
+	 * @return 指定的类是否存在
 	 */
 	public static boolean isPresent(String className, @Nullable ClassLoader classLoader) {
 		try {
@@ -341,10 +336,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the given class is visible in the given ClassLoader.
-	 * @param clazz the class to check (typically an interface)
-	 * @param classLoader the ClassLoader to check against
-	 * (may be {@code null} in which case this method will always return {@code true})
+	 * 检查给定类在指定ClassLoader中是否可见。
+	 * @param clazz 要检查的类（通常是一个接口）
+	 * @param classLoader 要检查的ClassLoader（可能为{@code null}，这种情况下该方法将始终返回{@code true}）
 	 */
 	public static boolean isVisible(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		if (classLoader == null) {
@@ -356,19 +350,17 @@ public abstract class ClassUtils {
 			}
 		}
 		catch (SecurityException ex) {
-			// Fall through to loadable check below
+			// 继续执行下面的可加载检查
 		}
 
-		// Visible if same Class can be loaded from given ClassLoader
+        // 如果可以从给定ClassLoader加载相同的Class，则可见
 		return isLoadable(clazz, classLoader);
 	}
 
 	/**
-	 * Check whether the given class is cache-safe in the given context,
-	 * i.e. whether it is loaded by the given ClassLoader or a parent of it.
-	 * @param clazz the class to analyze
-	 * @param classLoader the ClassLoader to potentially cache metadata in
-	 * (may be {@code null} which indicates the system class loader)
+	 * 检查给定类在指定上下文中是否是缓存安全的，即是否由给定ClassLoader或其父ClassLoader加载。
+	 * @param clazz 要分析的类
+	 * @param classLoader 可能缓存元数据的ClassLoader（可能为{@code null}，表示系统类加载器）
 	 */
 	public static boolean isCacheSafe(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -407,9 +399,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the given class is loadable in the given ClassLoader.
-	 * @param clazz the class to check (typically an interface)
-	 * @param classLoader the ClassLoader to check against
+	 * 检查给定类在指定ClassLoader中是否可加载。
+	 * @param clazz 要检查的类（通常是一个接口）
+	 * @param classLoader 要检查的ClassLoader
 	 * @since 5.0.6
 	 */
 	private static boolean isLoadable(Class<?> clazz, ClassLoader classLoader) {
@@ -424,14 +416,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Resolve the given class name as primitive class, if appropriate,
-	 * according to the JVM's naming rules for primitive classes.
-	 * <p>Also supports the JVM's internal class names for primitive arrays.
-	 * Does <i>not</i> support the "[]" suffix notation for primitive arrays;
-	 * this is only supported by {@link #forName(String, ClassLoader)}.
-	 * @param name the name of the potentially primitive class
-	 * @return the primitive class, or {@code null} if the name does not denote
-	 * a primitive class or primitive array class
+	 * 根据JVM对原始类的命名规则，将给定的类名解析为原始类（如果适用）。
+	 * <p>同时支持JVM内部对原始数组类的命名。
+	 * <i>不</i>支持原始数组的"[]"后缀表示法；该表示法仅由 {@link #forName(String, ClassLoader)} 支持。
+	 * @param name 可能为原始类的名称
+	 * @return 原始类，如果名称不表示原始类或原始数组类则返回 {@code null}
 	 */
 	@Nullable
 	public static Class<?> resolvePrimitiveClassName(@Nullable String name) {
@@ -445,11 +434,12 @@ public abstract class ClassUtils {
 		return result;
 	}
 
+
 	/**
-	 * Check if the given class represents a primitive wrapper,
-	 * i.e. Boolean, Byte, Character, Short, Integer, Long, Float, or Double.
-	 * @param clazz the class to check
-	 * @return whether the given class is a primitive wrapper class
+	 * 检查给定的类是否表示原始包装类，
+	 * 即 Boolean、Byte、Character、Short、Integer、Long、Float 或 Double。
+	 * @param clazz 要检查的类
+	 * @return 给定的类是否为原始包装类
 	 */
 	public static boolean isPrimitiveWrapper(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -457,11 +447,10 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check if the given class represents a primitive (i.e. boolean, byte,
-	 * char, short, int, long, float, or double) or a primitive wrapper
-	 * (i.e. Boolean, Byte, Character, Short, Integer, Long, Float, or Double).
-	 * @param clazz the class to check
-	 * @return whether the given class is a primitive or primitive wrapper class
+	 * 检查给定的类是否表示原始类型（即 boolean、byte、char、short、int、long、float 或 double）
+	 * 或原始包装类（即 Boolean、Byte、Character、Short、Integer、Long、Float 或 Double）。
+	 * @param clazz 要检查的类
+	 * @return 给定的类是否为原始类型或原始包装类
 	 */
 	public static boolean isPrimitiveOrWrapper(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -469,10 +458,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check if the given class represents an array of primitives,
-	 * i.e. boolean, byte, char, short, int, long, float, or double.
-	 * @param clazz the class to check
-	 * @return whether the given class is a primitive array class
+	 * 检查给定的类是否表示原始类型的数组，即 boolean、byte、char、short、int、long、float 或 double 的数组。
+	 * @param clazz 要检查的类
+	 * @return 给定的类是否为原始类型数组类
 	 */
 	public static boolean isPrimitiveArray(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -480,10 +468,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check if the given class represents an array of primitive wrappers,
-	 * i.e. Boolean, Byte, Character, Short, Integer, Long, Float, or Double.
-	 * @param clazz the class to check
-	 * @return whether the given class is a primitive wrapper array class
+	 * 检查给定的类是否表示原始包装类型的数组，即 Boolean、Byte、Character、Short、Integer、Long、Float 或 Double 的数组。
+	 * @param clazz 要检查的类
+	 * @return 给定的类是否为原始包装类型数组类
 	 */
 	public static boolean isPrimitiveWrapperArray(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -491,10 +478,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Resolve the given class if it is a primitive class,
-	 * returning the corresponding primitive wrapper type instead.
-	 * @param clazz the class to check
-	 * @return the original class, or a primitive wrapper for the original primitive type
+	 * 如果给定的类是原始类型，则解析并返回对应的原始包装类型。
+	 * @param clazz 要检查的类
+	 * @return 原始类本身，或原始类型对应的原始包装类型
 	 */
 	public static Class<?> resolvePrimitiveIfNecessary(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -502,12 +488,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check if the right-hand side type may be assigned to the left-hand side
-	 * type, assuming setting by reflection. Considers primitive wrapper
-	 * classes as assignable to the corresponding primitive types.
-	 * @param lhsType the target type
-	 * @param rhsType the value type that should be assigned to the target type
-	 * @return if the target type is assignable from the value type
+	 * 检查右侧类型是否可赋值给左侧类型（基于反射赋值场景考虑）。
+	 * 考虑原始类型包装类可赋值给对应的原始类型。
+	 * @param lhsType 目标类型
+	 * @param rhsType 需要赋值给目标类型的值类型
+	 * @return 如果目标类型可从值类型赋值则返回true
 	 * @see TypeUtils#isAssignable(java.lang.reflect.Type, java.lang.reflect.Type)
 	 */
 	public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
@@ -527,12 +512,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine if the given type is assignable from the given value,
-	 * assuming setting by reflection. Considers primitive wrapper classes
-	 * as assignable to the corresponding primitive types.
-	 * @param type the target type
-	 * @param value the value that should be assigned to the type
-	 * @return if the type is assignable from the value
+	 * 判断给定值否可以赋值给给定类型的变量（基于反射赋值场景考虑）。
+	 * 考虑原始类型包装类可赋值给对应的原始类型。
+	 * @param type 目标类型
+	 * @param value 需要赋值给目标类型的值
+	 * @return 如果类型可从值赋值则返回true
 	 */
 	public static boolean isAssignableValue(Class<?> type, @Nullable Object value) {
 		Assert.notNull(type, "Type must not be null");
@@ -540,9 +524,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Convert a "/"-based resource path to a "."-based fully qualified class name.
-	 * @param resourcePath the resource path pointing to a class
-	 * @return the corresponding fully qualified class name
+	 * 将基于斜杠"/"的资源路径转换为基于点"."的完全限定类名。
+	 * @param resourcePath 指向类的资源路径
+	 * @return 对应的完全限定类名
 	 */
 	public static String convertResourcePathToClassName(String resourcePath) {
 		Assert.notNull(resourcePath, "Resource path must not be null");
@@ -550,9 +534,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Convert a "."-based fully qualified class name to a "/"-based resource path.
-	 * @param className the fully qualified class name
-	 * @return the corresponding resource path, pointing to the class
+	 * 将基于点"."的完全限定类名转换为基于斜杠"/"的资源路径。
+	 * @param className 完全限定类名
+	 * @return 对应的资源路径，指向类文件
 	 */
 	public static String convertClassNameToResourcePath(String className) {
 		Assert.notNull(className, "Class name must not be null");
@@ -560,18 +544,12 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return a path suitable for use with {@code ClassLoader.getResource}
-	 * (also suitable for use with {@code Class.getResource} by prepending a
-	 * slash ('/') to the return value). Built by taking the package of the specified
-	 * class file, converting all dots ('.') to slashes ('/'), adding a trailing slash
-	 * if necessary, and concatenating the specified resource name to this.
-	 * <br/>As such, this function may be used to build a path suitable for
-	 * loading a resource file that is in the same package as a class file,
-	 * although {@link org.springframework.core.io.ClassPathResource} is usually
-	 * even more convenient.
-	 * @param clazz the Class whose package will be used as the base
-	 * @param resourceName the resource name to append. A leading slash is optional.
-	 * @return the built-up resource path
+	 * 返回适用于 {@code ClassLoader.getResource} 方法的路径（通过在返回值前添加斜杠'/'也可适用于 {@code Class.getResource} 方法）。
+	 * 构建方式：获取指定类文件所在的包路径，将所有点('.')转换为斜杠('/')，必要时添加尾部斜杠，并将指定的资源名称拼接至此路径。
+	 * <br/>因此，本方法可用于构建与类文件同包下的资源文件加载路径，尽管通常使用 {@link org.springframework.core.io.ClassPathResource} 更为便捷。
+	 * @param clazz 将使用其包路径作为基础路径的Class对象
+	 * @param resourceName 要追加的资源名称。开头的斜杠是可选的。
+	 * @return 构建完成的资源路径
 	 * @see ClassLoader#getResource
 	 * @see Class#getResource
 	 */
@@ -584,16 +562,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Given an input class object, return a string which consists of the
-	 * class's package name as a pathname, i.e., all dots ('.') are replaced by
-	 * slashes ('/'). Neither a leading nor trailing slash is added. The result
-	 * could be concatenated with a slash and the name of a resource and fed
-	 * directly to {@code ClassLoader.getResource()}. For it to be fed to
-	 * {@code Class.getResource} instead, a leading slash would also have
-	 * to be prepended to the returned value.
-	 * @param clazz the input class. A {@code null} value or the default
-	 * (empty) package will result in an empty string ("") being returned.
-	 * @return a path which represents the package name
+	 * 给定输入类对象，返回由类的包名组成的路径名字符串，即所有点('.')替换为斜杠('/')。
+	 * 不添加前导或尾随斜杠。结果可以与斜杠和资源名称连接后直接用于{@code ClassLoader.getResource()}。
+	 * 如果要用于{@code Class.getResource}，则需要在返回值前添加前导斜杠。
+	 * @param clazz 输入类。{@code null}值或默认（空）包将导致返回空字符串("")。
+	 * @return 表示包名的路径
 	 * @see ClassLoader#getResource
 	 * @see Class#getResource
 	 */
@@ -611,12 +584,10 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Build a String that consists of the names of the classes/interfaces
-	 * in the given array.
-	 * <p>Basically like {@code AbstractCollection.toString()}, but stripping
-	 * the "class "/"interface " prefix before every class name.
-	 * @param classes an array of Class objects
-	 * @return a String of form "[com.foo.Bar, com.foo.Baz]"
+	 * 构建一个由给定数组中类/接口名称组成的字符串。
+	 * <p>基本类似于{@code AbstractCollection.toString()}，但会在每个类名之前去除"class "/"interface "前缀。
+	 * @param classes Class对象数组
+	 * @return 形式为"[com.foo.Bar, com.foo.Baz]"的字符串
 	 * @see java.util.AbstractCollection#toString()
 	 */
 	public static String classNamesToString(Class<?>... classes) {
@@ -624,12 +595,10 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Build a String that consists of the names of the classes/interfaces
-	 * in the given collection.
-	 * <p>Basically like {@code AbstractCollection.toString()}, but stripping
-	 * the "class "/"interface " prefix before every class name.
-	 * @param classes a Collection of Class objects (may be {@code null})
-	 * @return a String of form "[com.foo.Bar, com.foo.Baz]"
+	 * 构建一个由给定集合中类/接口名称组成的字符串。
+	 * <p>基本类似于{@code AbstractCollection.toString()}，但会在每个类名之前去除"class "/"interface "前缀。
+	 * @param classes Class对象的集合（可能为{@code null}）
+	 * @return 形式为"[com.foo.Bar, com.foo.Baz]"的字符串
 	 * @see java.util.AbstractCollection#toString()
 	 */
 	public static String classNamesToString(@Nullable Collection<Class<?>> classes) {
@@ -649,10 +618,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Copy the given {@code Collection} into a {@code Class} array.
-	 * <p>The {@code Collection} must contain {@code Class} elements only.
-	 * @param collection the {@code Collection} to copy
-	 * @return the {@code Class} array
+	 * 将给定的{@code Collection}复制到{@code Class}数组中。
+	 * <p>{@code Collection}必须仅包含{@code Class}元素。
+	 *
+	 * @param collection 要复制的{@code Collection}
+	 * @return {@code Class}数组
 	 * @since 3.1
 	 * @see StringUtils#toStringArray
 	 */
@@ -661,10 +631,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return all interfaces that the given instance implements as an array,
-	 * including ones implemented by superclasses.
-	 * @param instance the instance to analyze for interfaces
-	 * @return all interfaces that the given instance implements as an array
+	 * 返回给定实例实现的所有接口（包括超类实现的接口）作为数组。
+	 * @param instance 要分析接口的实例
+	 * @return 给定实例实现的所有接口的数组
 	 */
 	public static Class<?>[] getAllInterfaces(Object instance) {
 		Assert.notNull(instance, "Instance must not be null");
@@ -672,34 +641,30 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return all interfaces that the given class implements as an array,
-	 * including ones implemented by superclasses.
-	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyze for interfaces
-	 * @return all interfaces that the given object implements as an array
+	 * 返回给定类实现的所有接口（包括超类实现的接口）作为数组。
+	 * <p>如果类本身是接口，则将其作为唯一接口返回。
+	 * @param clazz 要分析接口的类
+	 * @return 给定对象实现的所有接口的数组
 	 */
 	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz) {
 		return getAllInterfacesForClass(clazz, null);
 	}
 
 	/**
-	 * Return all interfaces that the given class implements as an array,
-	 * including ones implemented by superclasses.
-	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyze for interfaces
-	 * @param classLoader the ClassLoader that the interfaces need to be visible in
-	 * (may be {@code null} when accepting all declared interfaces)
-	 * @return all interfaces that the given object implements as an array
+	 * 返回给定类实现的所有接口（包括超类实现的接口）作为数组。
+	 * <p>如果类本身是接口，则将其作为唯一接口返回。
+	 * @param clazz 要分析接口的类
+	 * @param classLoader 接口需要在其内可见的ClassLoader（可为{@code null}，表示接受所有声明的接口）
+	 * @return 给定对象实现的所有接口的数组
 	 */
 	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		return toClassArray(getAllInterfacesForClassAsSet(clazz, classLoader));
 	}
 
 	/**
-	 * Return all interfaces that the given instance implements as a Set,
-	 * including ones implemented by superclasses.
-	 * @param instance the instance to analyze for interfaces
-	 * @return all interfaces that the given instance implements as a Set
+	 * 返回给定实例实现的所有接口（包括超类实现的接口）作为Set集合。
+	 * @param instance 要分析接口的实例
+	 * @return 给定实例实现的所有接口的Set集合
 	 */
 	public static Set<Class<?>> getAllInterfacesAsSet(Object instance) {
 		Assert.notNull(instance, "Instance must not be null");
@@ -707,26 +672,24 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return all interfaces that the given class implements as a Set,
-	 * including ones implemented by superclasses.
-	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyze for interfaces
-	 * @return all interfaces that the given object implements as a Set
+	 * 返回给定类实现的所有接口（包括超类实现的接口）作为Set集合。
+	 * <p>如果类本身是接口，则将其作为唯一接口返回。
+	 * @param clazz 要分析接口的类
+	 * @return 给定对象实现的所有接口的Set集合
 	 */
 	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz) {
 		return getAllInterfacesForClassAsSet(clazz, null);
 	}
 
 	/**
-	 * Return all interfaces that the given class implements as a Set,
-	 * including ones implemented by superclasses.
-	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyze for interfaces
-	 * @param classLoader the ClassLoader that the interfaces need to be visible in
-	 * (may be {@code null} when accepting all declared interfaces)
-	 * @return all interfaces that the given object implements as a Set
+	 * 返回给定类实现的所有接口（包括超类实现的接口）作为Set集合。
+	 * <p>如果类本身是接口，则将其作为唯一接口返回。
+	 * @param clazz 要分析接口的类
+	 * @param classLoader 接口需要在其内可见的ClassLoader
+	 *                  （可为{@code null}，表示接受所有声明的接口）
+	 * @return 给定对象实现的所有接口的Set集合
 	 */
-	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, @Nullable ClassLoader classLoader) {
+		public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		Assert.notNull(clazz, "Class must not be null");
 		if (clazz.isInterface() && isVisible(clazz, classLoader)) {
 			return Collections.singleton(clazz);
@@ -746,14 +709,12 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Create a composite interface Class for the given interfaces,
-	 * implementing the given interfaces in one single Class.
-	 * <p>This implementation builds a JDK proxy class for the given interfaces.
-	 * @param interfaces the interfaces to merge
-	 * @param classLoader the ClassLoader to create the composite Class in
-	 * @return the merged interface as Class
-	 * @throws IllegalArgumentException if the specified interfaces expose
-	 * conflicting method signatures (or a similar constraint is violated)
+	 * 为给定接口集创建复合接口类，在单个类中实现所有给定接口。
+	 * <p>此实现为给定接口构建JDK代理类。
+	 * @param interfaces 要合并的接口
+	 * @param classLoader 在其中创建复合类的ClassLoader
+	 * @return 合并后的接口Class
+	 * @throws IllegalArgumentException 如果指定的接口存在冲突的方法签名（或违反类似约束）
 	 * @see java.lang.reflect.Proxy#getProxyClass
 	 */
 	@SuppressWarnings("deprecation")  // on JDK 9
@@ -763,12 +724,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine the common ancestor of the given classes, if any.
-	 * @param clazz1 the class to introspect
-	 * @param clazz2 the other class to introspect
-	 * @return the common ancestor (i.e. common superclass, one interface
-	 * extending the other), or {@code null} if none found. If any of the
-	 * given classes is {@code null}, the other class will be returned.
+	 * 确定给定类的公共祖先（如果存在）。
+	 * @param clazz1 要内省的类
+	 * @param clazz2 要内省的另一个类
+	 * @return 公共祖先（即公共超类，或一个接口扩展另一个接口），如果未找到则返回{@code null}。
+	 *         如果任意给定的类为{@code null}，则返回另一个类。
 	 * @since 3.2.6
 	 */
 	@Nullable
@@ -797,12 +757,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given interface is a common Java language interface:
+	 * 判断给定的接口是否为常见的Java语言接口：
 	 * {@link Serializable}, {@link Externalizable}, {@link Closeable}, {@link AutoCloseable},
-	 * {@link Cloneable}, {@link Comparable} - all of which can be ignored when looking
-	 * for 'primary' user-level interfaces. Common characteristics: no service-level
-	 * operations, no bean property methods, no default methods.
-	 * @param ifc the interface to check
+	 * {@link Cloneable}, {@link Comparable} - 在寻找'主要'用户级接口时都可以忽略这些接口。
+	 * 共同特征：无服务级操作，无bean属性方法，无默认方法。
+	 * @param ifc 要检查的接口
 	 * @since 5.0.3
 	 */
 	public static boolean isJavaLanguageInterface(Class<?> ifc) {
@@ -810,9 +769,8 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine if the supplied class is an <em>inner class</em>,
-	 * i.e. a non-static member of an enclosing class.
-	 * @return {@code true} if the supplied class is an inner class
+	 * 判断提供的类是否为<em>内部类</em>，即外部类的非静态成员类。
+	 * @return 如果提供的类是内部类则返回{@code true}
 	 * @since 5.0.5
 	 * @see Class#isMemberClass()
 	 */
@@ -821,8 +779,8 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the given object is a CGLIB proxy.
-	 * @param object the object to check
+	 * 检查给定对象是否为CGLIB代理。
+	 * @param object 要检查的对象
 	 * @see #isCglibProxyClass(Class)
 	 * @see org.springframework.aop.support.AopUtils#isCglibProxy(Object)
 	 */
@@ -831,8 +789,8 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the specified class is a CGLIB-generated class.
-	 * @param clazz the class to check
+	 * 检查指定的类是否为CGLIB生成的类。
+	 * @param clazz 要检查的类
 	 * @see #isCglibProxyClassName(String)
 	 */
 	public static boolean isCglibProxyClass(@Nullable Class<?> clazz) {
@@ -840,19 +798,17 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the specified class name is a CGLIB-generated class.
-	 * @param className the class name to check
+	 * 检查指定的类名是否为CGLIB生成的类。
+	 * @param className 要检查的类名
 	 */
 	public static boolean isCglibProxyClassName(@Nullable String className) {
 		return (className != null && className.contains(CGLIB_CLASS_SEPARATOR));
 	}
 
 	/**
-	 * Return the user-defined class for the given instance: usually simply
-	 * the class of the given instance, but the original class in case of a
-	 * CGLIB-generated subclass.
-	 * @param instance the instance to check
-	 * @return the user-defined class
+	 * 返回给定实例的用户定义类：通常就是实例的类，但对于CGLIB生成的子类则返回原始类。
+	 * @param instance 要检查的实例
+	 * @return 用户定义的类
 	 */
 	public static Class<?> getUserClass(Object instance) {
 		Assert.notNull(instance, "Instance must not be null");
@@ -860,10 +816,10 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the user-defined class for the given class: usually simply the given
-	 * class, but the original class in case of a CGLIB-generated subclass.
-	 * @param clazz the class to check
-	 * @return the user-defined class
+	 * 返回给定类的用户定义类：
+	 * 通常就是给定的类，但对于CGLIB生成的子类则返回原始类。
+	 * @param clazz 要检查的类
+	 * @return 用户定义的类
 	 */
 	public static Class<?> getUserClass(Class<?> clazz) {
 		if (clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
@@ -876,11 +832,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return a descriptive name for the given object's type: usually simply
-	 * the class name, but component type class name + "[]" for arrays,
-	 * and an appended list of implemented interfaces for JDK proxies.
-	 * @param value the value to introspect
-	 * @return the qualified name of the class
+	 * 返回给定对象类型的描述性名称：通常就是类名，但对于数组则为组件类型类名 + "[]"，对于JDK代理则附加实现的接口列表。
+	 * @param value 要内省的对象值
+	 * @return 类的限定名
 	 */
 	@Nullable
 	public static String getDescriptiveType(@Nullable Object value) {
@@ -906,9 +860,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Check whether the given class matches the user-specified type name.
-	 * @param clazz the class to check
-	 * @param typeName the type name to match
+	 * 检查给定类是否与用户指定的类型名称匹配。
+	 * @param clazz 要检查的类
+	 * @param typeName 要匹配的类型名称
 	 */
 	public static boolean matchesTypeName(Class<?> clazz, @Nullable String typeName) {
 		return (typeName != null &&
@@ -916,10 +870,10 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Get the class name without the qualified package name.
-	 * @param className the className to get the short name for
-	 * @return the class name of the class without the package name
-	 * @throws IllegalArgumentException if the className is empty
+	 * 获取不包含包名的类名。
+	 * @param className 要获取短名称的类名
+	 * @return 不包含包名的类名
+	 * @throws IllegalArgumentException 如果类名为空
 	 */
 	public static String getShortName(String className) {
 		Assert.hasLength(className, "Class name must not be empty");
@@ -934,19 +888,19 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Get the class name without the qualified package name.
-	 * @param clazz the class to get the short name for
-	 * @return the class name of the class without the package name
+	 * 获取不包含包名的类名。
+	 * @param clazz 要获取短名称的类
+	 * @return 不包含包名的类名
 	 */
 	public static String getShortName(Class<?> clazz) {
 		return getShortName(getQualifiedName(clazz));
 	}
 
 	/**
-	 * Return the short string name of a Java class in uncapitalized JavaBeans
-	 * property format. Strips the outer class name in case of an inner class.
-	 * @param clazz the class
-	 * @return the short name rendered in a standard JavaBeans property format
+	 * 返回Java类的短字符串名称，以非首字母大写的JavaBeans属性格式。
+	 * 如果是内部类，则去除外部类名称。
+	 * @param clazz 类对象
+	 * @return 以标准JavaBeans属性格式呈现的短名称
 	 * @see java.beans.Introspector#decapitalize(String)
 	 */
 	public static String getShortNameAsProperty(Class<?> clazz) {
@@ -957,10 +911,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine the name of the class file, relative to the containing
-	 * package: e.g. "String.class"
-	 * @param clazz the class
-	 * @return the file name of the ".class" file
+	 * 确定类文件名（相对于所在包路径）：例如："String.class"
+	 * @param clazz 类对象
+	 * @return ".class" 文件的文件名
 	 */
 	public static String getClassFileName(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -970,11 +923,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine the name of the package of the given class,
-	 * e.g. "java.lang" for the {@code java.lang.String} class.
-	 * @param clazz the class
-	 * @return the package name, or the empty String if the class
-	 * is defined in the default package
+	 * 确定给定类的包名，例如：{@code java.lang.String} 类的包名为 "java.lang"。
+	 * @param clazz 类对象
+	 * @return 包名，如果类定义在默认包中则返回空字符串
 	 */
 	public static String getPackageName(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -982,11 +933,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine the name of the package of the given fully-qualified class name,
-	 * e.g. "java.lang" for the {@code java.lang.String} class name.
-	 * @param fqClassName the fully-qualified class name
-	 * @return the package name, or the empty String if the class
-	 * is defined in the default package
+	 * 确定给定完全限定类名的包名，例如：{@code java.lang.String} 类名的包名为 "java.lang"。
+	 * @param fqClassName 完全限定的类名
+	 * @return 包名，如果类定义在默认包中则返回空字符串
 	 */
 	public static String getPackageName(String fqClassName) {
 		Assert.notNull(fqClassName, "Class name must not be null");
@@ -995,10 +944,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the qualified name of the given class: usually simply
-	 * the class name, but component type class name + "[]" for arrays.
-	 * @param clazz the class
-	 * @return the qualified name of the class
+	 * 返回给定类的限定名：通常就是类名，但对于数组则为组件类型类名 + "[]"。
+	 * @param clazz 类对象
+	 * @return 类的限定名
 	 */
 	public static String getQualifiedName(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -1006,22 +954,19 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the qualified name of the given method, consisting of
-	 * fully qualified interface/class name + "." + method name.
-	 * @param method the method
-	 * @return the qualified name of the method
+	 * 返回给定方法的限定名，由完全限定的接口/类名 + "." + 方法名组成。
+	 * @param method 方法对象
+	 * @return 方法的限定名
 	 */
 	public static String getQualifiedMethodName(Method method) {
 		return getQualifiedMethodName(method, null);
 	}
 
 	/**
-	 * Return the qualified name of the given method, consisting of
-	 * fully qualified interface/class name + "." + method name.
-	 * @param method the method
-	 * @param clazz the clazz that the method is being invoked on
-	 * (may be {@code null} to indicate the method's declaring class)
-	 * @return the qualified name of the method
+	 * 返回给定方法的限定名，由完全限定的接口/类名 + "." + 方法名组成。
+	 * @param method 方法对象
+	 * @param clazz 调用该方法的类（可为{@code null}，表示使用方法的声明类）
+	 * @return 方法的限定名
 	 * @since 4.3.4
 	 */
 	public static String getQualifiedMethodName(Method method, @Nullable Class<?> clazz) {
@@ -1030,11 +975,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given class has a public constructor with the given signature.
-	 * <p>Essentially translates {@code NoSuchMethodException} to "false".
-	 * @param clazz the clazz to analyze
-	 * @param paramTypes the parameter types of the method
-	 * @return whether the class has a corresponding constructor
+	 * 判断给定类是否具有指定签名的公共构造方法。
+	 * <p>本质上将{@code NoSuchMethodException}转换为"false"。
+	 * @param clazz 要分析的类
+	 * @param paramTypes 方法的参数类型
+	 * @return 类是否具有对应的构造方法
 	 * @see Class#getConstructor
 	 */
 	public static boolean hasConstructor(Class<?> clazz, Class<?>... paramTypes) {
@@ -1042,12 +987,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given class has a public constructor with the given signature,
-	 * and return it if available (else return {@code null}).
-	 * <p>Essentially translates {@code NoSuchMethodException} to {@code null}.
-	 * @param clazz the clazz to analyze
-	 * @param paramTypes the parameter types of the method
-	 * @return the constructor, or {@code null} if not found
+	 * 判断给定类是否具有指定签名的公共构造方法，如果存在则返回该方法（否则返回{@code null}）。
+	 * <p>本质上将{@code NoSuchMethodException}转换为{@code null}。
+	 * @param clazz 要分析的类
+	 * @param paramTypes 方法的参数类型
+	 * @return 构造方法，如果未找到则返回{@code null}
 	 * @see Class#getConstructor
 	 */
 	@Nullable
@@ -1062,12 +1006,12 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given class has a public method with the given signature.
-	 * <p>Essentially translates {@code NoSuchMethodException} to "false".
-	 * @param clazz the clazz to analyze
-	 * @param methodName the name of the method
-	 * @param paramTypes the parameter types of the method
-	 * @return whether the class has a corresponding method
+	 * 判断给定类是否具有指定签名的公共方法。
+	 * <p>本质上将{@code NoSuchMethodException}转换为"false"。
+	 * @param clazz 要分析的类
+	 * @param methodName 方法名称
+	 * @param paramTypes 方法的参数类型
+	 * @return 类是否具有对应的方法
 	 * @see Class#getMethod
 	 */
 	public static boolean hasMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
@@ -1075,22 +1019,19 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given class has a public method with the given signature,
-	 * and return it if available (else throws an {@code IllegalStateException}).
-	 * <p>In case of any signature specified, only returns the method if there is a
-	 * unique candidate, i.e. a single public method with the specified name.
-	 * <p>Essentially translates {@code NoSuchMethodException} to {@code IllegalStateException}.
-	 * @param clazz the clazz to analyze
-	 * @param methodName the name of the method
-	 * @param paramTypes the parameter types of the method
-	 * (may be {@code null} to indicate any signature)
-	 * @return the method (never {@code null})
-	 * @throws IllegalStateException if the method has not been found
+	 * 判断给定类是否具有指定签名的公共方法，如果存在则返回该方法（否则抛出{@code IllegalStateException}）。
+	 * <p>在指定签名的情况下，仅当存在唯一候选方法（即具有指定名称的单个公共方法）时才会返回。
+	 * <p>本质上将{@code NoSuchMethodException}转换为{@code IllegalStateException}。
+	 * @param clazz 要分析的类
+	 * @param methodName 方法名称
+	 * @param paramTypes 方法的参数类型（可为{@code null}，表示接受任何签名）
+	 * @return 方法（永不返回{@code null}）
+	 * @throws IllegalStateException 如果未找到方法
 	 * @see Class#getMethod
 	 */
 	public static Method getMethod(Class<?> clazz, String methodName, @Nullable Class<?>... paramTypes) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.notNull(methodName, "Method name must not be null");
+		Assert.notNull(clazz, "Class 不可以为空");
+		Assert.notNull(methodName, "Method名称 不可以为空");
 		if (paramTypes != null) {
 			try {
 				return clazz.getMethod(methodName, paramTypes);
@@ -1131,8 +1072,8 @@ public abstract class ClassUtils {
 	 */
 	@Nullable
 	public static Method getMethodIfAvailable(Class<?> clazz, String methodName, @Nullable Class<?>... paramTypes) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.notNull(methodName, "Method name must not be null");
+		Assert.notNull(clazz, "Class 不可以为空");
+		Assert.notNull(methodName, "Method名称 不可以为空");
 		if (paramTypes != null) {
 			try {
 				return clazz.getMethod(methodName, paramTypes);
@@ -1157,15 +1098,15 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the number of methods with a given name (with any argument types),
-	 * for the given class and/or its superclasses. Includes non-public methods.
-	 * @param clazz	the clazz to check
-	 * @param methodName the name of the method
-	 * @return the number of methods with the given name
+	 * 返回给定类及其超类中具有指定名称的方法数量（参数类型不限）。
+	 * 包括非公共方法。
+	 * @param clazz 要检查的类
+	 * @param methodName 方法名称
+	 * @return 具有给定名称的方法数量
 	 */
 	public static int getMethodCountForName(Class<?> clazz, String methodName) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.notNull(methodName, "Method name must not be null");
+		Assert.notNull(clazz, "Class 不可以为空");
+		Assert.notNull(methodName, "Method名称 不可以为空");
 		int count = 0;
 		Method[] declaredMethods = clazz.getDeclaredMethods();
 		for (Method method : declaredMethods) {
@@ -1184,16 +1125,15 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Does the given class or one of its superclasses at least have one or more
-	 * methods with the supplied name (with any argument types)?
-	 * Includes non-public methods.
-	 * @param clazz	the clazz to check
-	 * @param methodName the name of the method
-	 * @return whether there is at least one method with the given name
+	 * 给定类或其超类是否至少拥有一个或多个指定名称的方法（参数类型不限）？
+	 * 包括非公共方法。
+	 * @param clazz 要检查的类
+	 * @param methodName 方法名称
+	 * @return 是否至少存在一个具有给定名称的方法
 	 */
 	public static boolean hasAtLeastOneMethodWithName(Class<?> clazz, String methodName) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.notNull(methodName, "Method name must not be null");
+		Assert.notNull(clazz, "Class 不可以为空");
+		Assert.notNull(methodName, "Method名称 不可以为空");
 		Method[] declaredMethods = clazz.getDeclaredMethods();
 		for (Method method : declaredMethods) {
 			if (method.getName().equals(methodName)) {
@@ -1210,24 +1150,18 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Given a method, which may come from an interface, and a target class used
-	 * in the current reflective invocation, find the corresponding target method
-	 * if there is one. E.g. the method may be {@code IFoo.bar()} and the
-	 * target class may be {@code DefaultFoo}. In this case, the method may be
-	 * {@code DefaultFoo.bar()}. This enables attributes on that method to be found.
-	 * <p><b>NOTE:</b> In contrast to {@link org.springframework.aop.support.AopUtils#getMostSpecificMethod},
-	 * this method does <i>not</i> resolve Java 5 bridge methods automatically.
-	 * Call {@link org.springframework.core.BridgeMethodResolver#findBridgedMethod}
-	 * if bridge method resolution is desirable (e.g. for obtaining metadata from
-	 * the original method definition).
-	 * <p><b>NOTE:</b> Since Spring 3.1.1, if Java security settings disallow reflective
-	 * access (e.g. calls to {@code Class#getDeclaredMethods} etc, this implementation
-	 * will fall back to returning the originally provided method.
-	 * @param method the method to be invoked, which may come from an interface
-	 * @param targetClass the target class for the current invocation
-	 * (may be {@code null} or may not even implement the method)
-	 * @return the specific target method, or the original method if the
-	 * {@code targetClass} does not implement it
+	 * 给定一个可能来自接口的方法，以及当前反射调用中使用的目标类，查找对应的目标方法（如果存在）。
+	 * 例如，方法可能是{@code IFoo.bar()}，目标类可能是{@code DefaultFoo}。
+	 * 在这种情况下，方法可能是{@code DefaultFoo.bar()}。这样可以找到该方法上的属性。
+	 * <p>
+	 *     <b>注意：</b>
+	 *     与{@link org.springframework.aop.support.AopUtils#getMostSpecificMethod}不同，此方法<i>不会</i>自动解析Java 5桥接方法。
+	 *     如果需要解析桥接方法（例如从原始方法定义获取元数据），请调用{@link org.springframework.core.BridgeMethodResolver#findBridgedMethod}。
+	 * <p><b>注意：</b>从Spring 3.1.1开始，如果Java安全设置不允许反射访问
+	 * （例如调用{@code Class#getDeclaredMethods}等），此实现将回退到返回最初提供的方法。
+	 * @param method 要调用的方法，可能来自接口
+	 * @param targetClass 当前调用的目标类（可能为{@code null}，或者甚至没有实现该方法）
+	 * @return 特定的目标方法，如果{@code targetClass}没有实现该方法则返回原始方法
 	 */
 	public static Method getMostSpecificMethod(Method method, @Nullable Class<?> targetClass) {
 		if (targetClass != null && targetClass != method.getDeclaringClass() && isOverridable(method, targetClass)) {
@@ -1254,15 +1188,13 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given method is declared by the user or at least pointing to
-	 * a user-declared method.
-	 * <p>Checks {@link Method#isSynthetic()} (for implementation methods) as well as the
-	 * {@code GroovyObject} interface (for interface methods; on an implementation class,
-	 * implementations of the {@code GroovyObject} methods will be marked as synthetic anyway).
-	 * Note that, despite being synthetic, bridge methods ({@link Method#isBridge()}) are considered
-	 * as user-level methods since they are eventually pointing to a user-declared generic method.
-	 * @param method the method to check
-	 * @return {@code true} if the method can be considered as user-declared; [@code false} otherwise
+	 * 判断给定方法是否由用户声明或至少指向用户声明的方法。
+	 * <p>
+	 *     检查{@link Method#isSynthetic()}（用于实现方法）以及{@code GroovyObject}接口
+	 *     （用于接口方法；在实现类上，{@code GroovyObject}方法的实现将被标记为合成方法）。
+	 *     注意，尽管是合成方法，桥接方法（{@link Method#isBridge()}）被视为用户级方法，因为它们最终指向用户声明的泛型方法。
+	 * @param method 要检查的方法
+	 * @return 如果方法可被视为用户声明则返回{@code true}；否则返回{@code false}
 	 */
 	public static boolean isUserLevelMethod(Method method) {
 		Assert.notNull(method, "Method must not be null");
@@ -1274,9 +1206,9 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Determine whether the given method is overridable in the given target class.
-	 * @param method the method to check
-	 * @param targetClass the target class to check against
+	 * 判断给定方法在指定目标类中是否可被重写。
+	 * @param method 要检查的方法
+	 * @param targetClass 要检查的目标类
 	 */
 	private static boolean isOverridable(Method method, @Nullable Class<?> targetClass) {
 		if (Modifier.isPrivate(method.getModifiers())) {
@@ -1290,12 +1222,12 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return a public static method of a class.
-	 * @param clazz the class which defines the method
-	 * @param methodName the static method name
-	 * @param args the parameter types to the method
-	 * @return the static method, or {@code null} if no static method was found
-	 * @throws IllegalArgumentException if the method name is blank or the clazz is null
+	 * 返回类的公共静态方法。
+	 * @param clazz 定义方法的类
+	 * @param methodName 静态方法名
+	 * @param args 方法的参数类型
+	 * @return 静态方法，如果未找到静态方法则返回{@code null}
+	 * @throws IllegalArgumentException 如果方法名为空或clazz为null
 	 */
 	@Nullable
 	public static Method getStaticMethod(Class<?> clazz, String methodName, Class<?>... args) {

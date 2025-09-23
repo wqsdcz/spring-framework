@@ -31,21 +31,18 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * A container for CORS configuration along with methods to check against the
- * actual origin, HTTP methods, and headers of a given request.
+ * 一个用于CORS配置的容器，包含检查实际Origin、HTTP Method和给定的Request Header的方法。
  *
- * <p>By default a newly created {@code CorsConfiguration} does not permit any
- * cross-origin requests and must be configured explicitly to indicate what
- * should be allowed. Use {@link #applyPermitDefaultValues()} to flip the
- * initialization model to start with open defaults that permit all cross-origin
- * requests for GET, HEAD, and POST requests.
+ * <p>
+ *     默认情况下，新创建的{@code CorsConfiguration}不允许任何跨源请求，必须显式配置以指示应允许的内容。
+ *     使用{@link #applyPermitDefaultValues()}来切换初始化模型，以从允许GET、HEAD和POST请求的所有跨源请求的开放默认值开始。
  *
  * @author Sebastien Deleuze
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 4.2
- * @see <a href="https://www.w3.org/TR/cors/">CORS spec</a>
+ * @see <a href="https://www.w3.org/TR/cors/">CORS规范</a>
  */
 public class CorsConfiguration {
 
@@ -61,25 +58,28 @@ public class CorsConfiguration {
 	private static final List<String> DEFAULT_PERMIT_ALL = Collections.unmodifiableList(
 			Collections.singletonList(ALL));
 
-
+	/** 允许的源 */
 	@Nullable
 	private List<String> allowedOrigins;
-
+	/** 允许的方法 */
 	@Nullable
 	private List<String> allowedMethods;
-
+	/** allowedMethods中内容的解析结果 */
 	@Nullable
 	private List<HttpMethod> resolvedMethods = DEFAULT_METHODS;
-
+	/** 允许的请求头 */
 	@Nullable
 	private List<String> allowedHeaders;
-
+	/** 允许公开的响应头 */
 	@Nullable
 	private List<String> exposedHeaders;
-
+	/**
+	 * 当设置为 true 时，表示允许浏览器携带 Cookie 或 HTTP 认证信息等凭据。
+	 * 如果请求需要凭据，服务器的 Access-Control-Allow-Origin 不能是 *，必须是具体的源。
+	 */
 	@Nullable
 	private Boolean allowCredentials;
-
+	/** 预检请求的结果可以被缓存多久（秒），在有效期内不再发送预检请求。	 */
 	@Nullable
 	private Long maxAge;
 
@@ -324,19 +324,16 @@ public class CorsConfiguration {
 
 
 	/**
-	 * By default a newly created {@code CorsConfiguration} does not permit any
-	 * cross-origin requests and must be configured explicitly to indicate what
-	 * should be allowed.
-	 * <p>Use this method to flip the initialization model to start with open
-	 * defaults that permit all cross-origin requests for GET, HEAD, and POST
-	 * requests. Note however that this method will not override any existing
-	 * values already set.
-	 * <p>The following defaults are applied if not already set:
+	 * 默认情况下，新创建的{@code CorsConfiguration}不允许任何跨源请求，必须显式配置以指定应允许的内容。
+	 * <p>
+	 *     调用此方法将切换初始化模式，改为采用允许GET、HEAD和POST请求进行所有跨源请求的开放默认值。
+	 *     但请注意，该方法不会覆盖已设置的现有值。
+	 * <p>如果未设置，将应用以下默认值：
 	 * <ul>
-	 * <li>Allow all origins.</li>
-	 * <li>Allow "simple" methods {@code GET}, {@code HEAD} and {@code POST}.</li>
-	 * <li>Allow all headers.</li>
-	 * <li>Set max age to 1800 seconds (30 minutes).</li>
+	 *     <li>允许所有源</li>
+	 *     <li>允许"简单"方法：{@code GET}、{@code HEAD}和{@code POST}</li>
+	 *     <li>允许所有头部</li>
+	 *     <li>设置最大存活时间为1800秒（30分钟）</li>
 	 * </ul>
 	 */
 	public CorsConfiguration applyPermitDefaultValues() {
@@ -358,22 +355,19 @@ public class CorsConfiguration {
 	}
 
 	/**
-	 * Combine the non-null properties of the supplied
-	 * {@code CorsConfiguration} with this one.
-	 * <p>When combining single values like {@code allowCredentials} or
-	 * {@code maxAge}, {@code this} properties are overridden by non-null
-	 * {@code other} properties if any.
-	 * <p>Combining lists like {@code allowedOrigins}, {@code allowedMethods},
-	 * {@code allowedHeaders} or {@code exposedHeaders} is done in an additive
-	 * way. For example, combining {@code ["GET", "POST"]} with
-	 * {@code ["PATCH"]} results in {@code ["GET", "POST", "PATCH"]}, but keep
-	 * in mind that combining {@code ["GET", "POST"]} with {@code ["*"]}
-	 * results in {@code ["*"]}.
-	 * <p>Notice that default permit values set by
-	 * {@link CorsConfiguration#applyPermitDefaultValues()} are overridden by
-	 * any value explicitly defined.
-	 * @return the combined {@code CorsConfiguration}, or {@code this}
-	 * configuration if the supplied configuration is {@code null}
+	 * 将提供的{@code CorsConfiguration}的非空属性与本配置合并。
+	 * <p>
+	 *     当合并单值属性（如{@code allowCredentials}或{@code maxAge}）时，
+	 *      如果{@code other}配置中的对应属性非空，则会覆盖{@code this}中的属性。
+	 * <p>
+	 *     列表属性的合并（如{@code allowedOrigins}、{@code allowedMethods}、
+	 *     {@code allowedHeaders}或{@code exposedHeaders}）采用追加方式。
+	 *     例如，将{@code ["GET", "POST"]}与{@code ["PATCH"]}合并会得到
+	 *     {@code ["GET", "POST", "PATCH"]}，但请注意将{@code ["GET", "POST"]}与{@code ["*"]}合并会得到{@code ["*"]}。
+	 * <p>
+	 *     注意：通过{@link CorsConfiguration#applyPermitDefaultValues()}设置的默认允许值会被任何显式定义的值覆盖。
+	 *
+	 * @return 合并后的{@code CorsConfiguration}，如果提供的配置为{@code null}则返回{@code this}
 	 */
 	@Nullable
 	public CorsConfiguration combine(@Nullable CorsConfiguration other) {
@@ -418,10 +412,9 @@ public class CorsConfiguration {
 	}
 
 	/**
-	 * Check the origin of the request against the configured allowed origins.
-	 * @param requestOrigin the origin to check
-	 * @return the origin to use for the response, or {@code null} which
-	 * means the request origin is not allowed
+	 * 根据配置的允许源检查请求的源
+	 * @param requestOrigin 要检查的源
+	 * @return 用于响应的源，如果请求源不被允许则返回{@code null}
 	 */
 	@Nullable
 	public String checkOrigin(@Nullable String requestOrigin) {
@@ -450,12 +443,9 @@ public class CorsConfiguration {
 	}
 
 	/**
-	 * Check the HTTP request method (or the method from the
-	 * {@code Access-Control-Request-Method} header on a pre-flight request)
-	 * against the configured allowed methods.
-	 * @param requestMethod the HTTP request method to check
-	 * @return the list of HTTP methods to list in the response of a pre-flight
-	 * request, or {@code null} if the supplied {@code requestMethod} is not allowed
+	 * 根据配置的允许方法检查HTTP请求方法（或预检请求中{@code Access-Control-Request-Method}头部的方法）
+	 * @param requestMethod 要检查的HTTP请求方法
+	 * @return 预检请求响应中允许列出的HTTP方法列表，如果提供的{@code requestMethod}不被允许则返回{@code null}
 	 */
 	@Nullable
 	public List<HttpMethod> checkHttpMethod(@Nullable HttpMethod requestMethod) {
@@ -469,12 +459,9 @@ public class CorsConfiguration {
 	}
 
 	/**
-	 * Check the supplied request headers (or the headers listed in the
-	 * {@code Access-Control-Request-Headers} of a pre-flight request) against
-	 * the configured allowed headers.
-	 * @param requestHeaders the request headers to check
-	 * @return the list of allowed headers to list in the response of a pre-flight
-	 * request, or {@code null} if none of the supplied request headers is allowed
+	 * 根据配置的允许头部检查提供的请求头部（或预检请求中{@code Access-Control-Request-Headers}列出的头部）
+	 * @param requestHeaders 要检查的请求头部
+	 * @return 预检请求响应中允许列出的头部列表，如果提供的请求头部均不被允许则返回{@code null}
 	 */
 	@Nullable
 	public List<String> checkHeaders(@Nullable List<String> requestHeaders) {

@@ -44,9 +44,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 
 /**
- * Creates {@link RequestMappingInfo} instances from type and method-level
- * {@link RequestMapping @RequestMapping} annotations in
- * {@link Controller @Controller} classes.
+ * 根据{@link Controller @Controller}类中，
+ * 类型级别和方法级别的{@link RequestMapping @RequestMapping}注解去创建{@link RequestMappingInfo}实例。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev

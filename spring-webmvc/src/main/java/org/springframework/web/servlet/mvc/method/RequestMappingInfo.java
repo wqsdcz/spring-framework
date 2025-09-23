@@ -36,15 +36,15 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.util.UrlPathHelper;
 
 /**
- * A {@link RequestCondition} that consists of the following other conditions:
+ * 一种由以下其他条件组成的 {@link RequestCondition}：
  * <ol>
- * <li>{@link PatternsRequestCondition}
- * <li>{@link RequestMethodsRequestCondition}
- * <li>{@link ParamsRequestCondition}
- * <li>{@link HeadersRequestCondition}
- * <li>{@link ConsumesRequestCondition}
- * <li>{@link ProducesRequestCondition}
- * <li>{@code RequestCondition} (optional, custom request condition)
+ *      <li>{@link PatternsRequestCondition}
+ *      <li>{@link RequestMethodsRequestCondition}
+ *      <li>{@link ParamsRequestCondition}
+ *      <li>{@link HeadersRequestCondition}
+ *      <li>{@link ConsumesRequestCondition}
+ *      <li>{@link ProducesRequestCondition}
+ *      <li>{@code RequestCondition}（可选的自定义请求条件）
  * </ol>
  *
  * @author Arjen Poutsma
@@ -87,7 +87,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	}
 
 	/**
-	 * Creates a new instance with the given request conditions.
+	 * 使用给定的请求条件创建新实例。
 	 */
 	public RequestMappingInfo(@Nullable PatternsRequestCondition patterns,
 			@Nullable RequestMethodsRequestCondition methods, @Nullable ParamsRequestCondition params,
@@ -98,7 +98,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	}
 
 	/**
-	 * Re-create a RequestMappingInfo with the given custom request condition.
+	 * 使用给定的自定义请求条件重新创建RequestMappingInfo。
 	 */
 	public RequestMappingInfo(RequestMappingInfo info, @Nullable RequestCondition<?> customRequestCondition) {
 		this(info.name, info.patternsCondition, info.methodsCondition, info.paramsCondition, info.headersCondition,
@@ -107,7 +107,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 
 	/**
-	 * Return the name for this mapping, or {@code null}.
+	 * 返回此映射的名称，如果不存在则返回{@code null}。
 	 */
 	@Nullable
 	public String getName() {
@@ -115,55 +115,55 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	}
 
 	/**
-	 * Return the URL patterns of this {@link RequestMappingInfo};
-	 * or instance with 0 patterns (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 URL 模式；
+	 * 或返回包含 0 个模式的实例（绝不会为 {@code null}）。
 	 */
 	public PatternsRequestCondition getPatternsCondition() {
 		return this.patternsCondition;
 	}
 
 	/**
-	 * Return the HTTP request methods of this {@link RequestMappingInfo};
-	 * or instance with 0 request methods (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 HTTP 请求方法；
+	 * 或返回包含 0 个请求方法的实例（绝不会为 {@code null}）。
 	 */
 	public RequestMethodsRequestCondition getMethodsCondition() {
 		return this.methodsCondition;
 	}
 
 	/**
-	 * Return the "parameters" condition of this {@link RequestMappingInfo};
-	 * or instance with 0 parameter expressions (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 "parameters" 条件；
+	 * 或返回包含 0 个参数表达式的实例（绝不会为 {@code null}）。
 	 */
 	public ParamsRequestCondition getParamsCondition() {
 		return this.paramsCondition;
 	}
 
 	/**
-	 * Return the "headers" condition of this {@link RequestMappingInfo};
-	 * or instance with 0 header expressions (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 "headers" 条件；
+	 * 或返回包含 0 个头表达式的实例（绝不会为 {@code null}）。
 	 */
 	public HeadersRequestCondition getHeadersCondition() {
 		return this.headersCondition;
 	}
 
 	/**
-	 * Return the "consumes" condition of this {@link RequestMappingInfo};
-	 * or instance with 0 consumes expressions (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 "consumes" 条件；
+	 * 或返回包含 0 个消费表达式的实例（绝不会为 {@code null}）。
 	 */
 	public ConsumesRequestCondition getConsumesCondition() {
 		return this.consumesCondition;
 	}
 
 	/**
-	 * Return the "produces" condition of this {@link RequestMappingInfo};
-	 * or instance with 0 produces expressions (never {@code null}).
+	 * 返回此 {@link RequestMappingInfo} 的 "produces" 条件；
+	 * 或返回包含 0 个生产表达式的实例（绝不会为 {@code null}）。
 	 */
 	public ProducesRequestCondition getProducesCondition() {
 		return this.producesCondition;
 	}
 
 	/**
-	 * Return the "custom" condition of this {@link RequestMappingInfo}, or {@code null}.
+	 * 返回此 {@link RequestMappingInfo} 的 "custom" 条件，或 {@code null}。
 	 */
 	@Nullable
 	public RequestCondition<?> getCustomCondition() {
@@ -172,9 +172,9 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 
 	/**
-	 * Combine "this" request mapping info (i.e. the current instance) with another request mapping info instance.
-	 * <p>Example: combine type- and method-level request mappings.
-	 * @return a new request mapping info instance; never {@code null}
+	 * 将"this"请求映射信息（即当前实例）与另一个请求映射信息实例合并。
+	 * <p>示例：合并类型级别和方法级别的请求映射。
+	 * @return 新的请求映射信息实例；绝不会为 {@code null}
 	 */
 	@Override
 	public RequestMappingInfo combine(RequestMappingInfo other) {
@@ -206,11 +206,9 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	}
 
 	/**
-	 * Checks if all conditions in this request mapping info match the provided request and returns
-	 * a potentially new request mapping info with conditions tailored to the current request.
-	 * <p>For example the returned instance may contain the subset of URL patterns that match to
-	 * the current request, sorted with best matching patterns on top.
-	 * @return a new instance in case all conditions match; or {@code null} otherwise
+	 * 检查此请求映射信息中的所有条件是否与提供的请求匹配，并返回一个根据当前请求定制的、可能更新的请求映射信息实例。
+	 * <p>例如：返回的实例可能包含与当前请求匹配的URL模式子集，并按最佳匹配模式优先的顺序排序。
+	 * @return 当所有条件都匹配时返回新实例；否则返回 {@code null}
 	 */
 	@Override
 	@Nullable
@@ -239,11 +237,12 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 				methods, params, headers, consumes, produces, custom.getCondition());
 	}
 
+
 	/**
-	 * Compares "this" info (i.e. the current instance) with another info in the context of a request.
-	 * <p>Note: It is assumed both instances have been obtained via
-	 * {@link #getMatchingCondition(HttpServletRequest)} to ensure they have conditions with
-	 * content relevant to current request.
+	 * 在请求上下文中将"this"信息（即当前实例）与另一个信息实例进行比较。
+	 * <p>
+	 *     注意：假定两个实例都是通过{@link #getMatchingCondition(HttpServletRequest)}方法获得的，
+	 *     以确保它们包含与当前请求相关的条件内容。
 	 */
 	@Override
 	public int compareTo(RequestMappingInfo other, HttpServletRequest request) {
@@ -341,8 +340,8 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 
 	/**
-	 * Create a new {@code RequestMappingInfo.Builder} with the given paths.
-	 * @param paths the paths to use
+	 * 使用给定路径创建新的 {@code RequestMappingInfo.Builder} 实例。
+	 * @param paths 使用的路径
 	 * @since 4.2
 	 */
 	public static Builder paths(String... paths) {
@@ -351,7 +350,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 
 	/**
-	 * Defines a builder for creating a RequestMappingInfo.
+	 * 定义用于创建 RequestMappingInfo 的构建器。
 	 * @since 4.2
 	 */
 	public interface Builder {
@@ -510,9 +509,8 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 
 	/**
-	 * Container for configuration options used for request mapping purposes.
-	 * Such configuration is required to create RequestMappingInfo instances but
-	 * is typically used across all RequestMappingInfo instances.
+	 * 用于请求映射目的的配置选项容器。
+	 * 创建 RequestMappingInfo 实例需要此类配置，通常会在所有 RequestMappingInfo 实例间共享使用。
 	 * @since 4.2
 	 * @see Builder#options
 	 */

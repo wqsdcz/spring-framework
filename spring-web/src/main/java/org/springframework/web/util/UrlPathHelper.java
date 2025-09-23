@@ -33,12 +33,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
- * Helper class for URL path matching. Provides support for URL paths in
- * {@code RequestDispatcher} includes and support for consistent URL decoding.
+ * URL路径匹配的辅助类。提供对{@code RequestDispatcher}包含的URL路径的支持以及一致的URL解码支持。
  *
- * <p>Used by {@link org.springframework.web.servlet.handler.AbstractUrlHandlerMapping}
- * and {@link org.springframework.web.servlet.support.RequestContext} for path matching
- * and/or URI determination.
+ * <p>被{@link org.springframework.web.servlet.handler.AbstractUrlHandlerMapping}
+ * 和{@link org.springframework.web.servlet.support.RequestContext}用于路径匹配和/或URI确定。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -50,9 +48,8 @@ import org.springframework.util.StringUtils;
 public class UrlPathHelper {
 
 	/**
-	 * Special WebSphere request attribute, indicating the original request URI.
-	 * Preferable over the standard Servlet 2.4 forward attribute on WebSphere,
-	 * simply because we need the very first URI in the request forwarding chain.
+	 * WebSphere特定的请求属性，用于指示原始请求URI。
+	 * 在WebSphere上优先于标准的Servlet 2.4转发属性使用，因为这能确保获取到请求转发链中最初始的URI。
 	 */
 	private static final String WEBSPHERE_URI_ATTRIBUTE = "com.ibm.websphere.servlet.uri_non_decoded";
 
@@ -74,13 +71,11 @@ public class UrlPathHelper {
 
 
 	/**
-	 * Whether URL lookups should always use the full path within the current
-	 * web application context, i.e. within
-	 * {@link javax.servlet.ServletContext#getContextPath()}.
-	 * <p>If set to {@literal false} the path within the current servlet mapping
-	 * is used instead if applicable (i.e. in the case of a prefix based Servlet
-	 * mapping such as "/myServlet/*").
-	 * <p>By default this is set to "false".
+	 * 是否应始终在当前Web应用程序上下文中使用完整路径进行URL查找，
+	 * 即在{@link javax.servlet.ServletContext#getContextPath()}范围内。
+	 * <p>如果设置为{@literal false}，则会在适用时使用当前Servlet映射内的路径
+	 * （例如，在基于前缀的Servlet映射情况下，如"/myServlet/*"）。
+	 * <p>默认此值为"false"。
 	 */
 	public void setAlwaysUseFullPath(boolean alwaysUseFullPath) {
 		checkReadOnly();
@@ -88,16 +83,13 @@ public class UrlPathHelper {
 	}
 
 	/**
-	 * Whether the context path and request URI should be decoded -- both of
-	 * which are returned <i>undecoded</i> by the Servlet API, in contrast to
-	 * the servlet path.
-	 * <p>Either the request encoding or the default Servlet spec encoding
-	 * (ISO-8859-1) is used when set to "true".
-	 * <p>By default this is set to {@literal true}.
-	 * <p><strong>Note:</strong> Be aware the servlet path will not match when
-	 * compared to encoded paths. Therefore use of {@code urlDecode=false} is
-	 * not compatible with a prefix-based Servlet mapping and likewise implies
-	 * also setting {@code alwaysUseFullPath=true}.
+	 * 是否对上下文路径和请求URI进行解码——与servlet路径不同，
+	 * 这两者由Servlet API返回时均为<i>未解码</i>状态。
+	 * <p>当设置为"true"时，将使用请求编码或默认的Servlet规范编码（ISO-8859-1）进行解码。
+	 * <p>默认此值为{@literal true}。
+	 * <p><strong>注意：</strong>需注意在比较编码路径时，servlet路径可能不匹配。
+	 * 因此使用{@code urlDecode=false}与基于前缀的Servlet映射不兼容，
+	 * 这也意味着需要同时设置{@code alwaysUseFullPath=true}。
 	 * @see #getServletPath
 	 * @see #getContextPath
 	 * @see #getRequestUri

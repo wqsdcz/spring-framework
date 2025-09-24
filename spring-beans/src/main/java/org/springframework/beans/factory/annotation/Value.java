@@ -23,24 +23,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation at the field or method/constructor parameter level
- * that indicates a default value expression for the affected argument.
+ * 字段或方法/构造函数参数级别的注解，
+ * 用于为受影响的参数指示默认值表达式。
  *
- * <p>Typically used for expression-driven dependency injection. Also supported
- * for dynamic resolution of handler method parameters, e.g. in Spring MVC.
+ * <p>通常用于表达式驱动的依赖注入。也支持处理器方法参数的动态解析，
+ * 例如在Spring MVC中。
  *
- * <p>A common use case is to assign default field values using
- * {@code #{systemProperties.myProp}} style expressions.
+ * <p>常见用例是使用{@code #{systemProperties.myProp}}样式表达式分配默认字段值。
  *
- * <p>Note that actual processing of the {@code @Value} annotation is performed
- * by a {@link org.springframework.beans.factory.config.BeanPostProcessor
- * BeanPostProcessor} which in turn means that you <em>cannot</em> use
- * {@code @Value} within
- * {@link org.springframework.beans.factory.config.BeanPostProcessor
- * BeanPostProcessor} or
+ * <p>请注意，{@code @Value}注解的实际处理由
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessor}
+ * 执行，这意味着您<em>不能</em>在
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessor}或
  * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessor}
- * types. Please consult the javadoc for the {@link AutowiredAnnotationBeanPostProcessor}
- * class (which, by default, checks for the presence of this annotation).
+ * 类型中使用{@code @Value}。请查阅{@link AutowiredAnnotationBeanPostProcessor}
+ * 类的javadoc（默认情况下，该类会检查此注解的存在）。
  *
  * @author Juergen Hoeller
  * @since 3.0
@@ -55,7 +52,7 @@ import java.lang.annotation.Target;
 public @interface Value {
 
 	/**
-	 * The actual value expression: for example {@code #{systemProperties.myProp}}.
+	 * 实际的值表达式：例如{@code #{systemProperties.myProp}}。
 	 */
 	String value();
 

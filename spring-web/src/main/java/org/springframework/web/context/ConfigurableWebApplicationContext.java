@@ -27,8 +27,7 @@ import org.springframework.lang.Nullable;
  * 由{@link ContextLoader}和{@link org.springframework.web.servlet.FrameworkServlet}支持。
  *
  * <p>
- *     注意：此接口的setter方法必须在调用{@link #refresh}方法
- *     （从{@link org.springframework.context.ConfigurableApplicationContext}继承的）之前调用。
+ *     注意：此接口的setter方法必须在调用{@link #refresh}方法（从{@link org.springframework.context.ConfigurableApplicationContext}继承的）之前调用。
  *     它们不会自行引起上下文的初始化。
  *
  * @author Juergen Hoeller
@@ -71,36 +70,31 @@ public interface ConfigurableWebApplicationContext extends WebApplicationContext
 	ServletConfig getServletConfig();
 
 	/**
-	 * Set the namespace for this web application context,
-	 * to be used for building a default context config location.
-	 * The root web application context does not have a namespace.
+	 * 设置此Web应用上下文的命名空间，用于构建默认的上下文配置位置。
+	 * 根Web应用上下文没有命名空间。
 	 */
 	void setNamespace(@Nullable String namespace);
 
 	/**
-	 * Return the namespace for this web application context, if any.
+	 * 返回此Web应用上下文的命名空间（如果有）。
 	 */
 	@Nullable
 	String getNamespace();
 
 	/**
-	 * Set the config locations for this web application context in init-param style,
-	 * i.e. with distinct locations separated by commas, semicolons or whitespace.
-	 * <p>If not set, the implementation is supposed to use a default for the
-	 * given namespace or the root web application context, as appropriate.
+	 * 以初始化参数样式设置此Web应用上下文的配置位置，即用逗号、分号或空格分隔的不同位置。
+	 * <p>如果未设置，实现应使用给定命名空间或根Web应用上下文的默认值（视情况而定）。
 	 */
 	void setConfigLocation(String configLocation);
 
 	/**
-	 * Set the config locations for this web application context.
-	 * <p>If not set, the implementation is supposed to use a default for the
-	 * given namespace or the root web application context, as appropriate.
+	 * 设置此Web应用上下文的配置位置。
+	 * <p>如果未设置，实现应使用给定命名空间或根Web应用上下文的默认值（视情况而定）。
 	 */
 	void setConfigLocations(String... configLocations);
 
 	/**
-	 * Return the config locations for this web application context,
-	 * or {@code null} if none specified.
+	 * 返回此Web应用上下文的配置位置，如果未指定则返回{@code null}。
 	 */
 	@Nullable
 	String[] getConfigLocations();

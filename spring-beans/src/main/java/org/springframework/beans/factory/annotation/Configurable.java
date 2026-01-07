@@ -24,13 +24,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 将类标记为符合Spring-driven配置的条件。
+ * 将类标记为符合Spring驱动配置的条件
  *
- * <p>通常用于AspectJ {@code AnnotationBeanConfigurerAspect}。
- *
- * Marks a class as being eligible for Spring-driven configuration.
- *
- * <p>Typically used with the AspectJ {@code AnnotationBeanConfigurerAspect}.
+ * <p>
+ *     通常与AspectJ的{@code AnnotationBeanConfigurerAspect}一起使用。
  *
  * @author Rod Johnson
  * @author Rob Harrop
@@ -45,22 +42,22 @@ import java.lang.annotation.Target;
 public @interface Configurable {
 
 	/**
-	 * The name of the bean definition that serves as the configuration template.
+	 * 用作配置模板的bean定义的名称。
 	 */
 	String value() default "";
 
 	/**
-	 * Are dependencies to be injected via autowiring?
+	 * 是否通过自动装配注入依赖？
 	 */
 	Autowire autowire() default Autowire.NO;
 
 	/**
-	 * Is dependency checking to be performed for configured objects?
+	 * 是否为配置的对象执行依赖检查？
 	 */
 	boolean dependencyCheck() default false;
 
 	/**
-	 * Are dependencies to be injected prior to the construction of an object?
+	 * 是否在对象构建之前注入依赖？
 	 */
 	boolean preConstruction() default false;
 

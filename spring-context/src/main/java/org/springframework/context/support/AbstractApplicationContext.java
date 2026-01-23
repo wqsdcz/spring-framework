@@ -501,25 +501,25 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareBeanFactory(beanFactory);
 
 			try {
-				// Allows post-processing of the bean factory in context subclasses.
+				// 允许在【上下文的子类】上对【bean工厂】进行【后处理】；
 				postProcessBeanFactory(beanFactory);
 
-				// Invoke factory processors registered as beans in the context.
+				// 调用【工厂后处理器】（在上下文中注册为bean的工厂后处理器）
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.
+				// 注册bean的后处理器（用于拦截bean的创建）
 				registerBeanPostProcessors(beanFactory);
 
-				// Initialize message source for this context.
+				// 初始化【此上下文】的【消息源】。
 				initMessageSource();
 
-				// Initialize event multicaster for this context.
+				// 初始化【此上下文】的【事件多播器】。
 				initApplicationEventMulticaster();
 
-				// Initialize other special beans in specific context subclasses.
+				// 初始化在【具体的上下文子类】中特有的bean；
 				onRefresh();
 
-				// Check for listener beans and register them.
+				// 查询监听器bean，并将他们进行注册。
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -696,8 +696,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Initialize the MessageSource.
-	 * Use parent's if none defined in this context.
+	 * 初始化消息源。
+	 * 如果当前上下文中未定义，则使用父级的消息源。
 	 */
 	protected void initMessageSource() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();

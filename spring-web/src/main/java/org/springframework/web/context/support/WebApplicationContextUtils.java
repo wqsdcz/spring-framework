@@ -165,19 +165,17 @@ public abstract class WebApplicationContextUtils {
 
 
 	/**
-	 * Register web-specific scopes ("request", "session", "globalSession")
-	 * with the given BeanFactory, as used by the WebApplicationContext.
-	 * @param beanFactory the BeanFactory to configure
+	 * 向给定的BeanFactory注册Web特定作用域（"request"、"session"、"globalSession"），供WebApplicationContext使用。
+	 * @param beanFactory 要配置的BeanFactory
 	 */
 	public static void registerWebApplicationScopes(ConfigurableListableBeanFactory beanFactory) {
 		registerWebApplicationScopes(beanFactory, null);
 	}
 
 	/**
-	 * Register web-specific scopes ("request", "session", "globalSession", "application")
-	 * with the given BeanFactory, as used by the WebApplicationContext.
-	 * @param beanFactory the BeanFactory to configure
-	 * @param sc the ServletContext that we're running within
+	 * 向给定的BeanFactory注册Web特定作用域（"request"、"session"、"globalSession"、"application"），供WebApplicationContext使用。
+	 * @param beanFactory 要配置的BeanFactory
+	 * @param sc 运行所在的ServletContext
 	 */
 	public static void registerWebApplicationScopes(ConfigurableListableBeanFactory beanFactory,
 			@Nullable ServletContext sc) {
@@ -201,21 +199,19 @@ public abstract class WebApplicationContextUtils {
 	}
 
 	/**
-	 * Register web-specific environment beans ("contextParameters", "contextAttributes")
-	 * with the given BeanFactory, as used by the WebApplicationContext.
-	 * @param bf the BeanFactory to configure
-	 * @param sc the ServletContext that we're running within
+	 * 向给定的BeanFactory注册Web特定环境的Bean（"contextParameters"、"contextAttributes"），供WebApplicationContext使用。
+	 * @param bf 要配置的BeanFactory
+	 * @param sc 运行所在的ServletContext
 	 */
 	public static void registerEnvironmentBeans(ConfigurableListableBeanFactory bf, @Nullable ServletContext sc) {
 		registerEnvironmentBeans(bf, sc, null);
 	}
 
 	/**
-	 * Register web-specific environment beans ("contextParameters", "contextAttributes")
-	 * with the given BeanFactory, as used by the WebApplicationContext.
-	 * @param bf the BeanFactory to configure
-	 * @param servletContext the ServletContext that we're running within
-	 * @param servletConfig the ServletConfig of the containing Portlet
+	 * 向给定的BeanFactory注册Web特定环境的Bean（"contextParameters"、"contextAttributes"），供WebApplicationContext使用。
+	 * @param bf 要配置的BeanFactory
+	 * @param servletContext 运行所在的ServletContext
+	 * @param servletConfig 包含Portlet的ServletConfig
 	 */
 	public static void registerEnvironmentBeans(ConfigurableListableBeanFactory bf,
 			@Nullable ServletContext servletContext, @Nullable ServletConfig servletConfig) {

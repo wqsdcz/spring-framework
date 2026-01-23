@@ -98,7 +98,7 @@ import org.springframework.lang.Nullable;
  */
 public interface BeanFactory {
 	/**
-	 * Bean的集合
+	 * Spring Bean容器的【根接口】
 	 * Bean的作用域
 	 * Bean的类型
 	 * Bean的别名

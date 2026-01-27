@@ -25,17 +25,27 @@ import org.springframework.lang.Nullable;
 
 /**
  * Static holder for local Spring properties, i.e. defined at the Spring library level.
+ * <p>本地Spring属性的静态持有者，即在Spring库级别定义的属性。
  *
  * <p>Reads a {@code spring.properties} file from the root of the classpath and
  * also allows for programmatically setting properties via {@link #setProperty}.
  * When retrieving properties, local entries are checked first, with JVM-level
  * system properties checked next as a fallback via {@link System#getProperty}.
+ * <p>从类路径根目录读取 {@code spring.properties} 文件并
+ * 也允许通过 {@link #setProperty} 以编程方式设置属性。
+ * 检索属性时，首先检查本地条目，然后通过 {@link System#getProperty} 检查JVM级
+ * 系统属性作为备选。
  *
  * <p>This is an alternative way to set Spring-related system properties such as
  * {@code spring.getenv.ignore} and {@code spring.beaninfo.ignore}, in particular
  * for scenarios where JVM system properties are locked on the target platform
  * (for example, WebSphere). See {@link #setFlag} for a convenient way to locally
  * set such flags to {@code "true"}.
+ * <p>这是设置Spring相关系统属性的替代方法，如
+ * {@code spring.getenv.ignore} 和 {@code spring.beaninfo.ignore}，特别是
+ * 在JVM系统属性在目标平台上被锁定的场景中
+ * (例如WebSphere)。参见 {@link #setFlag} 以本地方式
+ * 将这些标志设置为 {@code "true"} 的便捷方法。
  *
  * @author Juergen Hoeller
  * @since 3.2.7
@@ -82,8 +92,12 @@ public final class SpringProperties {
 	/**
 	 * Programmatically set a local property, overriding an entry in the
 	 * {@code spring.properties} file (if any).
+	 * <p>以编程方式设置本地属性，覆盖
+	 * {@code spring.properties} 文件中的条目(如果有)。
 	 * @param key the property key
+	 * <p>属性键
 	 * @param value the associated property value, or {@code null} to reset it
+	 * <p>相关的属性值，或 {@code null} 以重置它
 	 */
 	public static void setProperty(String key, @Nullable String value) {
 		if (value != null) {
@@ -97,8 +111,12 @@ public final class SpringProperties {
 	/**
 	 * Retrieve the property value for the given key, checking local Spring
 	 * properties first and falling back to JVM-level system properties.
+	 * <p>检索给定键的属性值，首先检查本地Spring
+	 * 属性，然后回退到JVM级系统属性。
 	 * @param key the property key
+	 * <p> 属性键
 	 * @return the associated property value, or {@code null} if none found
+	 * <p> 相关的属性值，如果未找到则返回 {@code null}
 	 */
 	@Nullable
 	public static String getProperty(String key) {
@@ -117,7 +135,10 @@ public final class SpringProperties {
 	/**
 	 * Programmatically set a local flag to "true", overriding an
 	 * entry in the {@code spring.properties} file (if any).
+	 * <p>以编程方式将本地标志设置为 "true"，覆盖
+	 * {@code spring.properties} 文件中的条目(如果有)。
 	 * @param key the property key
+	 * <p> 属性键
 	 */
 	public static void setFlag(String key) {
 		localProperties.setProperty(key, Boolean.TRUE.toString());
@@ -126,8 +147,12 @@ public final class SpringProperties {
 	/**
 	 * Programmatically set a local flag to the given value, overriding
 	 * an entry in the {@code spring.properties} file (if any).
+	 * <p>以编程方式将本地标志设置为给定值，覆盖
+	 * {@code spring.properties} 文件中的条目(如果有)。
 	 * @param key the property key
+	 * <p> 属性键
 	 * @param value the associated boolean value
+	 * <p> 相关的布尔值
 	 * @since 6.2.6
 	 */
 	public static void setFlag(String key, boolean value) {
@@ -136,9 +161,13 @@ public final class SpringProperties {
 
 	/**
 	 * Retrieve the flag for the given property key.
+	 * <p>检索给定属性键的标志。
 	 * @param key the property key
+	 * <p> 属性键
 	 * @return {@code true} if the property is set to the string "true"
 	 * (ignoring case), {@code} false otherwise
+	 * <p> 如果属性设置为字符串 "true" 则返回 {@code true}
+	 * (忽略大小写)，否则返回 {@code} false
 	 */
 	public static boolean getFlag(String key) {
 		return Boolean.parseBoolean(getProperty(key));
@@ -147,10 +176,16 @@ public final class SpringProperties {
 	/**
 	 * Retrieve the flag for the given property key, returning {@code null}
 	 * instead of {@code false} in case of no actual flag set.
+	 * <p>检索给定属性键的标志，如果没有实际设置标志
+	 * 则返回 {@code null} 而不是 {@code false}。
 	 * @param key the property key
+	 * <p> 属性键
 	 * @return {@code true} if the property is set to the string "true"
 	 * (ignoring case), {@code} false if it is set to any other value,
 	 * {@code null} if it is not set at all
+	 * <p> 如果属性设置为字符串 "true" 则返回 {@code true}
+	 * (忽略大小写)，如果设置为任何其他值则返回 {@code false}，
+	 * 如果根本没有设置则返回 {@code null}
 	 * @since 6.2.6
 	 */
 	@Nullable

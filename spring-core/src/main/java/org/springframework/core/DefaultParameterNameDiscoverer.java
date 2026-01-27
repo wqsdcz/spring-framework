@@ -19,12 +19,16 @@ package org.springframework.core;
 /**
  * Default implementation of the {@link ParameterNameDiscoverer} strategy interface,
  * delegating to the Java 8 standard reflection mechanism.
+ * <p>参数名称发现器策略接口的默认实现，委托给Java 8标准反射机制。
  *
  * <p>If a Kotlin reflection implementation is present,
  * {@link KotlinReflectionParameterNameDiscoverer} is added first in the list and
  * used for Kotlin classes and interfaces.
+ * <p>如果存在Kotlin反射实现，则首先将{@link KotlinReflectionParameterNameDiscoverer}添加到列表中，
+ * 并用于Kotlin类和接口。
  *
  * <p>Further discoverers may be added through {@link #addDiscoverer(ParameterNameDiscoverer)}.
+ * <p>可以通过{@link #addDiscoverer(ParameterNameDiscoverer)}方法添加更多的发现器。
  *
  * @author Juergen Hoeller
  * @author Sebastien Deleuze

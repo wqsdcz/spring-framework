@@ -37,6 +37,7 @@ import org.springframework.util.StringUtils;
  * {@link ParameterNameDiscoverer} implementation that tries to deduce parameter names
  * for an advice method from the pointcut expression, returning, and throwing clauses.
  * If an unambiguous interpretation is not available, it returns {@code null}.
+ * <p>这是一个参数名称发现器的实现，尝试从切点表达式、returning子句和throwing子句中推断通知方法的参数名称。如果没有明确的解释可用，则返回{@code null}。
  *
  * <h3>Algorithm Summary</h3>
  * <p>If an unambiguous binding can be deduced, then it is.
@@ -44,18 +45,28 @@ import org.springframework.util.StringUtils;
  * is returned. By setting the {@link #setRaiseExceptions(boolean) raiseExceptions}
  * property to {@code true}, descriptive exceptions will be thrown instead of
  * returning {@code null} in the case that the parameter names cannot be discovered.
+ * <p><b>算法摘要：</b>如果可以推断出明确的绑定关系，则进行绑定。如果通知要求不可能满足，则返回{@code null}。
+ * 通过将{@link #setRaiseExceptions(boolean) raiseExceptions}属性设置为{@code true}，
+ * 在无法发现参数名称的情况下，会抛出描述性异常而不是返回{@code null}。
  *
  * <h3>Algorithm Details</h3>
  * <p>This class interprets arguments in the following way:
+ * <p><b>算法详情：</b>此类以以下方式解释参数：
  * <ol>
  * <li>If the first parameter of the method is of type {@link JoinPoint}
  * or {@link ProceedingJoinPoint}, it is assumed to be for passing
  * {@code thisJoinPoint} to the advice, and the parameter name will
  * be assigned the value {@code "thisJoinPoint"}.</li>
+ * <p><li>如果方法的第一个参数是{@link JoinPoint}或{@link ProceedingJoinPoint}类型，
+ * 则假定它是用来向通知传递{@code thisJoinPoint}的，参数名将被赋值为{@code "thisJoinPoint"}。</li>
+ * 
  * <li>If the first parameter of the method is of type
  * {@code JoinPoint.StaticPart}, it is assumed to be for passing
  * {@code "thisJoinPointStaticPart"} to the advice, and the parameter name
  * will be assigned the value {@code "thisJoinPointStaticPart"}.</li>
+ * <p><li>如果方法的第一个参数是{@code JoinPoint.StaticPart}类型，
+ * 则假定它是用来向通知传递{@code "thisJoinPointStaticPart"}的，参数名将被赋值为{@code "thisJoinPointStaticPart"}。</li>
+ * 
  * <li>If a {@link #setThrowingName(String) throwingName} has been set, and
  * there are no unbound arguments of type {@code Throwable+}, then an
  * {@link IllegalArgumentException} is raised. If there is more than one
@@ -63,6 +74,11 @@ import org.springframework.util.StringUtils;
  * {@link AmbiguousBindingException} is raised. If there is exactly one
  * unbound argument of type {@code Throwable+}, then the corresponding
  * parameter name is assigned the value &lt;throwingName&gt;.</li>
+ * <p><li>如果设置了{@link #setThrowingName(String) throwingName}，
+ * 并且没有未绑定的{@code Throwable+}类型的参数，则抛出{@link IllegalArgumentException}。
+ * 如果有多个未绑定的{@code Throwable+}类型的参数，则抛出{@link AmbiguousBindingException}。
+ * 如果恰好有一个未绑定的{@code Throwable+}类型的参数，则将对应的参数名称赋值为&lt;throwingName&gt;。</li>
+ * 
  * <li>If there remain unbound arguments, then the pointcut expression is
  * examined. Let {@code a} be the number of annotation-based pointcut
  * expressions (&#64;annotation, &#64;this, &#64;target, &#64;args,
@@ -76,12 +92,24 @@ import org.springframework.util.StringUtils;
  * then an {@code IllegalArgumentException} is raised. If there is
  * exactly one such argument, then the corresponding parameter name is
  * assigned the value from the pointcut expression.</li>
+ * <p><li>如果还有未绑定的参数，则检查切点表达式。令{@code a}为以绑定形式使用的基于注解的切点表达式
+ * （&#64;annotation、&#64;this、&#64;target、&#64;args、&#64;within、&#64;withincode）的数量。
+ * 绑定形式的用法本身需要推断：如果切点内的表达式是符合Java变量命名约定的单个字符串字面量，则认为它是一个变量名。
+ * 如果{@code a}为零，则进入下一阶段。如果{@code a} &gt; 1，则抛出{@code AmbiguousBindingException}。
+ * 如果{@code a} == 1，并且没有未绑定的{@code Annotation+}类型的参数，则抛出{@code IllegalArgumentException}。
+ * 如果恰好有一个这样的参数，则将对应的参数名称赋值为切点表达式中的值。</li>
+ * 
  * <li>If a {@code returningName} has been set, and there are no unbound arguments
  * then an {@code IllegalArgumentException} is raised. If there is
  * more than one unbound argument then an
  * {@code AmbiguousBindingException} is raised. If there is exactly
  * one unbound argument then the corresponding parameter name is assigned
  * the value of the {@code returningName}.</li>
+ * <p><li>如果设置了{@code returningName}，并且没有未绑定的参数，
+ * 则抛出{@code IllegalArgumentException}。如果有多个未绑定的参数，
+ * 则抛出{@code AmbiguousBindingException}。如果恰好有一个未绑定的参数，
+ * 则将对应的参数名称赋值为{@code returningName}的值。</li>
+ * 
  * <li>If there remain unbound arguments, then the pointcut expression is
  * examined once more for {@code this}, {@code target}, and
  * {@code args} pointcut expressions used in the binding form (binding
@@ -102,6 +130,18 @@ import org.springframework.util.StringUtils;
  * {@code this}, {@code target}, or {@code args}, it is
  * assigned as the corresponding parameter name. If there are multiple
  * possibilities, an {@code AmbiguousBindingException} is raised.</li>
+ * <p><li>如果还有未绑定的参数，则再次检查切点表达式中以绑定形式使用的
+ * {@code this}、{@code target}和{@code args}切点表达式
+ * （绑定形式的推断如基于注解的切点所述）。如果仍存在多个原始类型的未绑定参数
+ * （只能在{@code args}中绑定），则抛出{@code AmbiguousBindingException}。
+ * 如果恰好有一个原始类型的参数，且恰好找到一个{@code args}绑定变量，
+ * 则将对应的参数名称赋值为该变量名。如果没有找到任何{@code args}绑定变量，
+ * 则抛出{@code IllegalStateException}。如果有多个{@code args}绑定变量，
+ * 则抛出{@code AmbiguousBindingException}。此时，如果仍有多个未绑定参数，
+ * 则抛出{@code AmbiguousBindingException}。如果没有剩余的未绑定参数，
+ * 则完成。如果恰好剩下一个未绑定参数，且只有来自{@code this}、
+ * {@code target}或{@code args}的一个候选变量名未绑定，
+ * 则将其分配为对应的参数名。如果有多种可能性，则抛出{@code AmbiguousBindingException}。</li>
  * </ol>
  *
  * <p>The behavior on raising an {@code IllegalArgumentException} or
@@ -112,6 +152,10 @@ import org.springframework.util.StringUtils;
  * property is set to {@code true}, the conditions will be thrown as
  * {@code IllegalArgumentException} and {@code AmbiguousBindingException},
  * respectively.
+ * <p>引发{@code IllegalArgumentException}或{@code AmbiguousBindingException}的行为是可配置的，
+ * 以便此发现器可以用作责任链的一部分。默认情况下，条件将被记录，并且{@link #getParameterNames(Method)}方法将简单地返回{@code null}。
+ * 如果将{@link #setRaiseExceptions(boolean) raiseExceptions}属性设置为{@code true}，
+ * 则条件将分别抛出为{@code IllegalArgumentException}和{@code AmbiguousBindingException}。
  *
  * @author Adrian Colyer
  * @author Juergen Hoeller

@@ -49,12 +49,21 @@ import org.springframework.util.StringUtils;
  * {@link #getSuperType() supertypes}, {@link #getInterfaces() interfaces}, and
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
  * {@link #resolve() resolve} to a {@link java.lang.Class}.
+ * 封装Java {@link java.lang.reflect.Type}，提供对
+ * {@link #getSuperType() 超类型}、{@link #getInterfaces() 接口}和
+ * {@link #getGeneric(int...) 泛型参数}的访问，以及最终
+ * {@link #resolve() 解析}为 {@link java.lang.Class} 的能力。
  *
  * <p>A {@code ResolvableType} may be obtained from a {@linkplain #forField(Field) field},
  * a {@linkplain #forMethodParameter(Method, int) method parameter},
  * a {@linkplain #forMethodReturnType(Method) method return type}, or a
  * {@linkplain #forClass(Class) class}. Most methods on this class will themselves return
  * a {@code ResolvableType}, allowing for easy navigation. For example:
+ * <p>{@code ResolvableType} 可以从 {@linkplain #forField(Field) 字段}、
+ * {@linkplain #forMethodParameter(Method, int) 方法参数}、
+ * {@linkplain #forMethodReturnType(Method) 方法返回类型}或
+ * {@linkplain #forClass(Class) 类}获得。此类上的大多数方法本身将返回
+ * 一个 {@code ResolvableType}，便于轻松导航。例如：
  * <pre class="code">
  * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
  *
@@ -89,6 +98,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * {@code ResolvableType} returned when no value is available. {@code NONE} is used
 	 * in preference to {@code null} so that multiple method calls can be safely chained.
+	 * 当没有可用值时返回的 {@code ResolvableType}。优先使用 {@code NONE} 而不是 {@code null}
+	 * 以便可以安全地链接多个方法调用。
 	 */
 	public static final ResolvableType NONE = new ResolvableType(EmptyType.INSTANCE, null, null, 0);
 
@@ -143,6 +154,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@code ResolvableType} for cache key purposes,
 	 * with no upfront resolution.
+	 * 私有构造函数，用于为缓存键目的创建新的 {@code ResolvableType}，
+	 * 不预先解析。
 	 */
 	private ResolvableType(
 			Type type, @Nullable TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
@@ -158,6 +171,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@code ResolvableType} for cache value purposes,
 	 * with upfront resolution and a pre-calculated hash.
+	 * 私有构造函数，用于为缓存值目的创建新的 {@code ResolvableType}，
+	 * 预先解析和预计算哈希值。
 	 * @since 4.2
 	 */
 	private ResolvableType(Type type, @Nullable TypeProvider typeProvider,
@@ -174,6 +189,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@code ResolvableType} for uncached purposes,
 	 * with upfront resolution but lazily calculated hash.
+	 * 私有构造函数，用于为非缓存目的创建新的 {@code ResolvableType}，
+	 * 预先解析但延迟计算哈希值。
 	 */
 	private ResolvableType(Type type, @Nullable ResolvableType componentType,
 			@Nullable TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
@@ -189,6 +206,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@code ResolvableType} on a {@link Class} basis.
 	 * <p>Avoids all {@code instanceof} checks in order to create a straight {@link Class} wrapper.
+	 * 私有构造函数，用于基于 {@link Class} 创建新的 {@code ResolvableType}。
+	 * <p>避免所有 {@code instanceof} 检查，以便直接创建 {@link Class} 包装器。
 	 * @since 4.2
 	 */
 	private ResolvableType(@Nullable Class<?> clazz) {
@@ -203,6 +222,7 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return the underling Java {@link Type} being managed.
+	 * 返回正在管理的底层Java {@link Type}。
 	 */
 	public Type getType() {
 		return SerializableTypeWrapper.unwrap(this.type);
@@ -211,6 +231,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return the underlying Java {@link Class} being managed, if available;
 	 * otherwise {@code null}.
+	 * 返回正在管理的底层Java {@link Class}（如果可用）；
+	 * 否则返回 {@code null}。
 	 */
 	@Nullable
 	public Class<?> getRawClass() {
@@ -229,6 +251,9 @@ public class ResolvableType implements Serializable {
 	 * {@link MethodParameter} or {@link Type} depending on how the {@code ResolvableType}
 	 * was constructed. This method is primarily to provide access to additional type
 	 * information or meta-data that alternative JVM languages may provide.
+	 * 返回可解析类型的底层源。将根据 {@code ResolvableType} 的构造方式返回
+	 * {@link Field}、{@link MethodParameter} 或 {@link Type}。
+	 * 此方法主要用于提供对替代JVM语言可能提供的附加类型信息或元数据的访问。
 	 */
 	public Object getSource() {
 		Object source = (this.typeProvider != null ? this.typeProvider.getSource() : null);
@@ -238,7 +263,10 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return this type as a resolved {@code Class}, falling back to
 	 * {@link java.lang.Object} if no specific class can be resolved.
+	 * 将此类型作为已解析的 {@code Class} 返回，如果无法解析特定类，则回退到
+	 * {@link java.lang.Object}。
 	 * @return the resolved {@link Class} or the {@code Object} fallback
+	 * @return 已解析的 {@link Class} 或 {@code Object} 回退值
 	 * @since 5.1
 	 * @see #getRawClass()
 	 * @see #resolve(Class)
@@ -249,7 +277,9 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Determine whether the given object is an instance of this {@code ResolvableType}.
+	 * 确定给定对象是否为该 {@code ResolvableType} 的实例。
 	 * @param obj the object to check
+	 * @param obj 要检查的对象
 	 * @since 4.2
 	 * @see #isAssignableFrom(Class)
 	 */
@@ -260,7 +290,9 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether this {@code ResolvableType} is assignable from the
 	 * specified other type.
+	 * 确定该 {@code ResolvableType} 是否可以从指定的其他类型赋值。
 	 * @param other the type to be checked against (as a {@code Class})
+	 * @param other 要针对检查的类型（作为 {@code Class}）
 	 * @since 4.2
 	 * @see #isAssignableFrom(ResolvableType)
 	 */
@@ -273,13 +305,17 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether this {@code ResolvableType} is assignable from the
 	 * specified other type.
-	 * <p>Attempts to follow the same rules as the Java compiler, considering
-	 * whether both the {@link #resolve() resolved} {@code Class} is
-	 * {@link Class#isAssignableFrom(Class) assignable from} the given type
-	 * as well as whether all {@link #getGenerics() generics} are assignable.
+	 * 确定该 {@code ResolvableType} 是否可以从指定的其他类型赋值。
+	 * <p>尝试遵循与Java编译器相同的规则，考虑
+	 * {@link #resolve() 解析的} {@code Class} 是否
+	 * {@link Class#isAssignableFrom(Class) 可以从} 给定类型赋值，
+	 * 以及所有 {@link #getGenerics() 泛型} 是否都可以赋值。
 	 * @param other the type to be checked against (as a {@code ResolvableType})
+	 * @param other 要针对检查的类型（作为 {@code ResolvableType}）
 	 * @return {@code true} if the specified other type can be assigned to this
 	 * {@code ResolvableType}; {@code false} otherwise
+	 * @return 如果指定的其他类型可以分配给此 {@code ResolvableType}，则返回 {@code true}；
+	 * 否则返回 {@code false}
 	 */
 	public boolean isAssignableFrom(ResolvableType other) {
 		return isAssignableFrom(other, false, null, false);

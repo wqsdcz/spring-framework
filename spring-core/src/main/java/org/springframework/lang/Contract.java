@@ -21,16 +21,15 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 /**
- * <p>Specifies some aspects of the method behavior depending on the arguments.
- * Can be used by tools for advanced data flow analysis. Note that this annotation
- * just describes how the code works and doesn't add any functionality by means of
- * code generation.
+ * <p>指定方法行为的某些方面，取决于参数。
+ * 可以被工具用于高级数据流分析。请注意，此注解
+ * 只是描述代码的工作方式，并不通过代码生成添加任何功能。
  *
- * <p>Inspired by {@code org.jetbrains.annotations.Contract}, this variant has
- * been introduced in the {@code org.springframework.lang} package to avoid
- * requiring an extra dependency, while still following the same semantics.
+ * <p>受 {@code org.jetbrains.annotations.Contract} 启发，此变体已在
+ * {@code org.springframework.lang} 包中引入，以避免
+ * 需要额外依赖项，同时仍遵循相同的语义。
  *
- * <p>Method contract has the following syntax:
+ * <p>方法契约具有以下语法:
  * <pre>{@code
  *  contract ::= (clause ';')* clause
  *  clause ::= args '->' effect
@@ -39,41 +38,41 @@ import java.lang.annotation.Target;
  *  value-constraint ::= '_' | 'null' | '!null' | 'false' | 'true'
  *  effect ::= value-constraint | 'fail' | 'this' | 'new' | 'param<N>'}</pre>
  *
- * <p>The constraints denote the following:
+ * <p>约束表示以下内容:
  * <ul>
- * <li>{@code _} - any value
- * <li>{@code null} - null value
- * <li>{@code !null} - a value statically proved to be not-null
- * <li>{@code true} - true boolean value
- * <li>{@code false} - false boolean value
+ * <li>{@code _} - 任何值
+ * <li>{@code null} - null值
+ * <li>{@code !null} - 静态证明为非空的值
+ * <li>{@code true} - true布尔值
+ * <li>{@code false} - false布尔值
  * </ul>
  *
- * <p>The additional return values denote the following:
+ * <p>附加的返回值表示以下内容:
  * <ul>
- * <li>{@code fail} - the method throws an exception, if the arguments satisfy argument constraints
- * <li>{@code new} - the method returns a non-null new object which is distinct from any other object existing in the heap prior to method execution.
- * If the method has no visible side effects, then we can be sure that the new object is not stored to any field/array and will be lost if the method's return value is not used.
- * <li>{@code this} - the method returns its qualifier value (not applicable for static methods)
- * <li>{@code param1, param2, ...} - the method returns its first (second, ...) parameter value
+ * <li>{@code fail} - 如果参数满足参数约束，方法抛出异常
+ * <li>{@code new} - 方法返回一个非空的新对象，该对象与方法执行前堆中存在的任何其他对象都不同。
+ * 如果方法没有可见的副作用，那么我们可以确保新对象不会存储到任何字段/数组中，如果方法的返回值未被使用，则该新对象将丢失。
+ * <li>{@code this} - 方法返回其限定符值(不适用于静态方法)
+ * <li>{@code param1, param2, ...} - 方法返回其第一(第二，...)参数值
  * </ul>
  *
- * <p>Examples:
+ * <p>示例:
  * <ul>
- * <li>{@code @Contract("_, null -> null")} - the method returns null if its second argument is null.
- * <li>{@code @Contract("_, null -> null; _, !null -> !null")} - the method returns null if its second argument is null and not-null otherwise.
- * <li>{@code @Contract("true -> fail")} - a typical {@code assertFalse} method which throws an exception if {@code true} is passed to it.
- * <li>{@code @Contract("_ -> this")} - the method always returns its qualifier (e.g. {@link StringBuilder#append(String)}).
- * <li>{@code @Contract("null -> fail; _ -> param1")} - the method throws an exception if the first argument is null,
- * otherwise it returns the first argument (e.g. {@code Objects.requireNonNull}).
- * <li>{@code @Contract("!null, _ -> param1; null, !null -> param2; null, null -> fail")} - the method returns the first non-null argument,
- * or throws an exception if both arguments are null (e.g. {@code Objects.requireNonNullElse}).
+ * <li>{@code @Contract("_, null -> null")} - 如果第二个参数为null，方法返回null。
+ * <li>{@code @Contract("_, null -> null; _, !null -> !null")} - 如果第二个参数为null，方法返回null，否则返回非空值。
+ * <li>{@code @Contract("true -> fail")} - 一个典型的 {@code assertFalse} 方法，如果传入 {@code true} 则抛出异常。
+ * <li>{@code @Contract("_ -> this")} - 方法总是返回其限定符(例如 {@link StringBuilder#append(String)})。
+ * <li>{@code @Contract("null -> fail; _ -> param1")} - 如果第一个参数为null，方法抛出异常，
+ * 否则返回第一个参数(例如 {@code Objects.requireNonNull})。
+ * <li>{@code @Contract("!null, _ -> param1; null, !null -> param2; null, null -> fail")} - 方法返回第一个非空参数，
+ * 如果两个参数都为null则抛出异常(例如 {@code Objects.requireNonNullElse})。
  * </ul>
  *
  * @author Sebastien Deleuze
  * @since 6.2
  * @see <a href="https://github.com/JetBrains/java-annotations/blob/master/src/jvmMain/java/org/jetbrains/annotations/Contract.java">org.jetbrains.annotations.Contract</a>
  * @see <a href="https://github.com/uber/NullAway/wiki/Configuration#custom-contract-annotations">
- * NullAway custom contract annotations</a>
+ * NullAway 自定义契约注解</a>
  */
 @Documented
 @Target(ElementType.METHOD)
@@ -81,6 +80,7 @@ public @interface Contract {
 
 	/**
 	 * Contains the contract clauses describing causal relations between call arguments and the returned value.
+	 * 包含描述调用参数和返回值之间因果关系的契约子句。
 	 */
 	String value() default "";
 

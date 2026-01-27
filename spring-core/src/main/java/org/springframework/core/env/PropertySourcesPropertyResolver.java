@@ -21,6 +21,7 @@ import org.springframework.lang.Nullable;
 /**
  * {@link PropertyResolver} implementation that resolves property values against
  * an underlying set of {@link PropertySources}.
+ * <p>针对底层{@link PropertySources}集合，来解析属性值的{@link PropertyResolver}实现。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -37,7 +38,9 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 
 	/**
 	 * Create a new resolver against the given property sources.
+	 * <p>针对给定的属性源创建一个新的解析器。
 	 * @param propertySources the set of {@link PropertySource} objects to use
+	 * <p>要使用的 {@link PropertySource} 对象集合
 	 */
 	public PropertySourcesPropertyResolver(@Nullable PropertySources propertySources) {
 		this.propertySources = propertySources;
@@ -107,14 +110,22 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 	/**
 	 * Log the given key as found in the given {@link PropertySource}, resulting in
 	 * the given value.
+	 * <p>记录在给定的{@link PropertySource}中找到的指定键的日志，结果为给定值。
 	 * <p>The default implementation writes a debug log message with key and source.
 	 * As of 4.3.3, this does not log the value anymore in order to avoid accidental
 	 * logging of sensitive settings. Subclasses may override this method to change
 	 * the log level and/or log message, including the property's value if desired.
+	 * <p>默认实现在日志中以键和源的形式写入调试日志消息。
+	 * 从4.3.3版本开始，不再记录值，以避免意外记录敏感设置。子类可以覆盖此方法以更改
+	 * 日志级别和/或日志消息，如有需要可以包括属性的值。
 	 * @param key the key found
+	 * <p>找到的键
 	 * @param propertySource the {@code PropertySource} that the key has been found in
+	 * <p>在其中找到键的{@code PropertySource}
 	 * @param value the corresponding value
+	 * <p>相应的值
 	 * @since 4.3.1
+
 	 */
 	protected void logKeyFound(String key, PropertySource<?> propertySource, Object value) {
 		if (logger.isDebugEnabled()) {

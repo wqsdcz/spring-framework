@@ -31,6 +31,8 @@ import org.springframework.util.StringUtils;
  * Composite {@link PropertySource} implementation that iterates over a set of
  * {@link PropertySource} instances. Necessary in cases where multiple property sources
  * share the same name, for example, when multiple values are supplied to {@code @PropertySource}.
+ * <p>组合 {@link PropertySource} 实现，用于迭代一组 {@link PropertySource} 实例。
+ * 在多个属性源共享相同名称的情况下是必要的，例如，当向 {@code @PropertySource} 提供多个值时。
  *
  * <p>As of Spring 4.1.2, this class extends {@link EnumerablePropertySource} instead
  * of plain {@link PropertySource}, exposing {@link #getPropertyNames()} based on the
@@ -38,6 +40,10 @@ import org.springframework.util.StringUtils;
  * {@code IllegalStateException} against any non-{@code EnumerablePropertySource}.
  * <b>When used through the {@code EnumerablePropertySource} contract, all contained
  * sources are expected to be of type {@code EnumerablePropertySource} as well.</b>
+ * <p>从 Spring 4.1.2 开始，此类扩展了 {@link EnumerablePropertySource} 而不是普通的 {@link PropertySource}，
+ * 基于所有包含源的累积属性名称公开 {@link #getPropertyNames()} - 并对任何非 {@code EnumerablePropertySource}
+ * 抛出 {@code IllegalStateException}。
+ * <b>当通过 {@code EnumerablePropertySource} 契约使用时，所有包含的源也应该是 {@code EnumerablePropertySource} 类型。</b>
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -51,7 +57,9 @@ public class CompositePropertySource extends EnumerablePropertySource<Object> {
 
 	/**
 	 * Create a new {@code CompositePropertySource}.
+	 * <p>创建一个新的 {@code CompositePropertySource}。
 	 * @param name the name of the property source
+	 * <p>属性源的名称
 	 */
 	public CompositePropertySource(String name) {
 		super(name);
@@ -101,7 +109,9 @@ public class CompositePropertySource extends EnumerablePropertySource<Object> {
 
 	/**
 	 * Add the given {@link PropertySource} to the end of the chain.
+	 * <p>将给定的 {@link PropertySource} 添加到链的末尾。
 	 * @param propertySource the PropertySource to add
+	 * <p>要添加的 PropertySource
 	 */
 	public void addPropertySource(PropertySource<?> propertySource) {
 		this.propertySources.add(propertySource);
@@ -109,7 +119,9 @@ public class CompositePropertySource extends EnumerablePropertySource<Object> {
 
 	/**
 	 * Add the given {@link PropertySource} to the start of the chain.
+	 * <p>将给定的 {@link PropertySource} 添加到链的开头。
 	 * @param propertySource the PropertySource to add
+	 * <p>要添加的 PropertySource
 	 * @since 4.1
 	 */
 	public void addFirstPropertySource(PropertySource<?> propertySource) {
@@ -121,6 +133,7 @@ public class CompositePropertySource extends EnumerablePropertySource<Object> {
 
 	/**
 	 * Return all property sources that this composite source holds.
+	 * <p>返回此组合源持有的所有属性源。
 	 * @since 4.1.1
 	 */
 	public Collection<PropertySource<?>> getPropertySources() {

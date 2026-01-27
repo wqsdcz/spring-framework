@@ -30,8 +30,12 @@ import org.springframework.lang.Nullable;
  * {@link ParameterNameDiscoverer} implementation which uses Kotlin's reflection facilities
  * for introspecting parameter names.
  *
+ * <p>{@link ParameterNameDiscoverer} 的实现，使用 Kotlin 的反射功能来内省参数名称。
+ *
  * <p>Compared to {@link StandardReflectionParameterNameDiscoverer}, it allows in addition to
  * determine interface parameter names without requiring Java 8 -parameters compiler flag.
+ *
+ * <p>与 {@link StandardReflectionParameterNameDiscoverer} 相比，它还允许在不需要 Java 8 -parameters 编译器标志的情况下确定接口参数名称。
  *
  * @author Sebastien Deleuze
  * @since 5.0

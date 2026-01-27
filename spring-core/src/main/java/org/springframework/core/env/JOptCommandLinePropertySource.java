@@ -69,6 +69,7 @@ public class JOptCommandLinePropertySource extends CommandLinePropertySource<Opt
 	/**
 	 * Create a new {@code JOptCommandLinePropertySource} having the default name
 	 * and backed by the given {@code OptionSet}.
+	 * <p>创建一个新的 {@code JOptCommandLinePropertySource}，具有默认名称并由给定的 {@code OptionSet} 支持。
 	 * @see CommandLinePropertySource#COMMAND_LINE_PROPERTY_SOURCE_NAME
 	 * @see CommandLinePropertySource#CommandLinePropertySource(Object)
 	 */
@@ -79,6 +80,11 @@ public class JOptCommandLinePropertySource extends CommandLinePropertySource<Opt
 	/**
 	 * Create a new {@code JOptCommandLinePropertySource} having the given name
 	 * and backed by the given {@code OptionSet}.
+	 * <p>创建一个新的 {@code JOptCommandLinePropertySource}，具有给定的名称并由给定的 {@code OptionSet} 支持。
+	 * @param name the name of the property source
+	 * <p>属性源的名称
+	 * @param options the JOpt OptionSet backing this property source
+	 * <p>支持此属性源的 JOpt OptionSet
 	 */
 	public JOptCommandLinePropertySource(String name, OptionSet options) {
 		super(name, options);

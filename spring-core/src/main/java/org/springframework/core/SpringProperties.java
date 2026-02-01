@@ -24,28 +24,14 @@ import java.util.Properties;
 import org.springframework.lang.Nullable;
 
 /**
- * Static holder for local Spring properties, i.e. defined at the Spring library level.
  * <p>本地Spring属性的静态持有者，即在Spring库级别定义的属性。
  *
- * <p>Reads a {@code spring.properties} file from the root of the classpath and
- * also allows for programmatically setting properties via {@link #setProperty}.
- * When retrieving properties, local entries are checked first, with JVM-level
- * system properties checked next as a fallback via {@link System#getProperty}.
- * <p>从类路径根目录读取 {@code spring.properties} 文件并
- * 也允许通过 {@link #setProperty} 以编程方式设置属性。
- * 检索属性时，首先检查本地条目，然后通过 {@link System#getProperty} 检查JVM级
- * 系统属性作为备选。
+ * <p>从类路径根目录读取 {@code spring.properties} 文件并也允许通过 {@link #setProperty} 以编程方式设置属性。
+ * 检索属性时，首先检查本地条目，然后通过 {@link System#getProperty} 检查JVM级系统属性作为备选。
  *
- * <p>This is an alternative way to set Spring-related system properties such as
- * {@code spring.getenv.ignore} and {@code spring.beaninfo.ignore}, in particular
- * for scenarios where JVM system properties are locked on the target platform
- * (for example, WebSphere). See {@link #setFlag} for a convenient way to locally
- * set such flags to {@code "true"}.
- * <p>这是设置Spring相关系统属性的替代方法，如
- * {@code spring.getenv.ignore} 和 {@code spring.beaninfo.ignore}，特别是
- * 在JVM系统属性在目标平台上被锁定的场景中
- * (例如WebSphere)。参见 {@link #setFlag} 以本地方式
- * 将这些标志设置为 {@code "true"} 的便捷方法。
+ * <p>这是设置Spring相关系统属性的替代方法，如 {@code spring.getenv.ignore} 和 {@code spring.beaninfo.ignore}，
+ * 特别是在JVM系统属性在目标平台上被锁定的场景中(例如WebSphere)。
+ * 参见 {@link #setFlag} 以本地方式将这些标志设置为 {@code "true"} 的便捷方法。
  *
  * @author Juergen Hoeller
  * @since 3.2.7
@@ -90,10 +76,7 @@ public final class SpringProperties {
 
 
 	/**
-	 * Programmatically set a local property, overriding an entry in the
-	 * {@code spring.properties} file (if any).
-	 * <p>以编程方式设置本地属性，覆盖
-	 * {@code spring.properties} 文件中的条目(如果有)。
+	 * <p>以编程方式设置本地属性，覆盖{@code spring.properties} 文件中的条目(如果有)。
 	 * @param key the property key
 	 * <p>属性键
 	 * @param value the associated property value, or {@code null} to reset it
@@ -109,10 +92,7 @@ public final class SpringProperties {
 	}
 
 	/**
-	 * Retrieve the property value for the given key, checking local Spring
-	 * properties first and falling back to JVM-level system properties.
-	 * <p>检索给定键的属性值，首先检查本地Spring
-	 * 属性，然后回退到JVM级系统属性。
+	 * <p>检索给定键的属性值，首先检查本地Spring属性，然后回退到JVM级系统属性。
 	 * @param key the property key
 	 * <p> 属性键
 	 * @return the associated property value, or {@code null} if none found
@@ -133,10 +113,7 @@ public final class SpringProperties {
 	}
 
 	/**
-	 * Programmatically set a local flag to "true", overriding an
-	 * entry in the {@code spring.properties} file (if any).
-	 * <p>以编程方式将本地标志设置为 "true"，覆盖
-	 * {@code spring.properties} 文件中的条目(如果有)。
+	 * <p>以编程方式将本地标志设置为 "true"，覆盖{@code spring.properties} 文件中的条目(如果有)。
 	 * @param key the property key
 	 * <p> 属性键
 	 */

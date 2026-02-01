@@ -22,17 +22,16 @@ import java.util.List;
 import org.springframework.lang.Nullable;
 
 /**
- * Descriptor for a {@link org.springframework.core.env.PropertySource PropertySource}.
+ * {@link org.springframework.core.env.PropertySource PropertySource} 的描述符。
  *
  * @author Stephane Nicoll
  * @since 6.0
- * @param locations the locations to consider
- * @param ignoreResourceNotFound whether a failure to find a property resource
- * should be ignored
- * @param name the name of the property source, or {@code null} to infer one
- * @param propertySourceFactory the type of {@link PropertySourceFactory} to use,
- * or {@code null} to use the default
- * @param encoding the encoding, or {@code null} to use the default encoding
+ * @param locations 要考虑的位置
+ * @param ignoreResourceNotFound 是否应忽略找不到属性资源的失败
+ * @param name 属性源的名称，或 {@code null} 以推断一个
+ * @param propertySourceFactory 要使用的 {@link PropertySourceFactory} 类型，
+ * 或 {@code null} 以使用默认值
+ * @param encoding 编码，或 {@code null} 以使用默认编码
  * @see org.springframework.core.env.PropertySource
  * @see org.springframework.context.annotation.PropertySource
  */
@@ -41,8 +40,8 @@ public record PropertySourceDescriptor(List<String> locations, boolean ignoreRes
 		@Nullable String encoding) {
 
 	/**
-	 * Create a descriptor with the specified locations.
-	 * @param locations the locations to consider
+	 * 使用指定的位置创建描述符。
+	 * @param locations 要考虑的位置
 	 */
 	public PropertySourceDescriptor(String... locations) {
 		this(Arrays.asList(locations), false, null, null, null);

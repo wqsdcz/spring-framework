@@ -55,31 +55,29 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * General purpose factory loading mechanism for internal use within the framework.
+ * 框架内部使用的通用工厂加载机制。
  *
- * <p>{@code SpringFactoriesLoader} {@linkplain #loadFactories loads} and instantiates
- * factories of a given type from {@value #FACTORIES_RESOURCE_LOCATION} files which
- * may be present in multiple JAR files in the classpath. The {@code spring.factories}
- * file must be in {@link Properties} format, where the key is the fully qualified
- * name of the interface or abstract class, and the value is a comma-separated list of
- * implementation class names. For example:
+ * <p>{@code SpringFactoriesLoader} {@linkplain #loadFactories 加载} 并实例化
+ * 来自 {@value #FACTORIES_RESOURCE_LOCATION} 文件的给定类型的工厂，这些文件
+ * 可能存在于类路径中的多个 JAR 文件中。{@code spring.factories}
+ * 文件必须是 {@link Properties} 格式，其中键是完全限定的
+ * 接口或抽象类名称，值是用逗号分隔的实现类名列表。例如：
  *
  * <pre class="code">example.MyService=example.MyServiceImpl1,example.MyServiceImpl2</pre>
  *
- * where {@code example.MyService} is the name of the interface, and {@code MyServiceImpl1}
- * and {@code MyServiceImpl2} are two implementations.
+ * 其中 {@code example.MyService} 是接口名称，而 {@code MyServiceImpl1}
+ * 和 {@code MyServiceImpl2} 是两个实现。
  *
- * <p>Implementation classes <b>must</b> have a single resolvable constructor that will
- * be used to create the instance, either:
+ * <p>实现类<b>必须</b>有一个可解析的构造函数，用于创建实例，要么是：
  * <ul>
- * <li>a primary or single constructor</li>
- * <li>a single public constructor</li>
- * <li>the default constructor</li>
+ * <li>主构造函数或单一构造函数</li>
+ * <li>单一公共构造函数</li>
+ * <li>默认构造函数</li>
  * </ul>
  *
- * <p>If the resolvable constructor has arguments, a suitable {@link ArgumentResolver
- * ArgumentResolver} should be provided. To customize how instantiation failures
- * are handled, consider providing a {@link FailureHandler FailureHandler}.
+ * <p>如果可解析的构造函数有参数，应提供合适的 {@link ArgumentResolver
+ * ArgumentResolver}。要自定义如何处理实例化失败，
+ * 请考虑提供一个 {@link FailureHandler FailureHandler}。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
@@ -92,8 +90,8 @@ import org.springframework.util.StringUtils;
 public class SpringFactoriesLoader {
 
 	/**
-	 * The location to look for factories.
-	 * <p>Can be present in multiple JAR files.
+	 * 查找工厂的位置。
+	 * <p>可能存在于多个 JAR 文件中。
 	 */
 	public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
 
@@ -111,9 +109,9 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Create a new {@link SpringFactoriesLoader} instance.
-	 * @param classLoader the classloader used to instantiate the factories
-	 * @param factories a map of factory class name to implementation class names
+	 * 创建一个新的 {@link SpringFactoriesLoader} 实例。
+	 * @param classLoader 用于实例化工厂的类加载器
+	 * @param factories 工厂类名到实现类名的映射
 	 * @since 6.0
 	 */
 	protected SpringFactoriesLoader(@Nullable ClassLoader classLoader, Map<String, List<String>> factories) {
@@ -123,18 +121,15 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Load and instantiate the factory implementations of the given type from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the configured class loader
-	 * and a default argument resolver that expects a no-arg constructor.
-	 * <p>The returned factories are sorted using {@link AnnotationAwareOrderComparator}.
-	 * <p>If a custom instantiation strategy is required, use {@code load(...)}
-	 * with a custom {@link ArgumentResolver ArgumentResolver} and/or
-	 * {@link FailureHandler FailureHandler}.
-	 * <p>If duplicate implementation class names are discovered for a given factory
-	 * type, only one instance of the duplicated implementation type will be instantiated.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @throws IllegalArgumentException if any factory implementation class cannot
-	 * be loaded or if an error occurs while instantiating any factory
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化给定类型的工厂实现，
+	 * 使用配置的类加载器和预期无参数构造函数的默认参数解析器。
+	 * <p>返回的工厂使用 {@link AnnotationAwareOrderComparator} 进行排序。
+	 * <p>如果需要自定义实例化策略，请使用带有自定义 {@link ArgumentResolver ArgumentResolver} 和/或
+	 * {@link FailureHandler FailureHandler} 的 {@code load(...)}。
+	 * <p>如果为给定的工厂类型发现重复的实现类名，则只会实例化重复实现类型的一个实例。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @throws IllegalArgumentException 如果任何工厂实现类无法
+	 * 加载或在实例化任何工厂时发生错误
 	 * @since 6.0
 	 */
 	public <T> List<T> load(Class<T> factoryType) {
@@ -142,16 +137,14 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Load and instantiate the factory implementations of the given type from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the configured class loader
-	 * and the given argument resolver.
-	 * <p>The returned factories are sorted using {@link AnnotationAwareOrderComparator}.
-	 * <p>If duplicate implementation class names are discovered for a given factory
-	 * type, only one instance of the duplicated implementation type will be instantiated.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @param argumentResolver strategy used to resolve constructor arguments by their type
-	 * @throws IllegalArgumentException if any factory implementation class cannot
-	 * be loaded or if an error occurs while instantiating any factory
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化给定类型的工厂实现，
+	 * 使用配置的类加载器和给定的参数解析器。
+	 * <p>返回的工厂使用 {@link AnnotationAwareOrderComparator} 进行排序。
+	 * <p>如果为给定的工厂类型发现重复的实现类名，则只会实例化重复实现类型的一个实例。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @param argumentResolver 用于按类型解析构造函数参数的策略
+	 * @throws IllegalArgumentException 如果任何工厂实现类无法
+	 * 加载或在实例化任何工厂时发生错误
 	 * @since 6.0
 	 */
 	public <T> List<T> load(Class<T> factoryType, @Nullable ArgumentResolver argumentResolver) {
@@ -159,16 +152,13 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Load and instantiate the factory implementations of the given type from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the configured class loader
-	 * with custom failure handling provided by the given failure handler.
-	 * <p>The returned factories are sorted using {@link AnnotationAwareOrderComparator}.
-	 * <p>If duplicate implementation class names are discovered for a given factory
-	 * type, only one instance of the duplicated implementation type will be instantiated.
-	 * <p>For any factory implementation class that cannot be loaded or error that
-	 * occurs while instantiating it, the given failure handler is called.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @param failureHandler strategy used to handle factory instantiation failures
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化给定类型的工厂实现，
+	 * 使用配置的类加载器和由给定故障处理器提供的自定义故障处理。
+	 * <p>返回的工厂使用 {@link AnnotationAwareOrderComparator} 进行排序。
+	 * <p>如果为给定的工厂类型发现重复的实现类名，则只会实例化重复实现类型的一个实例。
+	 * <p>对于任何无法加载的工厂实现类或在实例化时发生的错误，将调用给定的故障处理器。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @param failureHandler 用于处理工厂实例化失败的策略
 	 * @since 6.0
 	 */
 	public <T> List<T> load(Class<T> factoryType, @Nullable FailureHandler failureHandler) {
@@ -176,18 +166,14 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Load and instantiate the factory implementations of the given type from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the configured class loader,
-	 * the given argument resolver, and custom failure handling provided by the given
-	 * failure handler.
-	 * <p>The returned factories are sorted using {@link AnnotationAwareOrderComparator}.
-	 * <p>If duplicate implementation class names are discovered for a given factory
-	 * type, only one instance of the duplicated implementation type will be instantiated.
-	 * <p>For any factory implementation class that cannot be loaded or error that
-	 * occurs while instantiating it, the given failure handler is called.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @param argumentResolver strategy used to resolve constructor arguments by their type
-	 * @param failureHandler strategy used to handle factory instantiation failures
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化给定类型的工厂实现，
+	 * 使用配置的类加载器、给定的参数解析器和由给定故障处理器提供的自定义故障处理。
+	 * <p>返回的工厂使用 {@link AnnotationAwareOrderComparator} 进行排序。
+	 * <p>如果为给定的工厂类型发现重复的实现类名，则只会实例化重复实现类型的一个实例。
+	 * <p>对于任何无法加载的工厂实现类或在实例化时发生的错误，将调用给定的故障处理器。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @param argumentResolver 用于按类型解析构造函数参数的策略
+	 * @param failureHandler 用于处理工厂实例化失败的策略
 	 * @since 6.0
 	 */
 	public <T> List<T> load(Class<T> factoryType, @Nullable ArgumentResolver argumentResolver,
@@ -231,36 +217,34 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Load and instantiate the factory implementations of the given type from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the given class loader.
-	 * <p>The returned factories are sorted using {@link AnnotationAwareOrderComparator}.
-	 * <p>If duplicate implementation class names are discovered for a given factory
-	 * type, only one instance of the duplicated implementation type will be instantiated.
-	 * <p>For more advanced factory loading with {@link ArgumentResolver} or
-	 * {@link FailureHandler} support, use {@link #forDefaultResourceLocation(ClassLoader)}
-	 * to obtain a {@link SpringFactoriesLoader} instance.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @param classLoader the ClassLoader to use for loading (can be {@code null}
-	 * to use the default)
-	 * @throws IllegalArgumentException if any factory implementation class cannot
-	 * be loaded or if an error occurs while instantiating any factory
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化给定类型的工厂实现，
+	 * 使用给定的类加载器。
+	 * <p>返回的工厂使用 {@link AnnotationAwareOrderComparator} 进行排序。
+	 * <p>如果为给定的工厂类型发现重复的实现类名，则只会实例化重复实现类型的一个实例。
+	 * <p>要使用 {@link ArgumentResolver} 或
+	 * {@link FailureHandler} 支持进行更高级的工厂加载，请使用 {@link #forDefaultResourceLocation(ClassLoader)}
+	 * 来获取 {@link SpringFactoriesLoader} 实例。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @param classLoader 用于加载的 ClassLoader（可以是 {@code null}
+	 * 以使用默认值）
+	 * @throws IllegalArgumentException 如果任何工厂实现类无法
+	 * 加载或在实例化任何工厂时发生错误
 	 */
 	public static <T> List<T> loadFactories(Class<T> factoryType, @Nullable ClassLoader classLoader) {
 		return forDefaultResourceLocation(classLoader).load(factoryType);
 	}
 
 	/**
-	 * Load the fully qualified class names of factory implementations of the
-	 * given type from {@value #FACTORIES_RESOURCE_LOCATION}, using the given
-	 * class loader.
-	 * <p>If a particular implementation class name is discovered more than once
-	 * for the given factory type, duplicates will be ignored.
-	 * @param factoryType the interface or abstract class representing the factory
-	 * @param classLoader the ClassLoader to use for loading resources; can be
-	 * {@code null} to use the default
-	 * @throws IllegalArgumentException if an error occurs while loading factory names
+	 * 从 {@value #FACTORIES_RESOURCE_LOCATION} 加载给定类型工厂实现的完全限定类名，
+	 * 使用给定的类加载器。
+	 * <p>如果给定工厂类型的特定实现类名被发现多次，
+	 * 重复项将被忽略。
+	 * @param factoryType 表示工厂的接口或抽象类
+	 * @param classLoader 用于加载资源的 ClassLoader；可以是
+	 * {@code null} 以使用默认值
+	 * @throws IllegalArgumentException 如果在加载工厂名称时发生错误
 	 * @see #loadFactories
-	 * @deprecated as of 6.0 in favor of {@link #load(Class, ArgumentResolver, FailureHandler)}
+	 * @deprecated 从 6.0 版本起，推荐使用 {@link #load(Class, ArgumentResolver, FailureHandler)}
 	 */
 	@Deprecated(since = "6.0")
 	public static List<String> loadFactoryNames(Class<?> factoryType, @Nullable ClassLoader classLoader) {
@@ -268,10 +252,10 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Create a {@link SpringFactoriesLoader} instance that will load and
-	 * instantiate the factory implementations from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the default class loader.
-	 * @return a {@link SpringFactoriesLoader} instance
+	 * 创建一个 {@link SpringFactoriesLoader} 实例，该实例将从
+	 * {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化工厂实现，
+	 * 使用默认类加载器。
+	 * @return 一个 {@link SpringFactoriesLoader} 实例
 	 * @since 6.0
 	 * @see #forDefaultResourceLocation(ClassLoader)
 	 */
@@ -280,12 +264,12 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Create a {@link SpringFactoriesLoader} instance that will load and
-	 * instantiate the factory implementations from
-	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the given class loader.
-	 * @param classLoader the ClassLoader to use for loading resources; can be
-	 * {@code null} to use the default
-	 * @return a {@link SpringFactoriesLoader} instance
+	 * 创建一个 {@link SpringFactoriesLoader} 实例，该实例将从
+	 * {@value #FACTORIES_RESOURCE_LOCATION} 加载并实例化工厂实现，
+	 * 使用给定的类加载器。
+	 * @param classLoader 用于加载资源的 ClassLoader；可以是
+	 * {@code null} 以使用默认值
+	 * @return 一个 {@link SpringFactoriesLoader} 实例
 	 * @since 6.0
 	 * @see #forDefaultResourceLocation()
 	 */
@@ -294,11 +278,11 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Create a {@link SpringFactoriesLoader} instance that will load and
-	 * instantiate the factory implementations from the given location,
-	 * using the default class loader.
-	 * @param resourceLocation the resource location to look for factories
-	 * @return a {@link SpringFactoriesLoader} instance
+	 * 创建一个 {@link SpringFactoriesLoader} 实例，该实例将从
+	 * 给定位置加载并实例化工厂实现，
+	 * 使用默认类加载器。
+	 * @param resourceLocation 查找工厂的资源位置
+	 * @return 一个 {@link SpringFactoriesLoader} 实例
 	 * @since 6.0
 	 * @see #forResourceLocation(String, ClassLoader)
 	 */
@@ -307,13 +291,13 @@ public class SpringFactoriesLoader {
 	}
 
 	/**
-	 * Create a {@link SpringFactoriesLoader} instance that will load and
-	 * instantiate the factory implementations from the given location,
-	 * using the given class loader.
-	 * @param resourceLocation the resource location to look for factories
-	 * @param classLoader the ClassLoader to use for loading resources;
-	 * can be {@code null} to use the default
-	 * @return a {@link SpringFactoriesLoader} instance
+	 * 创建一个 {@link SpringFactoriesLoader} 实例，该实例将从
+	 * 给定位置加载并实例化工厂实现，
+	 * 使用给定的类加载器。
+	 * @param resourceLocation 查找工厂的资源位置
+	 * @param classLoader 用于加载资源的 ClassLoader；
+	 * 可以是 {@code null} 以使用默认值
+	 * @return 一个 {@link SpringFactoriesLoader} 实例
 	 * @since 6.0
 	 * @see #forResourceLocation(String)
 	 */
@@ -356,9 +340,9 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Internal instantiator used to create the factory instance.
+	 * 用于创建工厂实例的内部实例化器。
 	 * @since 6.0
-	 * @param <T> the instance implementation type
+	 * @param <T> 实例实现类型
 	 */
 	static final class FactoryInstantiator<T> {
 
@@ -433,7 +417,7 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Nested class to avoid a hard dependency on Kotlin at runtime.
+	 * 嵌套类以避免在运行时对 Kotlin 的硬依赖。
 	 * @since 6.0
 	 */
 	private static class KotlinDelegate {
@@ -492,7 +476,7 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Strategy for resolving constructor arguments based on their type.
+	 * 基于类型解析构造函数参数的策略。
 	 * @since 6.0
 	 * @see ArgumentResolver#of(Class, Object)
 	 * @see ArgumentResolver#ofSupplied(Class, Supplier)
@@ -502,43 +486,40 @@ public class SpringFactoriesLoader {
 	public interface ArgumentResolver {
 
 		/**
-		 * Resolve the given argument if possible.
-		 * @param <T> the argument type
-		 * @param type the argument type
-		 * @return the resolved argument value or {@code null}
+		 * 如果可能，解析给定参数。
+		 * @param <T> 参数类型
+		 * @param type 参数类型
+		 * @return 解析的参数值或 {@code null}
 		 */
 		@Nullable
 		<T> T resolve(Class<T> type);
 
 		/**
-		 * Create a new composed {@link ArgumentResolver} by combining this resolver
-		 * with the given type and value.
-		 * @param <T> the argument type
-		 * @param type the argument type
-		 * @param value the argument value
-		 * @return a new composite {@link ArgumentResolver} instance
+		 * 通过将此解析器与给定类型和值组合来创建新的组合 {@link ArgumentResolver}。
+		 * @param <T> 参数类型
+		 * @param type 参数类型
+		 * @param value 参数值
+		 * @return 新的复合 {@link ArgumentResolver} 实例
 		 */
 		default <T> ArgumentResolver and(Class<T> type, T value) {
 			return and(ArgumentResolver.of(type, value));
 		}
 
 		/**
-		 * Create a new composed {@link ArgumentResolver} by combining this resolver
-		 * with the given type and value.
-		 * @param <T> the argument type
-		 * @param type the argument type
-		 * @param valueSupplier the argument value supplier
-		 * @return a new composite {@link ArgumentResolver} instance
+		 * 通过将此解析器与给定类型和值组合来创建新的组合 {@link ArgumentResolver}。
+		 * @param <T> 参数类型
+		 * @param type 参数类型
+		 * @param valueSupplier 参数值供应器
+		 * @return 新的复合 {@link ArgumentResolver} 实例
 		 */
 		default <T> ArgumentResolver andSupplied(Class<T> type, Supplier<T> valueSupplier) {
 			return and(ArgumentResolver.ofSupplied(type, valueSupplier));
 		}
 
 		/**
-		 * Create a new composed {@link ArgumentResolver} by combining this resolver
-		 * with the given resolver.
-		 * @param argumentResolver the argument resolver to add
-		 * @return a new composite {@link ArgumentResolver} instance
+		 * 通过将此解析器与给定解析器组合来创建新的组合 {@link ArgumentResolver}。
+		 * @param argumentResolver 要添加的参数解析器
+		 * @return 新的复合 {@link ArgumentResolver} 实例
 		 */
 		default ArgumentResolver and(ArgumentResolver argumentResolver) {
 			return from(type -> {
@@ -548,44 +529,40 @@ public class SpringFactoriesLoader {
 		}
 
 		/**
-		 * Factory method that returns an {@link ArgumentResolver} that always
-		 * returns {@code null}.
-		 * @return a new {@link ArgumentResolver} instance
+		 * 工厂方法，返回始终返回 {@code null} 的 {@link ArgumentResolver}。
+		 * @return 新的 {@link ArgumentResolver} 实例
 		 */
 		static ArgumentResolver none() {
 			return from(type -> null);
 		}
 
 		/**
-		 * Factory method that can be used to create an {@link ArgumentResolver}
-		 * that resolves only the given type.
-		 * @param <T> the argument type
-		 * @param type the argument type
-		 * @param value the argument value
-		 * @return a new {@link ArgumentResolver} instance
+		 * 工厂方法，可用于创建仅解析给定类型的 {@link ArgumentResolver}。
+		 * @param <T> 参数类型
+		 * @param type 参数类型
+		 * @param value 参数值
+		 * @return 新的 {@link ArgumentResolver} 实例
 		 */
 		static <T> ArgumentResolver of(Class<T> type, T value) {
 			return ofSupplied(type, () -> value);
 		}
 
 		/**
-		 * Factory method that can be used to create an {@link ArgumentResolver}
-		 * that resolves only the given type.
-		 * @param <T> the argument type
-		 * @param type the argument type
-		 * @param valueSupplier the argument value supplier
-		 * @return a new {@link ArgumentResolver} instance
+		 * 工厂方法，可用于创建仅解析给定类型的 {@link ArgumentResolver}。
+		 * @param <T> 参数类型
+		 * @param type 参数类型
+		 * @param valueSupplier 参数值供应器
+		 * @return 新的 {@link ArgumentResolver} 实例
 		 */
 		static <T> ArgumentResolver ofSupplied(Class<T> type, Supplier<T> valueSupplier) {
 			return from(candidateType -> (candidateType.equals(type) ? valueSupplier.get() : null));
 		}
 
 		/**
-		 * Factory method that creates a new {@link ArgumentResolver} from a
-		 * lambda friendly function. The given function is provided with the
-		 * argument type and must provide an instance of that type or {@code null}.
-		 * @param function the resolver function
-		 * @return a new {@link ArgumentResolver} instance backed by the function
+		 * 工厂方法，从 lambda 友好的函数创建新的 {@link ArgumentResolver}。给定函数提供
+		 * 参数类型并必须提供该类型的实例或 {@code null}。
+		 * @param function 解析器函数
+		 * @return 由函数支持的新 {@link ArgumentResolver} 实例
 		 */
 		static ArgumentResolver from(Function<Class<?>, Object> function) {
 			return new ArgumentResolver() {
@@ -600,7 +577,7 @@ public class SpringFactoriesLoader {
 
 
 	/**
-	 * Strategy for handling a failure that occurs when instantiating a factory.
+	 * 处理实例化工厂时发生的故障的策略。
 	 * @since 6.0
 	 * @see FailureHandler#throwing()
 	 * @see FailureHandler#logging(Log)
@@ -609,12 +586,11 @@ public class SpringFactoriesLoader {
 	public interface FailureHandler {
 
 		/**
-		 * Handle the {@code failure} that occurred when instantiating the
-		 * {@code factoryImplementationName} that was expected to be of the
-		 * given {@code factoryType}.
-		 * @param factoryType the type of the factory
-		 * @param factoryImplementationName the name of the factory implementation
-		 * @param failure the failure that occurred
+		 * 处理由于实例化预期为给定 {@code factoryType} 的
+		 * {@code factoryImplementationName} 时发生的 {@code failure}。
+		 * @param factoryType 工厂的类型
+		 * @param factoryImplementationName 工厂实现的名称
+		 * @param failure 发生的故障
 		 * @see #throwing()
 		 * @see #logging
 		 */
@@ -622,9 +598,9 @@ public class SpringFactoriesLoader {
 
 
 		/**
-		 * Create a new {@link FailureHandler} that handles errors by throwing an
-		 * {@link IllegalArgumentException}.
-		 * @return a new {@link FailureHandler} instance
+		 * 创建一个新的 {@link FailureHandler}，通过抛出
+		 * {@link IllegalArgumentException} 来处理错误。
+		 * @return 新的 {@link FailureHandler} 实例
 		 * @see #throwing(BiFunction)
 		 */
 		static FailureHandler throwing() {
@@ -632,10 +608,9 @@ public class SpringFactoriesLoader {
 		}
 
 		/**
-		 * Create a new {@link FailureHandler} that handles errors by throwing an
-		 * exception.
-		 * @param exceptionFactory factory used to create the exception
-		 * @return a new {@link FailureHandler} instance
+		 * 创建一个新的 {@link FailureHandler}，通过抛出异常来处理错误。
+		 * @param exceptionFactory 用于创建异常的工厂
+		 * @return 新的 {@link FailureHandler} 实例
 		 */
 		static FailureHandler throwing(BiFunction<String, Throwable, ? extends RuntimeException> exceptionFactory) {
 			return handleMessage((messageSupplier, failure) -> {
@@ -644,20 +619,18 @@ public class SpringFactoriesLoader {
 		}
 
 		/**
-		 * Create a new {@link FailureHandler} that handles errors by logging trace
-		 * messages.
-		 * @param logger the logger used to log messages
-		 * @return a new {@link FailureHandler} instance
+		 * 创建一个新的 {@link FailureHandler}，通过记录跟踪消息来处理错误。
+		 * @param logger 用于记录消息的日志记录器
+		 * @return 新的 {@link FailureHandler} 实例
 		 */
 		static FailureHandler logging(Log logger) {
 			return handleMessage((messageSupplier, failure) -> logger.trace(LogMessage.of(messageSupplier), failure));
 		}
 
 		/**
-		 * Create a new {@link FailureHandler} that handles errors using a standard
-		 * formatted message.
-		 * @param messageHandler the message handler used to handle the problem
-		 * @return a new {@link FailureHandler} instance
+		 * 创建一个新的 {@link FailureHandler}，使用标准格式的消息处理错误。
+		 * @param messageHandler 用于处理问题的消息处理器
+		 * @return 新的 {@link FailureHandler} 实例
 		 */
 		static FailureHandler handleMessage(BiConsumer<Supplier<String>, Throwable> messageHandler) {
 			return (factoryType, factoryImplementationName, failure) -> {

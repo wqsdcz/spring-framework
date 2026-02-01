@@ -40,15 +40,11 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link Resource} implementation for {@code java.io.File} and
- * {@code java.nio.file.Path} handles with a file system target.
- * Supports resolution as a {@code File} and also as a {@code URL}.
- * Implements the extended {@link WritableResource} interface.
+ * <p>针对文件系统目标的 {@code java.io.File} 和 {@code java.nio.file.Path} 句柄的 {@link Resource} 实现。
+ * 支持解析为 {@code File}，也支持解析为 {@code URL}。实现了扩展的 {@link WritableResource} 接口。
  *
- * <p>Note: This {@link Resource} implementation uses NIO.2 API for read/write
- * interactions and may be constructed with a {@link java.nio.file.Path} handle
- * in which case it will perform all file system interactions via NIO.2, only
- * resorting to {@link File} on {@link #getFile()}.
+ * <p>注意：此 {@link Resource} 实现使用 NIO.2 API 进行读/写交互，可以用 {@link java.nio.file.Path} 
+ * 句柄构造，在这种情况下它将仅通过 NIO.2 执行所有文件系统交互，仅在 {@link #getFile()} 时回退到 {@link File}。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -70,14 +66,12 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 
 
 	/**
-	 * Create a new {@code FileSystemResource} from a file path.
-	 * <p>Note: When building relative resources via {@link #createRelative},
-	 * it makes a difference whether the specified resource base path here
-	 * ends with a slash or not. In the case of "C:/dir1/", relative paths
-	 * will be built underneath that root: for example, relative path "dir2" &rarr;
-	 * "C:/dir1/dir2". In the case of "C:/dir1", relative paths will apply
-	 * at the same directory level: relative path "dir2" &rarr; "C:/dir2".
-	 * @param path a file path
+	 * <p>从文件路径创建新的 {@code FileSystemResource}。
+	 * <p>注意：当通过 {@link #createRelative} 构建相对资源时，此处指定的资源基本路径是否以斜杠结尾会有所不同。
+	 * 如果是 "C:/dir1/"，相对路径将构建在该根目录下：例如相对路径 "dir2" → "C:/dir1/dir2"。
+	 * 如果是 "C:/dir1"，相对路径将在同一目录级别应用：相对路径 "dir2" → "C:/dir2"。
+	 *
+	 * @param path 文件路径
 	 * @see #FileSystemResource(Path)
 	 */
 	public FileSystemResource(String path) {
@@ -88,15 +82,13 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * Create a new {@code FileSystemResource} from a {@link File} handle.
-	 * <p>Note: When building relative resources via {@link #createRelative},
-	 * the relative path will apply <i>at the same directory level</i>:
-	 * for example, new File("C:/dir1"), relative path "dir2" &rarr; "C:/dir2"!
-	 * If you prefer to have relative paths built underneath the given root directory,
-	 * use the {@link #FileSystemResource(String) constructor with a file path}
-	 * to append a trailing slash to the root path: "C:/dir1/", which indicates
-	 * this directory as root for all relative paths.
-	 * @param file a File handle
+	 * <p>从 {@link File} 句柄创建新的 {@code FileSystemResource}。
+	 * <p>注意：当通过 {@link #createRelative} 构建相对资源时，相对路径将在<i>同一目录级别</i>应用：
+	 * 例如 new File("C:/dir1")，相对路径 "dir2" → "C:/dir2"！
+	 * 如果你希望将相对路径构建在给定根目录下，请使用带有文件路径的 {@link #FileSystemResource(String) 构造函数}
+	 * 将尾部斜杠附加到根路径："C:/dir1/"，这表示此目录为所有相对路径的根。
+	 *
+	 * @param file 文件句柄
 	 * @see #FileSystemResource(Path)
 	 * @see #getFile()
 	 */
@@ -108,21 +100,17 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * Create a new {@code FileSystemResource} from a {@link Path} handle,
-	 * performing all file system interactions via NIO.2 instead of {@link File}.
-	 * <p>In contrast to {@link PathResource}, this variant strictly follows the
-	 * general {@link FileSystemResource} conventions, in particular in terms of
-	 * path cleaning and {@link #createRelative(String)} handling.
-	 * <p>Note: When building relative resources via {@link #createRelative},
-	 * the relative path will apply <i>at the same directory level</i>:
-	 * for example, Paths.get("C:/dir1"), relative path "dir2" &rarr; "C:/dir2"!
-	 * If you prefer to have relative paths built underneath the given root directory,
-	 * use the {@link #FileSystemResource(String) constructor with a file path}
-	 * to append a trailing slash to the root path: "C:/dir1/", which indicates
-	 * this directory as root for all relative paths. Alternatively, consider
-	 * using {@link PathResource#PathResource(Path)} for {@code java.nio.path.Path}
-	 * resolution in {@code createRelative}, always nesting relative paths.
-	 * @param filePath a Path handle to a file
+	 * <p>从 {@link Path} 句柄创建新的 {@code FileSystemResource}，通过 NIO.2 而不是 {@link File} 执行所有文件系统交互。
+	 * <p>与 {@link PathResource} 相比，此变体严格遵循通用的 {@link FileSystemResource} 约定，
+	 * 特别是在路径清理和 {@link #createRelative(String)} 处理方面。
+	 * <p>注意：当通过 {@link #createRelative} 构建相对资源时，相对路径将在<i>同一目录级别</i>应用：
+	 * 例如 Paths.get("C:/dir1")，相对路径 "dir2" → "C:/dir2"！
+	 * 如果你希望将相对路径构建在给定根目录下，请使用带有文件路径的 {@link #FileSystemResource(String) 构造函数}
+	 * 将尾部斜杠附加到根路径："C:/dir1/"，这表示此目录为所有相对路径的根。
+	 * 或者，考虑在 {@code createRelative} 中使用 {@link PathResource#PathResource(Path)} 进行 
+	 * {@code java.nio.path.Path} 解析，始终嵌套相对路径。
+	 *
+	 * @param filePath 文件的 Path 句柄
 	 * @since 5.1
 	 * @see #FileSystemResource(File)
 	 */
@@ -134,12 +122,13 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * Create a new {@code FileSystemResource} from a {@link FileSystem} handle,
-	 * locating the specified path.
-	 * <p>This is an alternative to {@link #FileSystemResource(String)},
-	 * performing all file system interactions via NIO.2 instead of {@link File}.
+	 * <p>从 {@link FileSystem} 句柄创建新的 {@code FileSystemResource}，定位指定路径。
+	 * <p>这是 {@link #FileSystemResource(String)} 的替代方案，通过 NIO.2 而不是 {@link File} 执行所有文件系统交互。
+	 *
 	 * @param fileSystem the FileSystem to locate the path within
+	 *                   用于定位路径的 FileSystem
 	 * @param path a file path
+	 *             文件路径
 	 * @since 5.1.1
 	 * @see #FileSystemResource(File)
 	 */
@@ -153,14 +142,15 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 
 
 	/**
-	 * Return the file path for this resource.
+	 * <p>返回此资源的文件路径。
 	 */
 	public final String getPath() {
 		return this.path;
 	}
 
 	/**
-	 * This implementation returns whether the underlying file exists.
+	 * <p>此实现返回底层文件是否存在。
+	 *
 	 * @see java.io.File#exists()
 	 * @see java.nio.file.Files#exists(Path, java.nio.file.LinkOption...)
 	 */
@@ -170,8 +160,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation checks whether the underlying file is marked as readable
-	 * (and corresponds to an actual file with content, not to a directory).
+	 * <p>此实现检查底层文件是否标记为可读（并对应于具有内容的实际文件，而不是目录）。
+	 *
 	 * @see java.io.File#canRead()
 	 * @see java.io.File#isDirectory()
 	 * @see java.nio.file.Files#isReadable(Path)
@@ -184,7 +174,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation opens an NIO file stream for the underlying file.
+	 * <p>此实现为底层文件打开 NIO 文件流。
+	 *
 	 * @see java.nio.file.Files#newInputStream(Path, java.nio.file.OpenOption...)
 	 */
 	@Override
@@ -218,8 +209,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation checks whether the underlying file is marked as writable
-	 * (and corresponds to an actual file with content, not to a directory).
+	 * <p>此实现检查底层文件是否标记为可写（并对应于具有内容的实际文件，而不是目录）。
+	 *
 	 * @see java.io.File#canWrite()
 	 * @see java.io.File#isDirectory()
 	 * @see java.nio.file.Files#isWritable(Path)
@@ -232,7 +223,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation opens a FileOutputStream for the underlying file.
+	 * <p>此实现为底层文件打开 FileOutputStream。
+	 *
 	 * @see java.nio.file.Files#newOutputStream(Path, java.nio.file.OpenOption...)
 	 */
 	@Override
@@ -241,7 +233,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns a URL for the underlying file.
+	 * <p>此实现返回底层文件的 URL。
+	 *
 	 * @see java.io.File#toURI()
 	 * @see java.nio.file.Path#toUri()
 	 */
@@ -251,7 +244,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns a URI for the underlying file.
+	 * <p>此实现返回底层文件的 URI。
+	 *
 	 * @see java.io.File#toURI()
 	 * @see java.nio.file.Path#toUri()
 	 */
@@ -277,7 +271,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation always indicates a file.
+	 * <p>此实现始终指示为文件。
 	 */
 	@Override
 	public boolean isFile() {
@@ -285,7 +279,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns the underlying File reference.
+	 * <p>此实现返回底层 File 引用。
 	 */
 	@Override
 	public File getFile() {
@@ -293,7 +287,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation opens a FileChannel for the underlying file.
+	 * <p>此实现为底层文件打开 FileChannel。
 	 * @see java.nio.channels.FileChannel
 	 */
 	@Override
@@ -307,7 +301,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation opens a FileChannel for the underlying file.
+	 * <p>此实现为底层文件打开 FileChannel。
 	 * @see java.nio.channels.FileChannel
 	 */
 	@Override
@@ -316,7 +310,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns the underlying File/Path length.
+	 * <p>此实现返回底层 File/Path 长度。
 	 */
 	@Override
 	public long contentLength() throws IOException {
@@ -339,7 +333,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns the underlying File/Path last-modified time.
+	 * <p>此实现返回底层 File/Path 的最后修改时间。
 	 */
 	@Override
 	public long lastModified() throws IOException {
@@ -357,8 +351,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation creates a FileSystemResource, applying the given path
-	 * relative to the path of the underlying file of this resource descriptor.
+	 * <p>此实现创建 FileSystemResource，将给定路径应用于此资源描述符的底层文件路径的相对路径。
+	 *
 	 * @see org.springframework.util.StringUtils#applyRelativePath(String, String)
 	 */
 	@Override
@@ -369,7 +363,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns the name of the file.
+	 * <p>此实现返回文件名称。
+	 *
 	 * @see java.io.File#getName()
 	 * @see java.nio.file.Path#getFileName()
 	 */
@@ -379,8 +374,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns a description that includes the absolute
-	 * path of the file.
+	 * <p>此实现返回包含文件绝对路径的描述。
+	 *
 	 * @see java.io.File#getAbsolutePath()
 	 * @see java.nio.file.Path#toAbsolutePath()
 	 */
@@ -391,7 +386,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 
 
 	/**
-	 * This implementation compares the underlying file paths.
+	 * <p>此实现比较底层文件路径。
+	 *
 	 * @see #getPath()
 	 */
 	@Override
@@ -400,7 +396,8 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	}
 
 	/**
-	 * This implementation returns the hash code of the underlying file path.
+	 * <p>此实现返回底层文件路径的哈希码。
+	 *
 	 * @see #getPath()
 	 */
 	@Override

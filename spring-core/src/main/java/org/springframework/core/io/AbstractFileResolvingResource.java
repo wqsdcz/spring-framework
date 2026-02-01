@@ -34,11 +34,10 @@ import java.util.jar.JarFile;
 import org.springframework.util.ResourceUtils;
 
 /**
- * Abstract base class for resources which resolve URLs into File references,
- * such as {@link UrlResource} or {@link ClassPathResource}.
+ * 将 URL 解析为文件引用的资源的抽象基类，
+· * 比如 {@link UrlResource} 或者 {@link ClassPathResource}。
  *
- * <p>Detects the "file" protocol as well as the JBoss "vfs" protocol in URLs,
- * resolving file system references accordingly.
+ * <p>检测 URL 中的"file"协议以及 JBoss 的"vfs"协议，并相应地解析文件系统引用。
  *
  * @author Juergen Hoeller
  * @since 3.0
@@ -202,8 +201,7 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation returns a File reference for the underlying class path
-	 * resource, provided that it refers to a file in the file system.
+	 * 此实现返回底层类路径资源的文件引用，前提是它引用的是文件系统中的文件。
 	 * @see org.springframework.util.ResourceUtils#getFile(java.net.URL, String)
 	 */
 	@Override
@@ -216,8 +214,7 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation determines the underlying File
-	 * (or jar file, in case of a resource in a jar/zip).
+	 * 此实现确定底层 File（如果是 jar/zip 中的资源，则为 jar 文件）。
 	 */
 	@Override
 	protected File getFileForLastModifiedCheck() throws IOException {
@@ -235,7 +232,7 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * Determine whether the given {@link URI} represents a file in a file system.
+	 * 判断给定的 {@link URI} 是否表示文件系统中的文件。
 	 * @since 5.0
 	 * @see #getFile(URI)
 	 */
@@ -252,8 +249,7 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation returns a File reference for the given URI-identified
-	 * resource, provided that it refers to a file in the file system.
+	 * 此实现返回给定 URI 标识的资源的文件引用，前提是它引用的是文件系统中的文件。
 	 * @see org.springframework.util.ResourceUtils#getFile(java.net.URI, String)
 	 */
 	protected File getFile(URI uri) throws IOException {
@@ -264,8 +260,7 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation returns a FileChannel for the given URI-identified
-	 * resource, provided that it refers to a file in the file system.
+	 * 此实现返回给定 URI 标识的资源的 FileChannel，前提是它引用的是文件系统中的文件。
 	 * @since 5.0
 	 * @see #getFile()
 	 */
@@ -353,12 +348,12 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * Customize the given {@link URLConnection} before fetching the resource.
-	 * <p>Calls {@link ResourceUtils#useCachesIfNecessary(URLConnection)} and
-	 * delegates to {@link #customizeConnection(HttpURLConnection)} if possible.
-	 * Can be overridden in subclasses.
-	 * @param con the URLConnection to customize
-	 * @throws IOException if thrown from URLConnection methods
+	 * 在获取资源之前自定义给定的 {@link URLConnection}。
+	 * <p>调用 {@link ResourceUtils#useCachesIfNecessary(URLConnection)} 并在可能的情况下
+	 * 委托给 {@link #customizeConnection(HttpURLConnection)}。
+	 * 可以在子类中重写。
+	 * @param con 要自定义的 URLConnection
+	 * @throws IOException 如果从 URLConnection 方法抛出
 	 */
 	protected void customizeConnection(URLConnection con) throws IOException {
 		useCachesIfNecessary(con);
@@ -368,8 +363,8 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * Apply {@link URLConnection#setUseCaches useCaches} if necessary.
-	 * @param con the URLConnection to customize
+	 * 如有必要，应用 {@link URLConnection#setUseCaches useCaches}。
+	 * @param con 要自定义的 URLConnection
 	 * @since 6.2.10
 	 * @see ResourceUtils#useCachesIfNecessary(URLConnection)
 	 */
@@ -378,17 +373,17 @@ public abstract class AbstractFileResolvingResource extends AbstractResource {
 	}
 
 	/**
-	 * Customize the given {@link HttpURLConnection} before fetching the resource.
-	 * <p>Can be overridden in subclasses for configuring request headers and timeouts.
-	 * @param con the HttpURLConnection to customize
-	 * @throws IOException if thrown from HttpURLConnection methods
+	 * 在获取资源之前自定义给定的 {@link HttpURLConnection}。
+	 * <p>可以在子类中重写以配置请求头和超时时间。
+	 * @param con 要自定义的 HttpURLConnection
+	 * @throws IOException 如果从 HttpURLConnection 方法抛出
 	 */
 	protected void customizeConnection(HttpURLConnection con) throws IOException {
 	}
 
 
 	/**
-	 * Inner delegate class, avoiding a hard JBoss VFS API dependency at runtime.
+	 * 内部委托类，避免在运行时对JBoss VFS API产生硬依赖。
 	 */
 	private static class VfsResourceDelegate {
 

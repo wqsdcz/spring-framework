@@ -27,11 +27,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 
 /**
- * JBoss VFS based {@link Resource} implementation.
+ * <p>基于 JBoss VFS 的 {@link Resource} 实现。
  *
- * <p>As of Spring 4.0, this class supports VFS 3.x on JBoss AS 6+
- * (package {@code org.jboss.vfs}) and is in particular compatible with
- * JBoss AS 7 and WildFly 8+.
+ * <p>自 Spring 4.0 起，此类支持 JBoss AS 6+ 上的 VFS 3.x（包 {@code org.jboss.vfs}），
+ * 特别兼容 JBoss AS 7 和 WildFly 8+。
  *
  * @author Ales Justin
  * @author Juergen Hoeller
@@ -45,9 +44,9 @@ public class VfsResource extends AbstractResource {
 
 
 	/**
-	 * Create a new {@code VfsResource} wrapping the given resource handle.
-	 * @param resource a {@code org.jboss.vfs.VirtualFile} instance
-	 * (untyped in order to avoid a static dependency on the VFS API)
+	 * <p>创建新的 {@code VfsResource} 包装给定的资源句柄。
+	 *
+	 * @param resource {@code org.jboss.vfs.VirtualFile} 实例（无类型以避免对 VFS API 的静态依赖）
 	 */
 	public VfsResource(Object resource) {
 		Assert.notNull(resource, "VirtualFile must not be null");

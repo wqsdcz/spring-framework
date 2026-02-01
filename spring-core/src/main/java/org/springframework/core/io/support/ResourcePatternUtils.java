@@ -21,11 +21,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
 /**
- * Utility class for determining whether a given URL is a resource
- * location that can be loaded via a {@link ResourcePatternResolver}.
+ * 用于确定给定 URL 是否是可以通过 {@link ResourcePatternResolver} 加载的资源位置的工具类。
  *
- * <p>Callers will usually assume that a location is a relative path
- * if the {@link #isUrl(String)} method returns {@code false}.
+ * <p>调用者通常会假设如果 {@link #isUrl(String)} 方法返回 {@code false}，则位置是相对路径。
  *
  * @author Juergen Hoeller
  * @since 1.2.3
@@ -33,10 +31,10 @@ import org.springframework.util.ResourceUtils;
 public abstract class ResourcePatternUtils {
 
 	/**
-	 * Return whether the given resource location is a URL: either a
-	 * special "classpath" or "classpath*" pseudo URL or a standard URL.
-	 * @param resourceLocation the location String to check
-	 * @return whether the location qualifies as a URL
+	 * 返回给定的资源位置是否是 URL：要么是特殊的 "classpath" 或 "classpath*" 伪 URL，
+	 * 要么是标准 URL。
+	 * @param resourceLocation 要检查的位置字符串
+	 * @return 位置是否符合 URL 的条件
 	 * @see ResourcePatternResolver#CLASSPATH_ALL_URL_PREFIX
 	 * @see org.springframework.util.ResourceUtils#CLASSPATH_URL_PREFIX
 	 * @see org.springframework.util.ResourceUtils#isUrl(String)
@@ -49,13 +47,12 @@ public abstract class ResourcePatternUtils {
 	}
 
 	/**
-	 * Return a default {@link ResourcePatternResolver} for the given {@link ResourceLoader}.
-	 * <p>This might be the {@code ResourceLoader} itself, if it implements the
-	 * {@code ResourcePatternResolver} extension, or a default
-	 * {@link PathMatchingResourcePatternResolver} built on the given {@code ResourceLoader}.
-	 * @param resourceLoader the ResourceLoader to build a pattern resolver for
-	 * (may be {@code null} to indicate a default ResourceLoader)
-	 * @return the ResourcePatternResolver
+	 * 为给定的 {@link ResourceLoader} 返回默认的 {@link ResourcePatternResolver}。
+	 * <p>这可能是 {@code ResourceLoader} 本身，如果它实现了 {@code ResourcePatternResolver} 扩展，
+	 * 或者是基于给定 {@code ResourceLoader} 构建的默认 {@link PathMatchingResourcePatternResolver}。
+	 * @param resourceLoader 要为其构建模式解析器的 ResourceLoader
+	 * （可能是 {@code null} 以表示默认 ResourceLoader）
+	 * @return ResourcePatternResolver
 	 * @see PathMatchingResourcePatternResolver
 	 */
 	public static ResourcePatternResolver getResourcePatternResolver(@Nullable ResourceLoader resourceLoader) {

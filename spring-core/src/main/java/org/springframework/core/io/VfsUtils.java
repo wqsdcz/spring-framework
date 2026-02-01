@@ -29,15 +29,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Utility for detecting and accessing JBoss VFS in the classpath.
+ * 检测和访问类路径中 JBoss VFS 的工具类。
  *
- * <p>As of Spring 4.0, this class supports VFS 3.x on JBoss AS 6+
- * (package {@code org.jboss.vfs}) and is in particular compatible with
- * JBoss AS 7 and WildFly 8+.
+ * <p>从 Spring 4.0 开始，此类支持 JBoss AS 6+ 上的 VFS 3.x 版本
+ * （包名为 {@code org.jboss.vfs}），特别是与 JBoss AS 7 和 WildFly 8+ 兼容。
  *
- * <p>Thanks go to Marius Bogoevici for the initial implementation.
+ * <p>感谢 Marius Bogoevici 提供的初始实现。
  *
- * <p><b>Note:</b> This is an internal class and should not be used outside the framework.
+ * <p><b>注意：</b>这是一个内部类，不应在框架外部使用。
  *
  * @author Costin Leau
  * @author Juergen Hoeller

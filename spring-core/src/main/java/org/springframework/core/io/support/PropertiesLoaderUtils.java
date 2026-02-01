@@ -33,11 +33,11 @@ import org.springframework.util.PropertiesPersister;
 import org.springframework.util.ResourceUtils;
 
 /**
- * Convenient utility methods for loading of {@code java.util.Properties},
- * performing standard handling of input streams.
+ * 用于加载 {@code java.util.Properties} 的便捷实用方法，
+ * 执行输入流的标准处理。
  *
- * <p>For more configurable properties loading, including the option of a
- * customized encoding, consider using the PropertiesLoaderSupport class.
+ * <p>对于更多可配置的属性加载，包括自定义编码的选项，
+ * 请考虑使用 PropertiesLoaderSupport 类。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -51,8 +51,8 @@ public abstract class PropertiesLoaderUtils {
 
 
 	/**
-	 * Load properties from the given EncodedResource,
-	 * potentially defining a specific encoding for the properties file.
+	 * 从给定的 EncodedResource 加载属性，
+	 * 可能为属性文件定义特定编码。
 	 * @see #fillProperties(java.util.Properties, EncodedResource)
 	 */
 	public static Properties loadProperties(EncodedResource resource) throws IOException {
@@ -62,11 +62,11 @@ public abstract class PropertiesLoaderUtils {
 	}
 
 	/**
-	 * Fill the given properties from the given EncodedResource,
-	 * potentially defining a specific encoding for the properties file.
-	 * @param props the Properties instance to load into
-	 * @param resource the resource to load from
-	 * @throws IOException in case of I/O errors
+	 * 从给定的 EncodedResource 填充给定属性，
+	 * 可能为属性文件定义特定编码。
+	 * @param props 要加载到的 Properties 实例
+	 * @param resource 要加载的资源
+	 * @throws IOException 在 I/O 错误的情况下
 	 */
 	public static void fillProperties(Properties props, EncodedResource resource)
 			throws IOException {
@@ -75,11 +75,11 @@ public abstract class PropertiesLoaderUtils {
 	}
 
 	/**
-	 * Actually load properties from the given EncodedResource into the given Properties instance.
-	 * @param props the Properties instance to load into
-	 * @param resource the resource to load from
-	 * @param persister the PropertiesPersister to use
-	 * @throws IOException in case of I/O errors
+	 * 实际从给定的 EncodedResource 将属性加载到给定的 Properties 实例中。
+	 * @param props 要加载到的 Properties 实例
+	 * @param resource 要加载的资源
+	 * @param persister 要使用的 PropertiesPersister
+	 * @throws IOException 在 I/O 错误的情况下
 	 */
 	static void fillProperties(Properties props, EncodedResource resource, PropertiesPersister persister)
 			throws IOException {
@@ -112,10 +112,10 @@ public abstract class PropertiesLoaderUtils {
 	}
 
 	/**
-	 * Load properties from the given resource (in ISO-8859-1 encoding).
-	 * @param resource the resource to load from
-	 * @return the populated Properties instance
-	 * @throws IOException if loading failed
+	 * 从给定资源加载属性（使用 ISO-8859-1 编码）。
+	 * @param resource 要加载的资源
+	 * @return 填充的 Properties 实例
+	 * @throws IOException 如果加载失败
 	 * @see #fillProperties(java.util.Properties, Resource)
 	 */
 	public static Properties loadProperties(Resource resource) throws IOException {
@@ -125,10 +125,10 @@ public abstract class PropertiesLoaderUtils {
 	}
 
 	/**
-	 * Fill the given properties from the given resource (in ISO-8859-1 encoding).
-	 * @param props the Properties instance to fill
-	 * @param resource the resource to load from
-	 * @throws IOException if loading failed
+	 * 从给定资源填充给定属性（使用 ISO-8859-1 编码）。
+	 * @param props 要填充的 Properties 实例
+	 * @param resource 要加载的资源
+	 * @throws IOException 如果加载失败
 	 */
 	public static void fillProperties(Properties props, Resource resource) throws IOException {
 		try (InputStream is = resource.getInputStream()) {
@@ -143,28 +143,26 @@ public abstract class PropertiesLoaderUtils {
 	}
 
 	/**
-	 * Load all properties from the specified class path resource
-	 * (in ISO-8859-1 encoding), using the default class loader.
-	 * <p>Merges properties if more than one resource of the same name
-	 * found in the class path.
-	 * @param resourceName the name of the class path resource
-	 * @return the populated Properties instance
-	 * @throws IOException if loading failed
+	 * 从指定的类路径资源加载所有属性（使用 ISO-8859-1 编码），
+	 * 使用默认类加载器。
+	 * <p>如果在类路径中找到多个同名资源，则合并属性。
+	 * @param resourceName 类路径资源的名称
+	 * @return 填充的 Properties 实例
+	 * @throws IOException 如果加载失败
 	 */
 	public static Properties loadAllProperties(String resourceName) throws IOException {
 		return loadAllProperties(resourceName, null);
 	}
 
 	/**
-	 * Load all properties from the specified class path resource
-	 * (in ISO-8859-1 encoding), using the given class loader.
-	 * <p>Merges properties if more than one resource of the same name
-	 * found in the class path.
-	 * @param resourceName the name of the class path resource
-	 * @param classLoader the ClassLoader to use for loading
-	 * (or {@code null} to use the default class loader)
-	 * @return the populated Properties instance
-	 * @throws IOException if loading failed
+	 * 从指定的类路径资源加载所有属性（使用 ISO-8859-1 编码），
+	 * 使用给定的类加载器。
+	 * <p>如果在类路径中找到多个同名资源，则合并属性。
+	 * @param resourceName 类路径资源的名称
+	 * @param classLoader 用于加载的 ClassLoader
+	 * （或 {@code null} 以使用默认类加载器）
+	 * @return 填充的 Properties 实例
+	 * @throws IOException 如果加载失败
 	 */
 	public static Properties loadAllProperties(String resourceName, @Nullable ClassLoader classLoader) throws IOException {
 		Assert.notNull(resourceName, "Resource name must not be null");

@@ -25,15 +25,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link Resource} implementation for {@link java.lang.Module} resolution,
- * performing {@link #getInputStream()} access via {@link Module#getResourceAsStream}.
+ * {@link java.lang.Module} 解析的 {@link Resource} 实现，
+ * 通过 {@link Module#getResourceAsStream} 执行 {@link #getInputStream()} 访问。
  *
- * <p>Alternatively, consider accessing resources in a module path layout via
- * {@link ClassPathResource} for exported resources, or specifically relative to
- * a {@code Class} via {@link ClassPathResource#ClassPathResource(String, Class)}
- * for local resolution within the containing module of that specific class.
- * In common scenarios, module resources will simply be transparently visible as
- * classpath resources and therefore do not need any special treatment at all.
+ * <p>或者，考虑通过 {@link ClassPathResource} 访问模块路径布局中的资源以获取导出的资源，
+ * 或者通过 {@link ClassPathResource#ClassPathResource(String, Class)} 特别针对 {@code Class} 
+ * 进行解析以在特定类所在的模块内进行本地解析。在常见场景中，模块资源将简单地透明可见为
+ * 类路径资源，因此根本不需要任何特殊处理。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -49,10 +47,9 @@ public class ModuleResource extends AbstractResource {
 
 
 	/**
-	 * Create a new {@code ModuleResource} for the given {@link Module}
-	 * and the given resource path.
-	 * @param module the runtime module to search within
-	 * @param path the resource path within the module
+	 * 为给定的 {@link Module} 和给定的资源路径创建一个新的 {@code ModuleResource}。
+	 * @param module 在其中搜索的运行时模块
+	 * @param path 模块内的资源路径
 	 */
 	public ModuleResource(Module module, String path) {
 		Assert.notNull(module, "Module must not be null");
@@ -63,14 +60,14 @@ public class ModuleResource extends AbstractResource {
 
 
 	/**
-	 * Return the {@link Module} for this resource.
+	 * 返回此资源的 {@link Module}。
 	 */
 	public final Module getModule() {
 		return this.module;
 	}
 
 	/**
-	 * Return the path for this resource.
+	 * 返回此资源的路径。
 	 */
 	public final String getPath() {
 		return this.path;

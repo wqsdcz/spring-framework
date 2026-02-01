@@ -23,29 +23,20 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * {@link Resource} implementation for a given {@link InputStream} or a given
- * {@link InputStreamSource} (which can be supplied as a lambda expression)
- * for a lazy {@link InputStream} on demand.
+ * <p>给定 {@link InputStream} 或给定 {@link InputStreamSource}（可以作为 lambda 表达式提供）的 {@link Resource} 实现，
+ * 用于按需延迟获取 {@link InputStream}。
  *
- * <p>Should only be used if no other specific {@code Resource} implementation
- * is applicable. In particular, prefer {@link ByteArrayResource} or any of the
- * file-based {@code Resource} implementations if possible. If you need to obtain
- * a custom stream multiple times, use a custom {@link AbstractResource} subclass
- * with a corresponding {@code getInputStream()} implementation.
+ * <p>仅在没有其他特定的 {@code Resource} 实现适用时才应使用。如果可能，优先使用 {@link ByteArrayResource} 
+ * 或任何基于文件的 {@code Resource} 实现。如果你需要多次获取自定义流，请使用带有相应 {@code getInputStream()} 
+ * 实现的自定义 {@link AbstractResource} 子类。
  *
- * <p>In contrast to other {@code Resource} implementations, this is a descriptor
- * for an <i>already opened</i> resource - therefore returning {@code true} from
- * {@link #isOpen()}. Do not use an {@code InputStreamResource} if you need to keep
- * the resource descriptor somewhere, or if you need to read from a stream multiple
- * times. This also applies when constructed with an {@code InputStreamSource}
- * which lazily obtains the stream but only allows for single access as well.
+ * <p>与其他 {@code Resource} 实现相比，这是<i>已打开</i>资源的描述符——因此从 {@link #isOpen()} 返回 
+ * {@code true}。如果你需要将资源描述符保留在某处，或者需要从流中多次读取，请不要使用 {@code InputStreamResource}。
+ * 这也适用于使用 {@code InputStreamSource} 构造的情况，它延迟获取流但仅允许单次访问。
  *
- * <p><b>NOTE: This class does not provide an independent {@link #contentLength()}
- * implementation: Any such call will consume the given {@code InputStream}!</b>
- * Consider overriding {@code #contentLength()} with a custom implementation if
- * possible. For any other purpose, it is not recommended to extend from this
- * class; this is particularly true when used with Spring's web resource rendering
- * which specifically skips {@code #contentLength()} for this exact class only.
+ * <p><b>注意：此类不提供独立的 {@link #contentLength()} 实现：任何此类调用都将消费给定的 {@code InputStream}！</b>
+ * 如果可能，考虑用自定义实现覆盖 {@code #contentLength()}。出于任何其他目的，不建议从此类扩展；
+ * 当与 Spring 的 Web 资源渲染一起使用时尤其如此，它专门为这个确切的类跳过 {@code #contentLength()}。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -67,9 +58,9 @@ public class InputStreamResource extends AbstractResource {
 
 
 	/**
-	 * Create a new {@code InputStreamResource} with a lazy {@code InputStream}
-	 * for single use.
-	 * @param inputStreamSource an on-demand source for a single-use InputStream
+	 * <p>使用延迟的 {@code InputStream} 创建新的 {@code InputStreamResource} 供单次使用。
+	 *
+	 * @param inputStreamSource 单次使用 InputStream 的按需源
 	 * @since 6.1.7
 	 */
 	public InputStreamResource(InputStreamSource inputStreamSource) {
@@ -77,10 +68,10 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * Create a new {@code InputStreamResource} with a lazy {@code InputStream}
-	 * for single use.
-	 * @param inputStreamSource an on-demand source for a single-use InputStream
-	 * @param description where the InputStream comes from
+	 * <p>使用延迟的 {@code InputStream} 创建新的 {@code InputStreamResource} 供单次使用。
+	 *
+	 * @param inputStreamSource 单次使用 InputStream 的按需源
+	 * @param description InputStream 的来源
 	 * @since 6.1.7
 	 */
 	public InputStreamResource(InputStreamSource inputStreamSource, @Nullable String description) {
@@ -91,11 +82,11 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * Create a new {@code InputStreamResource} for an existing {@code InputStream}.
-	 * <p>Consider retrieving the InputStream on demand if possible, reducing its
-	 * lifetime and reliably opening it and closing it through regular
-	 * {@link InputStreamSource#getInputStream()} usage.
-	 * @param inputStream the InputStream to use
+	 * <p>为现有的 {@code InputStream} 创建新的 {@code InputStreamResource}。
+	 * <p>如果可能，考虑按需检索 InputStream，减少其生命周期并通过常规的 
+	 * {@link InputStreamSource#getInputStream()} 使用可靠地打开和关闭它。
+	 *
+	 * @param inputStream 要使用的 InputStream
 	 * @see #InputStreamResource(InputStreamSource)
 	 */
 	public InputStreamResource(InputStream inputStream) {
@@ -103,9 +94,10 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * Create a new {@code InputStreamResource} for an existing {@code InputStream}.
-	 * @param inputStream the InputStream to use
-	 * @param description where the InputStream comes from
+	 * <p>为现有的 {@code InputStream} 创建新的 {@code InputStreamResource}。
+	 *
+	 * @param inputStream 要使用的 InputStream
+	 * @param description InputStream 的来源
 	 * @see #InputStreamResource(InputStreamSource, String)
 	 */
 	public InputStreamResource(InputStream inputStream, @Nullable String description) {
@@ -117,7 +109,7 @@ public class InputStreamResource extends AbstractResource {
 
 
 	/**
-	 * This implementation always returns {@code true}.
+	 * <p>此实现始终返回 {@code true}。
 	 */
 	@Override
 	public boolean exists() {
@@ -125,7 +117,7 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation always returns {@code true}.
+	 * <p>此实现始终返回 {@code true}。
 	 */
 	@Override
 	public boolean isOpen() {
@@ -133,8 +125,7 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation throws IllegalStateException if attempting to
-	 * read the underlying stream multiple times.
+	 * <p>此实现如果尝试多次读取底层流，则抛出 IllegalStateException。
 	 */
 	@Override
 	public InputStream getInputStream() throws IOException, IllegalStateException {
@@ -147,8 +138,7 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation returns a description that includes the passed-in
-	 * description, if any.
+	 * <p>此实现返回包含传入的描述（如果有）的描述。
 	 */
 	@Override
 	public String getDescription() {
@@ -157,7 +147,7 @@ public class InputStreamResource extends AbstractResource {
 
 
 	/**
-	 * This implementation compares the underlying InputStream.
+	 * <p>此实现比较底层 InputStream。
 	 */
 	@Override
 	public boolean equals(@Nullable Object other) {
@@ -166,7 +156,7 @@ public class InputStreamResource extends AbstractResource {
 	}
 
 	/**
-	 * This implementation returns the hash code of the underlying InputStream.
+	 * <p>此实现返回底层 InputStream 的哈希码。
 	 */
 	@Override
 	public int hashCode() {

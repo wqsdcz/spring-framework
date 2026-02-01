@@ -28,12 +28,10 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link Resource} implementation for class path resources. Uses either a
- * given {@link ClassLoader} or a given {@link Class} for loading resources.
+ * <p>类路径资源的 {@link Resource} 实现。使用给定的 {@link ClassLoader} 或给定的 {@link Class} 加载资源。
  *
- * <p>Supports resolution as {@code java.io.File} if the class path
- * resource resides in the file system, but not for resources in a JAR.
- * Always supports resolution as {@code java.net.URL}.
+ * <p>如果类路径资源位于文件系统中，则支持解析为 {@code java.io.File}，但对于 JAR 中的资源则不支持。
+ * 始终支持解析为 {@code java.net.URL}。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -46,8 +44,7 @@ import org.springframework.util.StringUtils;
 public class ClassPathResource extends AbstractFileResolvingResource {
 
 	/**
-	 * Internal representation of the original path supplied by the user,
-	 * used for creating relative paths and resolving URLs and InputStreams.
+	 * <p>用户提供的原始路径的内部表示，用于创建相对路径和解析 URL 及 InputStream。
 	 */
 	private final String path;
 
@@ -61,11 +58,11 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * Create a new {@code ClassPathResource} for {@code ClassLoader} usage.
-	 * <p>A leading slash will be removed, as the {@code ClassLoader} resource
-	 * access methods will not accept it.
-	 * <p>The default class loader will be used for loading the resource.
-	 * @param path the absolute path within the class path
+	 * <p>为 {@code ClassLoader} 使用创建新的 {@code ClassPathResource}。
+	 * <p>前导斜杠将被移除，因为 {@code ClassLoader} 资源访问方法不接受它。
+	 * <p>将使用默认类加载器加载资源。
+	 *
+	 * @param path 类路径中的绝对路径
 	 * @see ClassUtils#getDefaultClassLoader()
 	 */
 	public ClassPathResource(String path) {
@@ -73,13 +70,12 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code ClassPathResource} for {@code ClassLoader} usage.
-	 * <p>A leading slash will be removed, as the {@code ClassLoader} resource
-	 * access methods will not accept it.
-	 * <p>If the supplied {@code ClassLoader} is {@code null}, the default class
-	 * loader will be used for loading the resource.
-	 * @param path the absolute path within the class path
-	 * @param classLoader the class loader to load the resource with
+	 * <p>为 {@code ClassLoader} 使用创建新的 {@code ClassPathResource}。
+	 * <p>前导斜杠将被移除，因为 {@code ClassLoader} 资源访问方法不接受它。
+	 * <p>如果提供的 {@code ClassLoader} 为 {@code null}，将使用默认类加载器加载资源。
+	 *
+	 * @param path  类路径中的绝对路径
+	 * @param classLoader 用于加载资源的类加载器
 	 * @see ClassUtils#getDefaultClassLoader()
 	 */
 	public ClassPathResource(String path, @Nullable ClassLoader classLoader) {
@@ -95,16 +91,14 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code ClassPathResource} for {@code Class} usage.
-	 * <p>The path can be relative to the given class, or absolute within
-	 * the class path via a leading slash.
-	 * <p>If the supplied {@code Class} is {@code null}, the default class
-	 * loader will be used for loading the resource.
-	 * <p>This is also useful for resource access within the module system,
-	 * loading a resource from the containing module of a given {@code Class}.
-	 * See {@link ModuleResource} and its javadoc.
-	 * @param path relative or absolute path within the class path
-	 * @param clazz the class to load resources with
+	 * <p>为 {@code Class} 使用创建新的 {@code ClassPathResource}。
+	 * <p>路径可以是相对于给定类的，或者通过前导斜杠在类路径中绝对定位。
+	 * <p>如果提供的 {@code Class} 为 {@code null}，将使用默认类加载器加载资源。
+	 * <p>这也适用于模块系统中的资源访问，从给定 {@code Class} 的包含模块加载资源。
+	 * 参见 {@link ModuleResource} 及其 javadoc。
+	 *
+	 * @param path  类路径中的相对或绝对路径
+	 * @param clazz  用于加载资源的类
 	 * @see ClassUtils#getDefaultClassLoader()
 	 * @see ModuleResource
 	 */
@@ -127,18 +121,15 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * Return the <em>absolute path</em> for this resource, as a
-	 * {@linkplain StringUtils#cleanPath(String) cleaned} resource path within
-	 * the class path.
-	 * <p>The path returned by this method does not have a leading slash and is
-	 * suitable for use with {@link ClassLoader#getResource(String)}.
+	 * <p>返回此资源的<em>绝对路径</em>，作为类路径中已清理的资源路径。
+	 * <p>此方法返回的路径没有前导斜杠，适用于与 {@link ClassLoader#getResource(String)} 一起使用。
 	 */
 	public final String getPath() {
 		return this.absolutePath;
 	}
 
 	/**
-	 * Return the {@link ClassLoader} that this resource will be obtained from.
+	 * <p>返回将从中获取此资源的 {@link ClassLoader}。
 	 */
 	@Nullable
 	public final ClassLoader getClassLoader() {
@@ -147,7 +138,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * This implementation checks for the resolution of a resource URL.
+	 * <p>此实现检查资源 URL 的解析。
+	 *
 	 * @see ClassLoader#getResource(String)
 	 * @see Class#getResource(String)
 	 */
@@ -157,8 +149,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation checks for the resolution of a resource URL upfront,
-	 * then proceeding with {@link AbstractFileResolvingResource}'s length check.
+	 * <p>此实现预先检查资源 URL 的解析，然后继续 {@link AbstractFileResolvingResource} 的长度检查。
+	 *
 	 * @see ClassLoader#getResource(String)
 	 * @see Class#getResource(String)
 	 */
@@ -169,8 +161,9 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Resolves a {@link URL} for the underlying class path resource.
-	 * @return the resolved URL, or {@code null} if not resolvable
+	 * <p>解析底层类路径资源的 {@link URL}。
+	 *
+	 * @return 已解析的 URL，如果无法解析则返回 {@code null}
 	 */
 	@Nullable
 	protected URL resolveURL() {
@@ -193,8 +186,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation opens an {@link InputStream} for the underlying class
-	 * path resource, if available.
+	 * <p>此实现为底层类路径资源打开 {@link InputStream}（如果可用）。
+	 *
 	 * @see ClassLoader#getResourceAsStream(String)
 	 * @see Class#getResourceAsStream(String)
 	 * @see ClassLoader#getSystemResourceAsStream(String)
@@ -218,8 +211,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns a URL for the underlying class path resource,
-	 * if available.
+	 * <p>此实现返回底层类路径资源的 URL（如果可用）。
+	 *
 	 * @see ClassLoader#getResource(String)
 	 * @see Class#getResource(String)
 	 */
@@ -233,8 +226,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation creates a {@code ClassPathResource}, applying the given
-	 * path relative to the path used to create this descriptor.
+	 * <p>此实现创建一个 {@code ClassPathResource}，将给定路径应用于此描述符用于创建的路径的相对路径。
+	 *
 	 * @see StringUtils#applyRelativePath(String, String)
 	 */
 	@Override
@@ -245,8 +238,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the name of the file that this class path
-	 * resource refers to.
+	 * <p>此实现返回此类路径资源引用的文件名称。
+	 *
 	 * @see StringUtils#getFilename(String)
 	 */
 	@Override
@@ -256,8 +249,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns a description that includes the absolute
-	 * class path location.
+	 * <p>此实现返回包含绝对类路径位置的描述。
 	 */
 	@Override
 	public String getDescription() {
@@ -266,8 +258,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * This implementation compares the underlying class path locations and
-	 * associated class loaders.
+	 * <p>此实现比较底层类路径位置和相关联的类加载器。
+	 *
 	 * @see #getPath()
 	 * @see #getClassLoader()
 	 */
@@ -279,7 +271,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the hash code of the underlying class path location.
+	 * <p>此实现返回底层类路径位置的哈希码。
+	 *
 	 * @see #getPath()
 	 */
 	@Override

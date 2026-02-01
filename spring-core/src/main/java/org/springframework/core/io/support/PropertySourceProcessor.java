@@ -39,10 +39,10 @@ import org.springframework.util.PlaceholderResolutionException;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Contribute {@link PropertySource property sources} to the {@link Environment}.
+ * 向 {@link Environment} 提供 {@link PropertySource 属性源}。
  *
- * <p>This class is stateful and merges descriptors with the same name in a
- * single {@link PropertySource} rather than creating dedicated ones.
+ * <p>此类是有状态的，并将具有相同名称的描述符合并到单个 {@link PropertySource} 中，
+ * 而不是创建专用的属性源。
  *
  * @author Stephane Nicoll
  * @author Sam Brannen
@@ -71,10 +71,9 @@ public class PropertySourceProcessor {
 
 
 	/**
-	 * Process the specified {@link PropertySourceDescriptor} against the
-	 * environment managed by this instance.
-	 * @param descriptor the descriptor to process
-	 * @throws IOException if loading the properties failed
+	 * 针对此实例管理的环境处理指定的 {@link PropertySourceDescriptor}。
+	 * @param descriptor 要处理的描述符
+	 * @throws IOException 如果加载属性失败
 	 */
 	public void processPropertySource(PropertySourceDescriptor descriptor) throws IOException {
 		String name = descriptor.name();
@@ -154,8 +153,7 @@ public class PropertySourceProcessor {
 	}
 
 	/**
-	 * Determine if the supplied exception can be ignored according to
-	 * {@code ignoreResourceNotFound} semantics.
+	 * 根据 {@code ignoreResourceNotFound} 语义确定提供的异常是否可以忽略。
 	 */
 	private static boolean isIgnorableException(@Nullable Throwable ex) {
 		return (ex instanceof FileNotFoundException ||

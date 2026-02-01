@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2002-present the original author or authors.
  *
@@ -30,15 +31,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
 /**
- * Subclass of {@link UrlResource} which assumes file resolution, to the degree
- * of implementing the {@link WritableResource} interface for it. This resource
- * variant also caches resolved {@link File} handles from {@link #getFile()}.
+ * {@link UrlResource} 的子类，假定文件解析，实现 {@link WritableResource} 接口。
+ * 此资源变体还会从 {@link #getFile()} 缓存已解析的 {@link File} 句柄。
  *
- * <p>This is the class resolved by {@link DefaultResourceLoader} for a "file:..."
- * URL location, allowing a downcast to {@link WritableResource} for it.
+ * <p>这是由 {@link DefaultResourceLoader} 解析的类，用于 "file:..." URL 位置，
+ * 允许向下转换为此类的 {@link WritableResource}。
  *
- * <p>Alternatively, for direct construction from a {@link java.io.File} handle
- * or NIO {@link java.nio.file.Path}, consider using {@link FileSystemResource}.
+ * <p>或者，对于从 {@link java.io.File} 句柄或 NIO {@link java.nio.file.Path} 直接构造，
+ * 考虑使用 {@link FileSystemResource}。
  *
  * @author Juergen Hoeller
  * @since 5.0.2
@@ -50,10 +50,9 @@ public class FileUrlResource extends UrlResource implements WritableResource {
 
 
 	/**
-	 * Create a new {@code FileUrlResource} based on the given URL object.
-	 * <p>Note that this does not enforce "file" as URL protocol. If a protocol
-	 * is known to be resolvable to a file, it is acceptable for this purpose.
-	 * @param url a URL
+	 * 基于给定的 URL 对象创建新的 {@code FileUrlResource}。
+	 * <p>注意，这不会强制使用 "file" 作为 URL 协议。如果协议已知可以解析为文件，则适用于此目的。
+	 * @param url 一个 URL
 	 * @see ResourceUtils#isFileURL(URL)
 	 * @see #getFile()
 	 */
@@ -62,11 +61,11 @@ public class FileUrlResource extends UrlResource implements WritableResource {
 	}
 
 	/**
-	 * Create a new {@code FileUrlResource} based on the given file location,
-	 * using the URL protocol "file".
-	 * <p>The given parts will automatically get encoded if necessary.
-	 * @param location the location (i.e. the file path within that protocol)
-	 * @throws MalformedURLException if the given URL specification is not valid
+	 * 基于给定的文件位置创建新的 {@code FileUrlResource}，
+	 * 使用 URL 协议 "file"。
+	 * <p>必要时，给定的部分将自动进行编码。
+	 * @param location 位置（即该协议内的文件路径）
+	 * @throws MalformedURLException 如果给定的 URL 规范无效
 	 * @see UrlResource#UrlResource(String, String)
 	 * @see ResourceUtils#URL_PROTOCOL_FILE
 	 */

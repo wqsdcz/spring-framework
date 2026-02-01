@@ -36,9 +36,8 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link Resource} implementation for {@code java.net.URL} locators.
- * Supports resolution as a {@code URL} and also as a {@code File} in
- * case of the {@code "file:"} protocol.
+ * <p>{@code java.net.URL} 定位器的 {@link Resource} 实现。支持解析为 {@code URL}，
+ * 也支持在 {@code "file:"} 协议的情况下解析为 {@code File}。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -51,32 +50,33 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * Original URI, if available; used for URI and File access.
+	 * <p>原始 URI（如果可用）；用于 URI 和文件访问。
 	 */
 	@Nullable
 	private final URI uri;
 
 	/**
-	 * Original URL, used for actual access.
+	 * <p>原始 URL，用于实际访问。
 	 */
 	private final URL url;
 
 	/**
-	 * Cleaned URL String (with normalized path), used for comparisons.
+	 * <p>清理后的 URL 字符串（带有规范化路径），用于比较。
 	 */
 	@Nullable
 	private volatile String cleanedUrl;
 
 	/**
-	 * Whether to use URLConnection caches ({@code null} means default).
+	 * <p>是否使用 URLConnection 缓存（{@code null} 表示默认）。
 	 */
 	@Nullable
 	volatile Boolean useCaches;
 
 
 	/**
-	 * Create a new {@code UrlResource} based on the given URL object.
-	 * @param url a URL
+	 * <p>基于给定的 URL 对象创建新的 {@code UrlResource}。
+	 *
+	 * @param url  URL
 	 * @see #UrlResource(URI)
 	 * @see #UrlResource(String)
 	 */
@@ -87,9 +87,10 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code UrlResource} based on the given URI object.
-	 * @param uri a URI
-	 * @throws MalformedURLException if the given URL path is not valid
+	 * <p>基于给定的 URI 对象创建新的 {@code UrlResource}。
+	 *
+	 * @param uri  URI
+	 * @throws MalformedURLException  如果给定的 URL 路径无效
 	 * @since 2.5
 	 */
 	public UrlResource(URI uri) throws MalformedURLException {
@@ -99,10 +100,11 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code UrlResource} based on a URI path.
-	 * <p>Note: The given path needs to be pre-encoded if necessary.
-	 * @param path a URI path
-	 * @throws MalformedURLException if the given URI path is not valid
+	 * <p>基于 URI 路径创建新的 {@code UrlResource}。
+	 * <p>注意：如有必要，给定的路径需要预先编码。
+	 *
+	 * @param path  URI 路径
+	 * @throws MalformedURLException 如果给定的 URI 路径无效
 	 * @see ResourceUtils#toURI(String)
 	 */
 	public UrlResource(String path) throws MalformedURLException {
@@ -127,13 +129,12 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code UrlResource} based on a URI specification.
-	 * <p>The given parts will automatically get encoded if necessary.
-	 * @param protocol the URL protocol to use (for example, "jar" or "file" - without colon);
-	 * also known as "scheme"
-	 * @param location the location (for example, the file path within that protocol);
-	 * also known as "scheme-specific part"
-	 * @throws MalformedURLException if the given URL specification is not valid
+	 * <p>基于 URI 规范创建新的 {@code UrlResource}。
+	 * <p>给定的部分将自动编码（如有必要）。
+	 *
+	 * @param protocol  要使用的 URL 协议（例如，"jar" 或 "file" - 不带冒号）；也称为 "scheme"
+	 * @param location  位置（例如，该协议中的文件路径）；也称为 "scheme-specific part"
+	 * @throws MalformedURLException  如果给定的 URL 规范无效
 	 * @see java.net.URI#URI(String, String, String)
 	 */
 	public UrlResource(String protocol, String location) throws MalformedURLException {
@@ -141,15 +142,13 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Create a new {@code UrlResource} based on a URI specification.
-	 * <p>The given parts will automatically get encoded if necessary.
-	 * @param protocol the URL protocol to use (for example, "jar" or "file" - without colon);
-	 * also known as "scheme"
-	 * @param location the location (for example, the file path within that protocol);
-	 * also known as "scheme-specific part"
-	 * @param fragment the fragment within that location (for example, anchor on an HTML page,
-	 * as following after a "#" separator)
-	 * @throws MalformedURLException if the given URL specification is not valid
+	 * <p>基于 URI 规范创建新的 {@code UrlResource}。
+	 * <p>给定的部分将自动编码（如有必要）。
+	 *
+	 * @param protocol  要使用的 URL 协议（例如，"jar" 或 "file" - 不带冒号）；也称为 "scheme"
+	 * @param location  位置（例如，该协议中的文件路径）；也称为 "scheme-specific part"
+	 * @param fragment  该位置中的片段（例如，HTML 页面上的锚点，跟在 "#" 分隔符之后）
+	 * @throws MalformedURLException  如果给定的 URL 规范无效
 	 * @see java.net.URI#URI(String, String, String)
 	 */
 	public UrlResource(String protocol, String location, @Nullable String fragment) throws MalformedURLException {
@@ -166,14 +165,12 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * Create a new {@code UrlResource} from the given {@link URI}.
-	 * <p>This factory method is a convenience for {@link #UrlResource(URI)} that
-	 * catches any {@link MalformedURLException} and rethrows it wrapped in an
-	 * {@link UncheckedIOException}; suitable for use in {@link java.util.stream.Stream}
-	 * and {@link java.util.Optional} APIs or other scenarios when a checked
-	 * {@link IOException} is undesirable.
-	 * @param uri a URI
-	 * @throws UncheckedIOException if the given URL path is not valid
+	 * 从给定的 {@link URI} 创建一个新的 {@code UrlResource}。
+	 * <p>此工厂方法是对 {@link #UrlResource(URI)} 的便利封装，
+	 * 它捕获任何 {@link MalformedURLException} 并将其包装在{@link UncheckedIOException} 中重新抛出；
+	 * 适用于 {@link java.util.stream.Stream} 和 {@link java.util.Optional} API 或其他不希望出现检查型 {@link IOException} 的场景。
+	 * @param uri 一个 URI
+	 * @throws UncheckedIOException 如果给定的 URL 路径无效
 	 * @since 6.0
 	 * @see #UrlResource(URI)
 	 */
@@ -186,15 +183,16 @@ public class UrlResource extends AbstractFileResolvingResource {
 		}
 	}
 
+
 	/**
-	 * Create a new {@code UrlResource} from the given URL path.
-	 * <p>This factory method is a convenience for {@link #UrlResource(String)}
-	 * that catches any {@link MalformedURLException} and rethrows it wrapped in an
-	 * {@link UncheckedIOException}; suitable for use in {@link java.util.stream.Stream}
-	 * and {@link java.util.Optional} APIs or other scenarios when a checked
-	 * {@link IOException} is undesirable.
-	 * @param path a URL path
-	 * @throws UncheckedIOException if the given URL path is not valid
+	 * 从给定的 URL 路径创建一个新的 {@code UrlResource}。
+	 * <p>此工厂方法是对 {@link #UrlResource(String)} 的便利封装，
+	 * 它捕获任何 {@link MalformedURLException} 并将其包装在
+	 * {@link UncheckedIOException} 中重新抛出；适用于 {@link java.util.stream.Stream}
+	 * 和 {@link java.util.Optional} API 或其他不希望出现检查型
+	 * {@link IOException} 的场景。
+	 * @param path URL 路径
+	 * @throws UncheckedIOException 如果给定的 URL 路径无效
 	 * @since 6.0
 	 * @see #UrlResource(String)
 	 */
@@ -209,7 +207,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * Lazily determine a cleaned URL for the given original URL.
+	 * <p>惰性确定给定原始 URL 的清理后的 URL。
 	 */
 	private String getCleanedUrl() {
 		String cleanedUrl = this.cleanedUrl;
@@ -223,11 +221,10 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * Set an explicit flag for {@link URLConnection#setUseCaches},
-	 * to be applied for any {@link URLConnection} operation in this resource.
-	 * <p>By default, caching will be applied only to jar resources.
-	 * An explicit {@code true} flag applies caching to all resources, whereas an
-	 * explicit {@code false} flag turns off caching for jar resources as well.
+	 * <p>为 {@link URLConnection#setUseCaches} 设置显式标志，以应用于此资源中的任何 {@link URLConnection} 操作。
+	 * <p>默认情况下，缓存将仅应用于 JAR 资源。显式的 {@code true} 标志将缓存应用于所有资源，
+	 * 而显式的 {@code false} 标志也将关闭 JAR 资源的缓存。
+	 *
 	 * @since 6.2.10
 	 * @see ResourceUtils#useCachesIfNecessary
 	 */
@@ -237,7 +234,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * This implementation opens an InputStream for the given URL.
+	 * <p>此实现为给定 URL 打开 InputStream。
+	 *
 	 * @see java.net.URL#openConnection()
 	 * @see java.net.URLConnection#setUseCaches(boolean)
 	 * @see java.net.URLConnection#getInputStream()
@@ -280,7 +278,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the underlying URL reference.
+	 * <p>此实现返回底层 URL 引用。
 	 */
 	@Override
 	public URL getURL() {
@@ -288,8 +286,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the underlying URI directly,
-	 * if possible.
+	 * <p>此实现直接返回底层 URI（如果可能）。
 	 */
 	@Override
 	public URI getURI() throws IOException {
@@ -312,8 +309,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns a File reference for the underlying URL/URI,
-	 * provided that it refers to a file in the file system.
+	 * <p>此实现返回底层 URL/URI 的 File 引用，前提是指向文件系统中的文件。
+	 *
 	 * @see org.springframework.util.ResourceUtils#getFile(java.net.URL, String)
 	 */
 	@Override
@@ -327,8 +324,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation creates a {@code UrlResource}, delegating to
-	 * {@link #createRelativeURL(String)} for adapting the relative path.
+	 * <p>此实现创建一个 {@code UrlResource}，委托给 {@link #createRelativeURL(String)} 来调整相对路径。
+	 *
 	 * @see #createRelativeURL(String)
 	 */
 	@Override
@@ -339,10 +336,9 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This delegate creates a {@code java.net.URL}, applying the given path
-	 * relative to the path of the underlying URL of this resource descriptor.
-	 * <p>A leading slash will get dropped; a "#" symbol will get encoded.
-	 * Note that this method effectively cleans the combined path as of 6.1.
+	 * <p>此委托创建一个 {@code java.net.URL}，将给定路径应用于此资源描述符的底层 URL 路径的相对路径。
+	 * <p>前导斜杠将被删除；"#" 符号将被编码。注意，自 6.1 起，此方法实际上会清理组合路径。
+	 *
 	 * @since 5.2
 	 * @see #createRelative(String)
 	 * @see ResourceUtils#toRelativeURL(URL, String)
@@ -355,8 +351,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the URL-decoded name of the file that this URL
-	 * refers to.
+	 * <p>此实现返回此 URL 引用的文件的 URL 解码后的名称。
+	 *
 	 * @see java.net.URL#getPath()
 	 * @see java.net.URLDecoder#decode(String, java.nio.charset.Charset)
 	 */
@@ -376,7 +372,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns a description that includes the URL.
+	 * <p>此实现返回包含 URL 的描述。
 	 */
 	@Override
 	public String getDescription() {
@@ -385,7 +381,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 
 	/**
-	 * This implementation compares the underlying URL references.
+	 * <p>此实现比较底层 URL 引用。
 	 */
 	@Override
 	public boolean equals(@Nullable Object other) {
@@ -394,7 +390,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	}
 
 	/**
-	 * This implementation returns the hash code of the underlying URL reference.
+	 * <p>此实现返回底层 URL 引用的哈希码。
 	 */
 	@Override
 	public int hashCode() {

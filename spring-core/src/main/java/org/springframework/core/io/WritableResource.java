@@ -22,8 +22,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * Extended interface for a resource that supports writing to it.
- * Provides an {@link #getOutputStream() OutputStream accessor}.
+ * <p>支持写入的资源扩展接口。提供 {@link #getOutputStream()} 输出流访问器。
  *
  * @author Juergen Hoeller
  * @since 3.1
@@ -32,12 +31,10 @@ import java.nio.channels.WritableByteChannel;
 public interface WritableResource extends Resource {
 
 	/**
-	 * Indicate whether the contents of this resource can be written
-	 * via {@link #getOutputStream()}.
-	 * <p>Will be {@code true} for typical resource descriptors;
-	 * note that actual content writing may still fail when attempted.
-	 * However, a value of {@code false} is a definitive indication
-	 * that the resource content cannot be modified.
+	 * <p>指示是否可以通过 {@link #getOutputStream()} 写入此资源的内容。
+	 * <p>对于典型的资源描述符，将返回 {@code true}；
+	 * 注意实际内容写入仍可能失败。但是，{@code false} 值明确指示资源内容无法修改。
+	 * 
 	 * @see #getOutputStream()
 	 * @see #isReadable()
 	 */
@@ -46,21 +43,21 @@ public interface WritableResource extends Resource {
 	}
 
 	/**
-	 * Return an {@link OutputStream} for the underlying resource,
-	 * allowing to (over-)write its content.
-	 * @throws IOException if the stream could not be opened
+	 * <p>返回底层资源的 {@link OutputStream}，允许（覆盖）写入其内容。
+	 * 
+	 * @throws IOException 如果流无法打开
 	 * @see #getInputStream()
 	 */
 	OutputStream getOutputStream() throws IOException;
 
 	/**
-	 * Return a {@link WritableByteChannel}.
-	 * <p>It is expected that each call creates a <i>fresh</i> channel.
-	 * <p>The default implementation returns {@link Channels#newChannel(OutputStream)}
-	 * with the result of {@link #getOutputStream()}.
-	 * @return the byte channel for the underlying resource (must not be {@code null})
-	 * @throws java.io.FileNotFoundException if the underlying resource doesn't exist
-	 * @throws IOException if the content channel could not be opened
+	 * <p>返回 {@link WritableByteChannel}。
+	 * <p>期望每次调用创建一个<i>新的</i>通道。
+	 * <p>默认实现返回 {@link Channels#newChannel(OutputStream)} 并使用 {@link #getOutputStream()} 的结果。
+	 * 
+	 * @return 底层资源的字节通道（不能为 {@code null}）
+	 * @throws java.io.FileNotFoundException 如果底层资源不存在
+	 * @throws IOException 如果内容通道无法打开
 	 * @since 5.0
 	 * @see #getOutputStream()
 	 */

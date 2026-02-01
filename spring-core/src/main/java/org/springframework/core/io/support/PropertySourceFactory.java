@@ -22,7 +22,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.lang.Nullable;
 
 /**
- * Strategy interface for creating resource-based {@link PropertySource} wrappers.
+ * 创建基于资源的 {@link PropertySource} 包装器的策略接口。
  *
  * @author Juergen Hoeller
  * @since 4.3
@@ -32,21 +32,21 @@ import org.springframework.lang.Nullable;
 public interface PropertySourceFactory {
 
 	/**
-	 * Create a {@link PropertySource} that wraps the given resource.
-	 * <p>Implementations will typically create {@link ResourcePropertySource}
-	 * instances, with {@link PropertySourceProcessor} automatically adapting
-	 * property source names via {@link ResourcePropertySource#withResourceName()}
-	 * if necessary, for example, when combining multiple sources for the same name
-	 * into a {@link org.springframework.core.env.CompositePropertySource}.
-	 * Custom implementations with custom {@link PropertySource} types need
-	 * to make sure to expose distinct enough names, possibly deriving from
-	 * {@link ResourcePropertySource} where possible.
-	 * @param name the name of the property source
-	 * (can be {@code null} in which case the factory implementation
-	 * will have to generate a name based on the given resource)
-	 * @param resource the resource (potentially encoded) to wrap
-	 * @return the new {@link PropertySource} (never {@code null})
-	 * @throws IOException if resource resolution failed
+	 * 创建一个包装给定资源的 {@link PropertySource}。
+	 * <p>实现通常会创建 {@link ResourcePropertySource}
+	 * 实例，而 {@link PropertySourceProcessor} 会自动通过
+	 * {@link ResourcePropertySource#withResourceName()} 适配
+	 * 属性源名称（如有必要），例如，当将同一名称的多个源
+	 * 组合成 {@link org.springframework.core.env.CompositePropertySource} 时。
+	 * 具有自定义 {@link PropertySource} 类型的自定义实现
+	 * 需要确保公开足够不同的名称，可能的话从
+	 * {@link ResourcePropertySource} 派生。
+	 * @param name 属性源的名称
+	 * （可以是 {@code null}，在这种情况下工厂实现
+	 * 将不得不基于给定资源生成名称）
+	 * @param resource 要包装的资源（可能是编码的）
+	 * @return 新的 {@link PropertySource}（永不为 {@code null}）
+	 * @throws IOException 如果资源解析失败
 	 */
 	PropertySource<?> createPropertySource(@Nullable String name, EncodedResource resource) throws IOException;
 

@@ -22,6 +22,8 @@ import org.springframework.lang.Nullable;
  * Strategy that encapsulates value String styling algorithms
  * according to Spring conventions.
  *
+ * <p>根据Spring约定封装值字符串样式化算法的策略。
+ *
  * @author Keith Donald
  * @since 1.2.2
  */
@@ -29,8 +31,10 @@ public interface ValueStyler {
 
 	/**
 	 * Style the given value, returning a String representation.
-	 * @param value the Object value to style
-	 * @return the styled String
+	 *
+	 * <p>样式化给定的值，返回字符串表示形式。
+	 * @param value 要样式化的对象值
+	 * @return 样式化的字符串
 	 */
 	String style(@Nullable Object value);
 

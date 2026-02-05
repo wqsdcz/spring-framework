@@ -24,6 +24,11 @@ import org.springframework.core.NestedRuntimeException;
  * {@link org.springframework.core.serializer.Deserializer} failed.
  * Thrown by {@link SerializingConverter} and {@link DeserializingConverter}.
  *
+ * <p>当{@link org.springframework.core.serializer.Serializer}或
+ * {@link org.springframework.core.serializer.Deserializer}失败时，
+ * 对原生IOException（或类似异常）的包装器。
+ * 由{@link SerializingConverter}和{@link DeserializingConverter}抛出。
+ *
  * @author Gary Russell
  * @author Juergen Hoeller
  * @since 3.0.5
@@ -33,7 +38,9 @@ public class SerializationFailedException extends NestedRuntimeException {
 
 	/**
 	 * Construct a {@code SerializationException} with the specified detail message.
-	 * @param message the detail message
+	 *
+	 * <p>使用指定的详细消息构造{@code SerializationException}。
+	 * @param message 详细消息
 	 */
 	public SerializationFailedException(String message) {
 		super(message);
@@ -42,8 +49,10 @@ public class SerializationFailedException extends NestedRuntimeException {
 	/**
 	 * Construct a {@code SerializationException} with the specified detail message
 	 * and nested exception.
-	 * @param message the detail message
-	 * @param cause the nested exception
+	 *
+	 * <p>使用指定的详细消息和嵌套异常构造{@code SerializationException}。
+	 * @param message 详细消息
+	 * @param cause 嵌套异常
 	 */
 	public SerializationFailedException(String message, Throwable cause) {
 		super(message, cause);

@@ -29,6 +29,9 @@ import org.springframework.util.Assert;
  * {@link org.springframework.core.serializer.Deserializer}
  * to convert data in a byte array to an object.
  *
+ * <p>委托给{@link org.springframework.core.serializer.Deserializer}的{@link Converter}，
+ * 用于将字节数组中的数据转换为对象。
+ *
  * @author Gary Russell
  * @author Mark Fisher
  * @author Juergen Hoeller
@@ -42,6 +45,9 @@ public class DeserializingConverter implements Converter<byte[], Object> {
 	/**
 	 * Create a {@code DeserializingConverter} with default {@link java.io.ObjectInputStream}
 	 * configuration, using the "latest user-defined ClassLoader".
+	 *
+	 * <p>创建具有默认{@link java.io.ObjectInputStream}配置的{@code DeserializingConverter}，
+	 * 使用"最新的用户定义的ClassLoader"。
 	 * @see DefaultDeserializer#DefaultDeserializer()
 	 */
 	public DeserializingConverter() {
@@ -51,7 +57,10 @@ public class DeserializingConverter implements Converter<byte[], Object> {
 	/**
 	 * Create a {@code DeserializingConverter} for using an {@link java.io.ObjectInputStream}
 	 * with the given {@code ClassLoader}.
+	 *
+	 * <p>创建用于使用给定{@code ClassLoader}的{@link java.io.ObjectInputStream}的{@code DeserializingConverter}。
 	 * @param classLoader the ClassLoader to use
+	 * <p>要使用的ClassLoader
 	 * @since 4.2.1
 	 * @see DefaultDeserializer#DefaultDeserializer(ClassLoader)
 	 */
@@ -61,6 +70,8 @@ public class DeserializingConverter implements Converter<byte[], Object> {
 
 	/**
 	 * Create a {@code DeserializingConverter} that delegates to the provided {@link Deserializer}.
+	 *
+	 * <p>创建委托给提供的{@link Deserializer}的{@code DeserializingConverter}。
 	 */
 	public DeserializingConverter(Deserializer<Object> deserializer) {
 		Assert.notNull(deserializer, "Deserializer must not be null");

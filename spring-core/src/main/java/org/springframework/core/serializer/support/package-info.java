@@ -1,6 +1,9 @@
 /**
  * Support classes for Spring's serializer abstraction.
  * Includes adapters to the Converter SPI.
+ *
+ * Spring序列化器抽象的支持类。
+ * 包含到Converter SPI的适配器。
  */
 @NonNullApi
 @NonNullFields

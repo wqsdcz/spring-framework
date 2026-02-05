@@ -37,6 +37,11 @@ import org.springframework.util.concurrent.ListenableFutureTask;
  * Also detects an extended {@code java.util.concurrent.ExecutorService}, adapting
  * the {@link org.springframework.core.task.AsyncTaskExecutor} interface accordingly.
  *
+ * 适配器，接收JDK {@code java.util.concurrent.Executor}并
+ * 为其暴露Spring {@link org.springframework.core.task.TaskExecutor}。
+ * 还检测扩展的{@code java.util.concurrent.ExecutorService}，相应地适配
+ * {@link org.springframework.core.task.AsyncTaskExecutor}接口。
+ *
  * @author Juergen Hoeller
  * @since 3.0
  * @see java.util.concurrent.Executor
@@ -55,7 +60,11 @@ public class TaskExecutorAdapter implements AsyncListenableTaskExecutor {
 	/**
 	 * Create a new TaskExecutorAdapter,
 	 * using the given JDK concurrent executor.
+	 *
+	 * 创建新的TaskExecutorAdapter，
+	 * 使用给定的JDK并发执行器。
 	 * @param concurrentExecutor the JDK concurrent executor to delegate to
+	 * @param concurrentExecutor 要委托的JDK并发执行器
 	 */
 	public TaskExecutorAdapter(Executor concurrentExecutor) {
 		Assert.notNull(concurrentExecutor, "Executor must not be null");
@@ -161,10 +170,17 @@ public class TaskExecutorAdapter implements AsyncListenableTaskExecutor {
 	/**
 	 * Actually execute the given {@code Runnable} (which may be a user-supplied task
 	 * or a wrapper around a user-supplied task) with the given executor.
+	 *
+	 * 使用给定的执行器实际执行给定的{@code Runnable}
+	 * （可能是用户提供的任务或围绕用户提供的任务的包装器）。
 	 * @param concurrentExecutor the underlying JDK concurrent executor to delegate to
+	 * @param concurrentExecutor 要委托的基础JDK并发执行器
 	 * @param taskDecorator the specified decorator to be applied, if any
+	 * @param taskDecorator 要应用的指定装饰器（如果有）
 	 * @param runnable the runnable to execute
+	 * @param runnable 要执行的runnable
 	 * @throws RejectedExecutionException if the given runnable cannot be accepted
+	 * @throws RejectedExecutionException 如果给定的runnable无法被接受
 	 * @since 4.3
 	 */
 	protected void doExecute(Executor concurrentExecutor, @Nullable TaskDecorator taskDecorator, Runnable runnable)

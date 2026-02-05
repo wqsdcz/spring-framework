@@ -31,6 +31,16 @@ import java.util.concurrent.Executor;
  * the standard {@code Executor} interface primarily for backwards compatibility
  * with older APIs that depend on the {@code TaskExecutor} interface.
  *
+ * <p>简单的任务执行器接口，抽象了{@link Runnable}的执行。
+ *
+ * <p>实现可以使用各种不同的执行策略，
+ * 例如：同步、异步、使用线程池等。
+ *
+ * <p>等同于Java的{@link java.util.concurrent.Executor}接口，
+ * 使得客户端可以声明对{@code Executor}的依赖并接收
+ * 任何{@code TaskExecutor}实现。此接口与标准的{@code Executor}接口保持分离，
+ * 主要是为了向后兼容依赖{@code TaskExecutor}接口的旧API。
+ *
  * @author Juergen Hoeller
  * @since 2.0
  * @see java.util.concurrent.Executor
@@ -43,8 +53,12 @@ public interface TaskExecutor extends Executor {
 	 * <p>The call might return immediately if the implementation uses
 	 * an asynchronous execution strategy, or might block in the case
 	 * of synchronous execution.
-	 * @param task the {@code Runnable} to execute (never {@code null})
-	 * @throws TaskRejectedException if the given task was not accepted
+	 *
+	 * <p>执行给定的{@code task}。
+	 * <p>如果实现使用异步执行策略，调用可能会立即返回，
+	 * 或者在同步执行的情况下可能会阻塞。
+	 * @param task 要执行的{@code Runnable}（永不为{@code null}）
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 */
 	@Override
 	void execute(Runnable task);

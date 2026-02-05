@@ -66,18 +66,21 @@ public class ExecutorServiceAdapter extends AbstractExecutorService {
 	public void shutdown() {
 		throw new IllegalStateException(
 				"Manual shutdown not supported - ExecutorServiceAdapter is dependent on an external lifecycle");
+		// 手动关闭不支持 - ExecutorServiceAdapter依赖于外部生命周期
 	}
 
 	@Override
 	public List<Runnable> shutdownNow() {
 		throw new IllegalStateException(
 				"Manual shutdown not supported - ExecutorServiceAdapter is dependent on an external lifecycle");
+		// 手动关闭不支持 - ExecutorServiceAdapter依赖于外部生命周期
 	}
 
 	@Override
 	public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
 		throw new IllegalStateException(
 				"Manual shutdown not supported - ExecutorServiceAdapter is dependent on an external lifecycle");
+		// 手动关闭不支持 - ExecutorServiceAdapter依赖于外部生命周期
 	}
 
 	@Override

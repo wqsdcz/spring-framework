@@ -22,6 +22,9 @@ import java.util.concurrent.ThreadFactory;
  * Internal delegate for virtual thread handling on JDK 21.
  * This is a dummy version for reachability on JDK <21.
  *
+ * JDK 21上虚拟线程处理的内部委托。
+ * 这是JDK <21上的可达性虚拟版本。
+ *
  * @author Juergen Hoeller
  * @since 6.1
  * @see VirtualThreadTaskExecutor

@@ -24,6 +24,8 @@ import java.util.concurrent.RejectedExecutionException;
  * Exception thrown when a {@link TaskExecutor} rejects to accept
  * a given task for execution.
  *
+ * 当{@link TaskExecutor}拒绝接受给定任务执行时抛出的异常。
+ *
  * @author Juergen Hoeller
  * @since 2.0.1
  * @see TaskExecutor#execute(Runnable)
@@ -34,7 +36,10 @@ public class TaskRejectedException extends RejectedExecutionException {
 	/**
 	 * Create a new {@code TaskRejectedException}
 	 * with the specified detail message and no root cause.
+	 *
+	 * 使用指定的详细消息和无根本原因创建新的{@code TaskRejectedException}。
 	 * @param msg the detail message
+	 * @param msg 详细消息
 	 */
 	public TaskRejectedException(String msg) {
 		super(msg);
@@ -43,9 +48,13 @@ public class TaskRejectedException extends RejectedExecutionException {
 	/**
 	 * Create a new {@code TaskRejectedException}
 	 * with the specified detail message and the given root cause.
+	 *
+	 * 使用指定的详细消息和给定的根本原因创建新的{@code TaskRejectedException}。
 	 * @param msg the detail message
+	 * @param msg 详细消息
 	 * @param cause the root cause (usually from using an underlying
 	 * API such as the {@code java.util.concurrent} package)
+	 * @param cause 根本原因（通常来自使用底层API，如{@code java.util.concurrent}包）
 	 * @see java.util.concurrent.RejectedExecutionException
 	 */
 	public TaskRejectedException(String msg, Throwable cause) {
@@ -55,9 +64,14 @@ public class TaskRejectedException extends RejectedExecutionException {
 	/**
 	 * Create a new {@code TaskRejectedException}
 	 * with a default message for the given executor and task.
+	 *
+	 * 为给定的执行器和任务创建带有默认消息的新{@code TaskRejectedException}。
 	 * @param executor the {@code Executor} that rejected the task
+	 * @param executor 拒绝任务的{@code Executor}
 	 * @param task the task object that got rejected
+	 * @param task 被拒绝的任务对象
 	 * @param cause the original {@link RejectedExecutionException}
+	 * @param cause 原始的{@link RejectedExecutionException}
 	 * @since 6.1
 	 * @see ExecutorService#isShutdown()
 	 * @see java.util.concurrent.RejectedExecutionException

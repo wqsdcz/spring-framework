@@ -24,27 +24,18 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 /**
- * {@link Comparator} implementation for {@link Ordered} objects, sorting
- * by order value ascending, respectively by priority descending.
  * <p>针对 {@link Ordered} 对象的 {@link Comparator} 实现，按顺序值升序排序，或者按优先级降序排序（目前getPriority方法还没有提供实现）。
- *
+ * <p>
  * <h3>{@code PriorityOrdered} Objects</h3>
- * <p>{@link PriorityOrdered} objects will be sorted with higher priority than
- * <em>plain</em> {@code Ordered} objects.
- * <p>{@link PriorityOrdered} 对象将比普通 {@code Ordered} 对象具有更高的优先级进行排序。
- *
+ * {@link PriorityOrdered} 对象将比普通 {@code Ordered} 对象具有更高的优先级进行排序。
+ * <p>
  * <h3>Same Order Objects</h3>
- * <p>Objects that have the same order value will be sorted with arbitrary
- * ordering with respect to other objects with the same order value.
- * <p>具有相同顺序值的对象将相对于其他具有相同顺序值的对象进行任意排序。
- *
+ . * 具有相同顺序值的对象将相对于其他具有相同顺序值的对象进行任意排序。
+ * <p>
  * <h3>Non-ordered Objects</h3>
- * <p>Any object that does not provide its own order value is implicitly
- * assigned a value of {@link Ordered#LOWEST_PRECEDENCE}, thus ending up
- * at the end of a sorted collection in arbitrary order with respect to
- * other objects with the same order value.
- * <p>任何不提供自身顺序值的对象都被隐式分配一个 {@link Ordered#LOWEST_PRECEDENCE} 值，
+ * 任何不提供自身顺序值的对象都被隐式分配一个 {@link Ordered#LOWEST_PRECEDENCE} 值，
  * 因此在排序集合的末尾与其他具有相同顺序值的对象按任意顺序排列。
+ * <p>
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -254,16 +245,10 @@ public class OrderComparator implements Comparator<Object> {
 	public interface OrderSourceProvider {
 
 		/**
-		 * Return an order source for the specified object, i.e. an object that
-		 * should be checked for an order value as a replacement to the given object.
 		 * <p>返回指定对象的顺序源，即应该检查顺序值以替代给定对象的对象。
-		 * <p>Can also be an array of order source objects.
 		 * <p>也可以是顺序源对象的数组。
-		 * <p>If the returned object does not indicate any order, the comparator
-		 * will fall back to checking the original object.
 		 * <p>如果返回的对象不表示任何顺序，则比较器将回退到检查原始对象。
 		 * @param obj the object to find an order source for
-		 * @return the order source for that object, or {@code null} if none found
 		 * @return 该对象的顺序源，如果未找到则为 {@code null}
 		 */
 		@Nullable

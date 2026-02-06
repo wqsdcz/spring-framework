@@ -27,18 +27,8 @@ import org.springframework.lang.Nullable;
 
 
 /**
- * {@code AnnotationAwareOrderComparator} is an extension of
- * {@link OrderComparator} that supports Spring's
- * {@link org.springframework.core.Ordered} interface as well as the
- * {@link Order @Order} and {@link jakarta.annotation.Priority @Priority}
- * annotations, with an order value provided by an {@code Ordered}
- * instance overriding a statically defined annotation value (if any).
- *
  * <p>AnnotationAwareOrderComparator 是 OrderComparator 的扩展，支持 Spring 的 Ordered 接口
  * 以及 @Order 和 @Priority 注解，其中 Ordered 实例提供的顺序值会覆盖静态定义的注解值（如果存在）。
- *
- * <p>Consult the Javadoc for {@link OrderComparator} for details on the
- * sort semantics for non-ordered objects.
  *
  * <p>有关非有序对象的排序语义详细信息，请参阅 OrderComparator 的 JavaDoc。
  *
@@ -64,11 +54,6 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 
 
 	/**
-	 * This implementation checks for {@link Order @Order} or
-	 * {@link jakarta.annotation.Priority @Priority} on various kinds of
-	 * elements, in addition to the {@link org.springframework.core.Ordered}
-	 * check in the superclass.
-	 * 
 	 * <p>此实现检查各种元素上的 {@link Order @Order} 或 {@link jakarta.annotation.Priority @Priority} 注解，
 	 * 以及父类中的 {@link org.springframework.core.Ordered} 检查。
 	 */

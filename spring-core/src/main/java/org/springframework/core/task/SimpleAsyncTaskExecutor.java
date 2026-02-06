@@ -396,6 +396,10 @@ public class SimpleAsyncTaskExecutor extends CustomizableThreadCreator
 	 * This close method tracks the termination of active threads if a concrete
 	 * {@link #setTaskTerminationTimeout task termination timeout} has been set.
 	 * Otherwise, it is not necessary to close this executor.
+	 *
+	 * 如果设置了具体的{@link #setTaskTerminationTimeout 任务终止超时}，
+	 * 此关闭方法会跟踪活动线程的终止。
+	 * 否则，没有必要关闭此执行器。
 	 * @since 6.1
 	 */
 	@Override

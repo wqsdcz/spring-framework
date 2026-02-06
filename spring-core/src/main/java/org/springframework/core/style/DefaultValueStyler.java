@@ -34,6 +34,11 @@ import org.springframework.util.ObjectUtils;
  * <p>Uses the reflective visitor pattern underneath the hood to nicely
  * encapsulate styling algorithms for each type of styled object.
  *
+ * 将对象转换为字符串形式，通常用于调试目的，
+ * 使用Spring的{@code toString}样式约定。
+ *
+ * <p>在底层使用反射访问者模式来很好地封装每种样式化对象的样式算法。
+ *
  * @author Keith Donald
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -85,7 +90,11 @@ public class DefaultValueStyler implements ValueStyler {
 	/**
 	 * Generate a styled version of {@code null}.
 	 * <p>The default implementation returns {@code "[null]"}.
+	 *
+	 * 生成{@code null}的样式化版本。
+	 * <p>默认实现返回{@code "[null]"}。
 	 * @return a styled version of {@code null}
+	 * @return {@code null}的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleNull() {
@@ -96,7 +105,11 @@ public class DefaultValueStyler implements ValueStyler {
 	 * Generate a styled version of the supplied {@link String}.
 	 * <p>The default implementation returns the supplied string wrapped in
 	 * single quotes.
+	 *
+	 * 生成所提供{@link String}的样式化版本。
+	 * <p>默认实现返回用单引号包装的提供字符串。
 	 * @return a styled version of the supplied string
+	 * @return 提供字符串的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleString(String str) {
@@ -106,7 +119,11 @@ public class DefaultValueStyler implements ValueStyler {
 	/**
 	 * Generate a styled version of the supplied {@link Class}.
 	 * <p>The default implementation delegates to {@link ClassUtils#getShortName(Class)}.
+	 *
+	 * 生成所提供{@link Class}的样式化版本。
+	 * <p>默认实现委托给{@link ClassUtils#getShortName(Class)}。
 	 * @return a styled version of the supplied class
+	 * @return 提供类的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleClass(Class<?> clazz) {
@@ -119,7 +136,13 @@ public class DefaultValueStyler implements ValueStyler {
 	 * name} and the {@linkplain ClassUtils#getShortName(Class) short name} of the
 	 * method's {@linkplain Method#getDeclaringClass() declaring class}, separated by
 	 * the {@code "@"} symbol.
+	 *
+	 * 生成所提供{@link Method}的样式化版本。
+	 * <p>默认实现返回方法的{@linkplain Method#getName() name}和方法的
+	 * {@linkplain Method#getDeclaringClass() declaring class}的{@linkplain ClassUtils#getShortName(Class) short name}，
+	 * 用{@code "@"}符号分隔。
 	 * @return a styled version of the supplied method
+	 * @return 提供方法的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleMethod(Method method) {
@@ -128,7 +151,10 @@ public class DefaultValueStyler implements ValueStyler {
 
 	/**
 	 * Generate a styled version of the supplied {@link Map}.
+	 *
+	 * 生成所提供{@link Map}的样式化版本。
 	 * @return a styled version of the supplied map
+	 * @return 提供映射的样式化版本
 	 * @since 6.0
 	 */
 	protected <K, V> String styleMap(Map<K, V> map) {
@@ -145,7 +171,10 @@ public class DefaultValueStyler implements ValueStyler {
 
 	/**
 	 * Generate a styled version of the supplied {@link Map.Entry}.
+	 *
+	 * 生成所提供{@link Map.Entry}的样式化版本。
 	 * @return a styled version of the supplied map entry
+	 * @return 提供映射条目的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleMapEntry(Map.Entry<?, ?> entry) {
@@ -154,7 +183,10 @@ public class DefaultValueStyler implements ValueStyler {
 
 	/**
 	 * Generate a styled version of the supplied {@link Collection}.
+	 *
+	 * 生成所提供{@link Collection}的样式化版本。
 	 * @return a styled version of the supplied collection
+	 * @return 提供集合的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleCollection(Collection<?> collection) {
@@ -173,7 +205,10 @@ public class DefaultValueStyler implements ValueStyler {
 
 	/**
 	 * Generate a styled version of the supplied array.
+	 *
+	 * 生成所提供数组的样式化版本。
 	 * @return a styled version of the supplied array
+	 * @return 提供数组的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleArray(Object[] array) {
@@ -194,7 +229,13 @@ public class DefaultValueStyler implements ValueStyler {
 	 * if none of the other {@code style*()} methods is suitable for the object's
 	 * type.
 	 * <p>The default implementation delegates to {@link String#valueOf(Object)}.
+	 *
+	 * 生成所提供{@link Object}的样式化版本。
+	 * <p>此方法仅由{@link #style(Object)}作为后备调用，
+	 * 如果其他{@code style*()}方法都不适合对象的类型。
+	 * <p>默认实现委托给{@link String#valueOf(Object)}。
 	 * @return a styled version of the supplied object
+	 * @return 提供对象的样式化版本
 	 * @since 6.0
 	 */
 	protected String styleObject(Object obj) {

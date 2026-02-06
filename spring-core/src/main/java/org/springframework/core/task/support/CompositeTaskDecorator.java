@@ -26,6 +26,8 @@ import org.springframework.util.Assert;
 /**
  * Composite {@link TaskDecorator} that delegates to other task decorators.
  *
+ * 委托给其他任务装饰器的复合{@link TaskDecorator}。
+ *
  * @author Tadaya Tsuyukubo
  * @since 6.1
  */
@@ -35,7 +37,10 @@ public class CompositeTaskDecorator implements TaskDecorator {
 
 	/**
 	 * Create a new instance.
+	 *
+	 * 创建新实例。
 	 * @param taskDecorators the taskDecorators to delegate to
+	 * @param taskDecorators 要委托的任务装饰器
 	 */
 	public CompositeTaskDecorator(Collection<? extends TaskDecorator> taskDecorators) {
 		Assert.notNull(taskDecorators, "TaskDecorators must not be null");

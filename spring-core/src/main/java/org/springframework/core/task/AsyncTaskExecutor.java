@@ -35,6 +35,17 @@ import org.springframework.util.concurrent.FutureUtils;
  * method will not execute its Runnable in the caller's thread but rather
  * asynchronously in some other thread.
  *
+ * <p>异步{@link TaskExecutor}实现的扩展接口，
+ * 提供对{@link java.util.concurrent.Callable}的支持。
+ *
+ * <p>注意：{@link java.util.concurrent.Executors}类包含一组
+ * 可以在执行之前将其他常见闭包类对象转换为{@link Callable}的方法，
+ * 例如，{@link java.security.PrivilegedAction}。
+ *
+ * <p>实现此接口还表明{@link #execute(Runnable)}
+ * 方法不会在调用者的线程中执行其Runnable，
+ * 而是在其他某个线程中异步执行。
+ *
  * @author Juergen Hoeller
  * @since 2.0.3
  * @see SimpleAsyncTaskExecutor
@@ -46,6 +57,8 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 
 	/**
 	 * Constant that indicates immediate execution.
+	 *
+	 * <p>表示立即执行的常量。
 	 * @deprecated as of 5.3.16 along with {@link #execute(Runnable, long)}
 	 */
 	@Deprecated
@@ -53,6 +66,8 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 
 	/**
 	 * Constant that indicates no time limit.
+	 *
+	 * <p>表示无时间限制的常量。
 	 * @deprecated as of 5.3.16 along with {@link #execute(Runnable, long)}
 	 */
 	@Deprecated
@@ -84,9 +99,13 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 	 * The Future will return a {@code null} result upon completion.
 	 * <p>As of 6.1, this method comes with a default implementation that delegates
 	 * to {@link #execute(Runnable)}.
-	 * @param task the {@code Runnable} to execute (never {@code null})
-	 * @return a Future representing pending completion of the task
-	 * @throws TaskRejectedException if the given task was not accepted
+	 *
+	 * <p>提交Runnable任务以执行，接收代表该任务的Future。
+	 * Future将在完成时返回{@code null}结果。
+	 * <p>从6.1开始，此方法带有默认实现，委托给{@link #execute(Runnable)}。
+	 * @param task 要执行的{@code Runnable}（永不为{@code null}）
+	 * @return 代表任务待完成的Future
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @since 3.0
 	 */
 	default Future<?> submit(Runnable task) {
@@ -100,9 +119,13 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 	 * The Future will return the Callable's result upon completion.
 	 * <p>As of 6.1, this method comes with a default implementation that delegates
 	 * to {@link #execute(Runnable)}.
-	 * @param task the {@code Callable} to execute (never {@code null})
-	 * @return a Future representing pending completion of the task
-	 * @throws TaskRejectedException if the given task was not accepted
+	 *
+	 * <p>提交Callable任务以执行，接收代表该任务的Future。
+	 * Future将在完成时返回Callable的结果。
+	 * <p>从6.1开始，此方法带有默认实现，委托给{@link #execute(Runnable)}。
+	 * @param task 要执行的{@code Callable}（永不为{@code null}）
+	 * @return 代表任务待完成的Future
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @since 3.0
 	 */
 	default <T> Future<T> submit(Callable<T> task) {
@@ -114,9 +137,12 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 	/**
 	 * Submit a {@code Runnable} task for execution, receiving a {@code CompletableFuture}
 	 * representing that task. The Future will return a {@code null} result upon completion.
-	 * @param task the {@code Runnable} to execute (never {@code null})
-	 * @return a {@code CompletableFuture} representing pending completion of the task
-	 * @throws TaskRejectedException if the given task was not accepted
+	 *
+	 * <p>提交{@code Runnable}任务以执行，接收代表该任务的{@code CompletableFuture}。
+	 * Future将在完成时返回{@code null}结果。
+	 * @param task 要执行的{@code Runnable}（永不为{@code null}）
+	 * @return 代表任务待完成的{@code CompletableFuture}
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @since 6.0
 	 */
 	default CompletableFuture<Void> submitCompletable(Runnable task) {
@@ -127,9 +153,12 @@ public interface AsyncTaskExecutor extends TaskExecutor {
 	 * Submit a {@code Callable} task for execution, receiving a {@code CompletableFuture}
 	 * representing that task. The Future will return the Callable's result upon
 	 * completion.
-	 * @param task the {@code Callable} to execute (never {@code null})
-	 * @return a {@code CompletableFuture} representing pending completion of the task
-	 * @throws TaskRejectedException if the given task was not accepted
+	 *
+	 * <p>提交{@code Callable}任务以执行，接收代表该任务的{@code CompletableFuture}。
+	 * Future将在完成时返回Callable的结果。
+	 * @param task 要执行的{@code Callable}（永不为{@code null}）
+	 * @return 代表任务待完成的{@code CompletableFuture}
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @since 6.0
 	 */
 	default <T> CompletableFuture<T> submitCompletable(Callable<T> task) {

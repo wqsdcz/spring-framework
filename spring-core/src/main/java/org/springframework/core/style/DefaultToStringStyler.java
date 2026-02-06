@@ -27,6 +27,10 @@ import org.springframework.util.ObjectUtils;
  * <p>This class is used by {@link ToStringCreator} to style {@code toString()}
  * output in a consistent manner according to Spring conventions.
  *
+ * <p>Spring的默认{@code toString()}样式器。
+ *
+ * <p>此类由{@link ToStringCreator}使用，根据Spring约定以一致的方式样式化{@code toString()}输出。
+ *
  * @author Keith Donald
  * @author Juergen Hoeller
  * @since 1.2.2
@@ -38,7 +42,9 @@ public class DefaultToStringStyler implements ToStringStyler {
 
 	/**
 	 * Create a new DefaultToStringStyler.
-	 * @param valueStyler the ValueStyler to use
+	 *
+	 * <p>创建一个新的DefaultToStringStyler。
+	 * @param valueStyler 要使用的ValueStyler
 	 */
 	public DefaultToStringStyler(ValueStyler valueStyler) {
 		Assert.notNull(valueStyler, "ValueStyler must not be null");
@@ -47,6 +53,8 @@ public class DefaultToStringStyler implements ToStringStyler {
 
 	/**
 	 * Return the ValueStyler used by this ToStringStyler.
+	 *
+	 * <p>返回此ToStringStyler使用的ValueStyler。
 	 */
 	protected final ValueStyler getValueStyler() {
 		return this.valueStyler;

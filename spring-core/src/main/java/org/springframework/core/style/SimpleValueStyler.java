@@ -37,6 +37,15 @@ import java.util.stream.Collectors;
  * wish to use styling similar to the JDK or when you need configurable control
  * over the styling of classes and methods.
  *
+ * {@link ValueStyler}，将对象转换为字符串形式——通常用于调试目的——
+ * 使用简单的样式约定，模仿标准JDK集合、映射和数组实现的
+ * {@code toString()}样式约定。
+ *
+ * <p>在底层使用反射访问者模式来很好地封装每种样式化对象的样式算法。
+ *
+ * <p>当您希望使用类似于JDK的样式或需要可配置控制类和方法的样式时，
+ * 优先选择{@link SimpleValueStyler}而不是{@link DefaultValueStyler}。
+ *
  * @author Sam Brannen
  * @since 6.0
  */
@@ -44,6 +53,8 @@ public class SimpleValueStyler extends DefaultValueStyler {
 
 	/**
 	 * Default {@link Class} styling function: {@link Class#getCanonicalName()}.
+	 *
+	 * 默认的{@link Class}样式化函数：{@link Class#getCanonicalName()}。
 	 */
 	public static final Function<Class<?>, String> DEFAULT_CLASS_STYLER = Class::getCanonicalName;
 
@@ -56,6 +67,12 @@ public class SimpleValueStyler extends DefaultValueStyler {
 	 * <p>For example, if the supplied method is a reference to
 	 * {@link String#getBytes(java.nio.charset.Charset)}, this function will
 	 * return {@code "getBytes(Charset)"}.
+	 *
+	 * 默认的{@link Method}样式化函数：将提供的{@link Method}转换为方法签名的简单字符串表示形式，
+	 * 形式为{@code <方法名>(<参数类型>)}，其中{@code <参数类型>}是参数类型的
+	 * {@linkplain Class#getSimpleName() simple names}的逗号分隔列表。
+	 * <p>例如，如果提供的方法是对{@link String#getBytes(java.nio.charset.Charset)}的引用，
+	 * 此函数将返回{@code "getBytes(Charset)"}。
 	 */
 	public static final Function<Method, String> DEFAULT_METHOD_STYLER = SimpleValueStyler::toSimpleMethodSignature;
 
@@ -68,6 +85,8 @@ public class SimpleValueStyler extends DefaultValueStyler {
 	/**
 	 * Create a {@code SimpleValueStyler} using the {@link #DEFAULT_CLASS_STYLER}
 	 * and {@link #DEFAULT_METHOD_STYLER}.
+	 *
+	 * 使用{@link #DEFAULT_CLASS_STYLER}和{@link #DEFAULT_METHOD_STYLER}创建{@code SimpleValueStyler}。
 	 */
 	public SimpleValueStyler() {
 		this(DEFAULT_CLASS_STYLER, DEFAULT_METHOD_STYLER);
@@ -75,8 +94,12 @@ public class SimpleValueStyler extends DefaultValueStyler {
 
 	/**
 	 * Create a {@code SimpleValueStyler} using the supplied class and method stylers.
+	 *
+	 * 使用提供的类和方法样式器创建{@code SimpleValueStyler}。
 	 * @param classStyler a function that applies styling to a {@link Class}
+	 * @param classStyler 应用于{@link Class}的样式化函数
 	 * @param methodStyler a function that applies styling to a {@link Method}
+	 * @param methodStyler 应用于{@link Method}的样式化函数
 	 */
 	public SimpleValueStyler(Function<Class<?>, String> classStyler, Function<Method, String> methodStyler) {
 		this.classStyler = classStyler;

@@ -22,6 +22,9 @@ import java.util.concurrent.Callable;
  * Extension of the {@link AsyncTaskExecutor} interface, adding the capability to submit
  * tasks for {@code ListenableFutures}.
  *
+ * {@link AsyncTaskExecutor}接口的扩展，增加了提交任务以获取
+ * {@code ListenableFutures}的能力。
+ *
  * @author Arjen Poutsma
  * @since 4.0
  * @deprecated as of 6.0, in favor of
@@ -35,9 +38,15 @@ public interface AsyncListenableTaskExecutor extends AsyncTaskExecutor {
 	/**
 	 * Submit a {@code Runnable} task for execution, receiving a {@code ListenableFuture}
 	 * representing that task. The Future will return a {@code null} result upon completion.
+	 *
+	 * 提交{@code Runnable}任务以执行，接收代表该任务的{@code ListenableFuture}。
+	 * Future将在完成时返回{@code null}结果。
 	 * @param task the {@code Runnable} to execute (never {@code null})
+	 * @param task 要执行的{@code Runnable}（永不为{@code null}）
 	 * @return a {@code ListenableFuture} representing pending completion of the task
+	 * @return 代表任务待完成的{@code ListenableFuture}
 	 * @throws TaskRejectedException if the given task was not accepted
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @deprecated in favor of {@link AsyncTaskExecutor#submitCompletable(Runnable)}
 	 */
 	@Deprecated(since = "6.0", forRemoval = true)
@@ -47,9 +56,15 @@ public interface AsyncListenableTaskExecutor extends AsyncTaskExecutor {
 	 * Submit a {@code Callable} task for execution, receiving a {@code ListenableFuture}
 	 * representing that task. The Future will return the Callable's result upon
 	 * completion.
+	 *
+	 * 提交{@code Callable}任务以执行，接收代表该任务的{@code ListenableFuture}。
+	 * Future将在完成时返回Callable的结果。
 	 * @param task the {@code Callable} to execute (never {@code null})
+	 * @param task 要执行的{@code Callable}（永不为{@code null}）
 	 * @return a {@code ListenableFuture} representing pending completion of the task
+	 * @return 代表任务待完成的{@code ListenableFuture}
 	 * @throws TaskRejectedException if the given task was not accepted
+	 * @throws TaskRejectedException 如果给定任务未被接受
 	 * @deprecated in favor of {@link AsyncTaskExecutor#submitCompletable(Callable)}
 	 */
 	@Deprecated(since = "6.0", forRemoval = true)

@@ -40,6 +40,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * 标准单例作用域的作用域标识符：{@value}。
 	 * <p>请注意，扩展的 bean 工厂可能支持更多的作用域。
+	 * <p>请注意，扩展的 bean 工厂可能支持更多的作用域。
 	 * @see #setScope
 	 * @see ConfigurableBeanFactory#SCOPE_SINGLETON
 	 */

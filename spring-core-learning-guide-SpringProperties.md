@@ -124,6 +124,7 @@ public static String getProperty(String key) {
 ```
 
 **设计要点**：
+
 - **优先级明确**：本地属性覆盖系统属性
 - **安全检查**：捕获 `Throwable` 而非 `Exception`，处理所有可能的错误
 - **优雅降级**：系统属性不可用时，仅记录错误，不影响功能
@@ -186,15 +187,15 @@ public static Boolean checkFlag(String key) {
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  优先级 1：编程式设置（最高）                              │
-│  SpringProperties.setProperty("key", "value")            │
-│  SpringProperties.setFlag("feature.enabled")             │
+│  优先级 1：编程式设置（最高）                                │
+│  SpringProperties.setProperty("key", "value")           │
+│  SpringProperties.setFlag("feature.enabled")            │
 ├─────────────────────────────────────────────────────────┤
 │  优先级 2：spring.properties 文件                         │
-│  classpath:spring.properties                             │
+│  classpath:spring.properties                            │
 ├─────────────────────────────────────────────────────────┤
-│  优先级 3：JVM 系统属性（最低）                            │
-│  java -Dkey=value MyApp                                  │
+│  优先级 3：JVM 系统属性（最低）                              │
+│  java -Dkey=value MyApp                                 │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -684,7 +685,7 @@ spring.cache.dir=/home/user/cache
    // 属性操作
    SpringProperties.setProperty(key, value)
    SpringProperties.getProperty(key)
-
+   
    // 标志操作
    SpringProperties.setFlag(key)
    SpringProperties.getFlag(key)

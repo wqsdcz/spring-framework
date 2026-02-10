@@ -32,12 +32,10 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * JavaBeans属性的描述，使我们能够避免依赖 {@code java.beans.PropertyDescriptor}。
- * {@code java.beans} 包在许多环境中不可用（例如，Android、Java ME），
- * 因此这对于Spring核心转换设施的可移植性是有益的。
+ * JavaBeans 属性的描述，使我们能够避免依赖 {@code java.beans.PropertyDescriptor}。
+ * <p>{@code java.beans} 包在许多环境中不可用（例如，Android、Java ME），因此这对于Spring核心转换设施的可移植性是有益的。
  *
- * <p>用于从属性位置构建 {@link TypeDescriptor}。构建的 {@code TypeDescriptor}
- * 然后可以用于在属性类型之间进行转换。
+ * <p>用于基于【属性的位置】构建 【{@link TypeDescriptor}】。然后构建的 {@code TypeDescriptor} 可以用于在属性类型之间进行转换。
  *
  * @author Keith Donald
  * @author Phillip Webb

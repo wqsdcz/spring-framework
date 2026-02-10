@@ -2,29 +2,29 @@
 
 ## 一、概述
 
-Spring 的注解处理系统提供了强大而灵活的工具来处理 Java 注解，特别是支持**元注解**（meta-annotations）、**组合注解**（composed annotations）和**属性别名**（@AliasFor）。
+**Spring** 的 **注解处理系统** 提供了强大而灵活的工具来处理 Java 注解，特别是支持**元注解**（meta-annotations）、**组合注解**（composed annotations）和**属性别名**（@AliasFor）。
 
 ### 1.1 核心组件
 
 ```
 注解处理 API 层次结构
-├── AnnotatedElementUtils        - 高级工具类（ facade 模式）
-│   ├── getMergedAnnotation()    - 获取合并后的注解
-│   └── findMergedAnnotation()   - 查找合并后的注解
-│
-├── MergedAnnotations              - 新的流式 API（5.2+）
-│   ├── from()                     - 从 AnnotatedElement 创建
-│   ├── get()                      - 获取单个合并注解
-│   └── stream()                   - 流式处理所有注解
-│
-├── MergedAnnotation<A>            - 单个合并注解视图
-│   ├── getString() / getInt()     - 获取属性值
-│   ├── isPresent()                - 是否存在
-│   └── synthesize()               - 合成回 Annotation
-│
-└── AnnotationUtils                - 低级工具类（简单场景）
-    ├── findAnnotation()           - 查找注解
-    └── getAnnotation()            - 获取直接注解
+	├── AnnotatedElementUtils        - 高级工具类（ facade 模式）
+	│   ├── getMergedAnnotation()    - 获取合并后的注解
+	│   └── findMergedAnnotation()   - 查找合并后的注解
+	│
+	├── MergedAnnotations              - 新的流式 API（5.2+）
+	│   ├── from()                     - 从 AnnotatedElement 创建
+	│   ├── get()                      - 获取单个合并注解
+	│   └── stream()                   - 流式处理所有注解
+	│
+	├── MergedAnnotation<A>            - 单个合并注解视图
+	│   ├── getString() / getInt()     - 获取属性值
+	│   ├── isPresent()                - 是否存在
+	│   └── synthesize()               - 合成回 Annotation
+	│
+	└── AnnotationUtils                - 低级工具类（简单场景）
+	    ├── findAnnotation()           - 查找注解
+	    └── getAnnotation()            - 获取直接注解
 ```
 
 ### 1.2 关键概念

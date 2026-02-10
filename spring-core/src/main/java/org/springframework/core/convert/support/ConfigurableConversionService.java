@@ -20,12 +20,12 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.ConverterRegistry;
 
 /**
- * 配置接口，大多数（如果不是全部）{@link ConversionService}类型都应该实现。
- * 整合并暴露了 {@link ConversionService} 的只读操作和 {@link ConverterRegistry} 的变更操作，
+ * 配置接口，大多数 {@link ConversionService} 的类型都应该实现本接口。
+ * <p>整合并暴露了 {@link ConversionService} 的只读操作和 {@link ConverterRegistry} 的变更操作，
  * 从而允许通过便捷的临时方式添加和移除
- * {@link org.springframework.core.convert.converter.Converter 转换器}。
+ * {@link org.springframework.core.convert.converter.Converter Converter}。
  * 后者在应用程序上下文引导代码中使用
- * {@link org.springframework.core.env.ConfigurableEnvironment 可配置环境}实例时特别有用。
+ * {@link org.springframework.core.env.ConfigurableEnvironment ConfigurableEnvironment} 实例时特别有用。
  *
  * @author Chris Beams
  * @since 3.1

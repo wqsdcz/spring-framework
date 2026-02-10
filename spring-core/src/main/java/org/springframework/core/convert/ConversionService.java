@@ -19,8 +19,9 @@ package org.springframework.core.convert;
 import org.springframework.lang.Nullable;
 
 /**
- * 用于类型转换的服务接口。这是转换系统的入口点。
- * 调用 {@link #convert(Object, Class)} 使用此系统执行线程安全的类型转换。
+ * 用于类型转换的服务接口。
+ * <p>这是转换系统的入口点。
+ * <p>调用 {@link #convert(Object, Class)} 使用此系统执行线程安全的类型转换。
  *
  * @author Keith Donald
  * @author Phillip Webb
@@ -36,6 +37,7 @@ public interface ConversionService {
 	 * 对于集合、数组和映射类型之间的转换，即使底层元素不可转换时转换调用仍可能产生
 	 * {@link ConversionException}，此方法也会返回 {@code true}。
 	 * 调用者在处理集合和映射时应处理这种异常情况。
+	 *
 	 * @param sourceType 要从中转换的源类型（如果源为 {@code null} 则可能为 {@code null}）
 	 * @param targetType 要转换到的目标类型（必需）
 	 * @return 如果可以执行转换则为 {@code true}，否则为 {@code false}

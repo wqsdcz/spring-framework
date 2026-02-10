@@ -40,13 +40,13 @@ public final class MethodIntrospector {
 
 ```
 目标类
-├── 自身声明的方法
-├── 父类继承的方法
-├── 接口实现的方法
-├── 默认方法（Java 8+）
-└── 代理类的方法（JDK/CGLIB）
-    ├── 接口方法
-    └── 桥接方法（Bridge Method）
+  ├── 自身声明的方法
+  ├── 父类继承的方法
+  ├── 接口实现的方法
+  ├── 默认方法（Java 8+）
+  └── 代理类的方法（JDK/CGLIB）
+        ├── 接口方法
+        └── 桥接方法（Bridge Method）
 ```
 
 ### 2.2 典型问题场景

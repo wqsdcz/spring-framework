@@ -109,10 +109,10 @@ class OrderService$$EnhancerBySpringCGLIB extends OrderService {
 ┌─────────────────────────────────────────────────────────────┐
 │                   MethodIntrospector                        │
 ├─────────────────────────────────────────────────────────────┤
-│ 1. 搜索范围：类 + 父类 + 所有接口                             │
-│ 2. 处理桥接方法：通过 BridgeMethodResolver 找到原始方法       │
-│ 3. 处理代理：识别 JDK/CGLIB 代理，找到目标类                  │
-│ 4. 元数据提取：回调接口允许提取注解或其他元数据                │
+│ 1. 搜索范围：类 + 父类 + 所有接口                                │
+│ 2. 处理桥接方法：通过 BridgeMethodResolver 找到原始方法           │
+│ 3. 处理代理：识别 JDK/CGLIB 代理，找到目标类                      │
+│ 4. 元数据提取：回调接口允许提取注解或其他元数据                      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -125,9 +125,7 @@ class OrderService$$EnhancerBySpringCGLIB extends OrderService {
 这是 MethodIntrospector 的核心方法：
 
 ```java
-public static <T> Map<Method, T> selectMethods(
-        Class<?> targetType,
-        final MetadataLookup<T> metadataLookup) {
+public static <T> Map<Method, T> selectMethods(Class<?> targetType, final MetadataLookup<T> metadataLookup) {
 
     final Map<Method, T> methodMap = new LinkedHashMap<>();
     Set<Class<?>> handlerTypes = new LinkedHashSet<>();
@@ -144,8 +142,8 @@ public static <T> Map<Method, T> selectMethods(
 
     // 3. 遍历所有类型查找方法
     for (Class<?> currentHandlerType : handlerTypes) {
-        final Class<?> targetClass = (specificHandlerType != null ?
-            specificHandlerType : currentHandlerType);
+        // 目标类 为 遍历的接口类/实际类
+        final Class<?> targetClass = specificHandlerType != null ? specificHandlerType : currentHandlerType;
 
         ReflectionUtils.doWithMethods(currentHandlerType, method -> {
             // 获取最具体的方法

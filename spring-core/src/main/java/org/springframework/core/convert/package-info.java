@@ -1,5 +1,5 @@
 /**
- * Type conversion system API.
+ * 类型转换系统的API。
  */
 @NonNullApi
 @NonNullFields

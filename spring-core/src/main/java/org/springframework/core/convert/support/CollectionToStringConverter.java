@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * Converts a Collection to a comma-delimited String.
+ * 将集合转换为逗号分隔的字符串。
  *
  * @author Keith Donald
  * @since 3.0

@@ -26,6 +26,7 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Internal utilities for the conversion package.
+ * 转换包的内部工具类。
  *
  * @author Keith Donald
  * @author Stephane Nicoll

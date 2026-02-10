@@ -22,9 +22,12 @@ import org.springframework.util.NumberUtils;
 
 /**
  * Converts from a Character to any JDK-standard Number implementation.
+ * 将字符转换为任何JDK标准的数字实现。
  *
  * <p>Support Number classes including Byte, Short, Integer, Float, Double, Long, BigInteger, BigDecimal. This class
  * delegates to {@link NumberUtils#convertNumberToTargetClass(Number, Class)} to perform the conversion.
+ * 支持包括Byte、Short、Integer、Float、Double、Long、BigInteger、BigDecimal在内的数字类。
+ * 此类委托给 {@link NumberUtils#convertNumberToTargetClass(Number, Class)} 来执行转换。
  *
  * @author Keith Donald
  * @since 3.0

@@ -23,6 +23,7 @@ import org.springframework.util.ClassUtils;
 
 /**
  * A {@link ConditionalConverter} base implementation for enum-based converters.
+ * 基于枚举的转换器的 {@link ConditionalConverter} 基础实现。
  *
  * @author Stephane Nicoll
  * @since 4.3

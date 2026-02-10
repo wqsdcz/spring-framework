@@ -19,18 +19,15 @@ package org.springframework.core.convert.converter;
 import org.springframework.core.convert.TypeDescriptor;
 
 /**
- * Allows a {@link Converter}, {@link GenericConverter} or {@link ConverterFactory} to
- * conditionally execute based on attributes of the {@code source} and {@code target}
- * {@link TypeDescriptor}.
+ * <p>允许 {@link Converter}、{@link GenericConverter} 或 {@link ConverterFactory}
+ * 基于 {@link TypeDescriptor} {@code source} 和 {@link TypeDescriptor} {@code target} 的属性有条件地执行。
  *
- * <p>Often used to selectively match custom conversion logic based on the presence of a
- * field or class-level characteristic, such as an annotation or method. For example, when
- * converting from a String field to a Date field, an implementation might return
- * {@code true} if the target field has also been annotated with {@code @DateTimeFormat}.
+ * <p>通常用于基于字段或类级别特征（如注解或方法）的存在来选择性匹配自定义转换逻辑。
+ * 例如，当从String字段转换到Date字段时，如果目标字段也被注解为 {@code @DateTimeFormat}，
+ * 实现可能会返回 {@code true}。
  *
- * <p>As another example, when converting from a String field to an {@code Account} field,
- * an implementation might return {@code true} if the target Account class defines a
- * {@code public static findAccount(String)} method.
+ * <p>另一个例子，当从String字段转换到 {@code Account} 字段时，如果目标Account类定义了
+ * {@code public static findAccount(String)} 方法，实现可能会返回 {@code true}。
  *
  * @author Phillip Webb
  * @author Keith Donald
@@ -43,11 +40,10 @@ import org.springframework.core.convert.TypeDescriptor;
 public interface ConditionalConverter {
 
 	/**
-	 * Should the conversion from {@code sourceType} to {@code targetType} currently under
-	 * consideration be selected?
-	 * @param sourceType the type descriptor of the field we are converting from
-	 * @param targetType the type descriptor of the field we are converting to
-	 * @return true if conversion should be performed, false otherwise
+	 * 是否应该选择【当前正在考虑的从 {@code sourceType} 到 {@code targetType} 的转换】？
+	 * @param sourceType 我们正在从中转换的字段的类型描述符
+	 * @param targetType 我们正在转换到的字段的类型描述符
+	 * @return 如果应该执行转换则返回true，否则返回false
 	 */
 	boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType);
 

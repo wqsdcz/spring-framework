@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 /**
  * A factory for common {@link org.springframework.core.convert.ConversionService}
  * configurations.
+ * 用于常见 {@link org.springframework.core.convert.ConversionService} 配置的工厂。
  *
  * @author Keith Donald
  * @author Juergen Hoeller
@@ -41,9 +42,13 @@ public final class ConversionServiceFactory {
 
 	/**
 	 * Register the given Converter objects with the given target ConverterRegistry.
+	 * 将给定的转换器对象注册到给定的目标转换器注册表中。
 	 * @param converters the converter objects: implementing {@link Converter},
 	 * {@link ConverterFactory}, or {@link GenericConverter}
+	 * @param converters 转换器对象：实现 {@link Converter}、
+	 * {@link ConverterFactory} 或 {@link GenericConverter}
 	 * @param registry the target registry
+	 * @param registry 目标注册表
 	 */
 	public static void registerConverters(@Nullable Set<?> converters, ConverterRegistry registry) {
 		if (converters != null) {

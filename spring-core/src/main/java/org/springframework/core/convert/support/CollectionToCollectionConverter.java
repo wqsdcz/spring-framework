@@ -28,11 +28,15 @@ import org.springframework.lang.Nullable;
 
 /**
  * Converts from a Collection to another Collection.
+ * 将集合转换为另一个集合。
  *
  * <p>First, creates a new Collection of the requested targetType with a size equal to the
  * size of the source Collection. Then copies each element in the source collection to the
  * target collection. Will perform an element conversion from the source collection's
  * parameterized type to the target collection's parameterized type if necessary.
+ * 首先，创建大小等于源集合大小的请求目标类型的新集合。
+ * 然后将源集合中的每个元素复制到目标集合中。
+ * 如有必要，将执行从源集合的参数化类型到目标集合的参数化类型的元素转换。
  *
  * @author Keith Donald
  * @author Juergen Hoeller

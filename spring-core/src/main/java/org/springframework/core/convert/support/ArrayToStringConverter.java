@@ -30,6 +30,8 @@ import org.springframework.util.ObjectUtils;
  * Converts an array to a comma-delimited String. First adapts the source array
  * to a List, then delegates to {@link CollectionToStringConverter} to perform
  * the target String conversion.
+ * 将数组转换为逗号分隔的字符串。首先将源数组适配为List，
+ * 然后委托给 {@link CollectionToStringConverter} 来执行目标字符串转换。
  *
  * @author Keith Donald
  * @since 3.0

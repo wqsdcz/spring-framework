@@ -29,11 +29,15 @@ import org.springframework.util.Assert;
 
 /**
  * Converts a Collection to an array.
+ * 将集合转换为数组。
  *
  * <p>First, creates a new array of the requested targetType with a length equal to the
  * size of the source Collection. Then sets each collection element into the array.
  * Will perform an element conversion from the collection's parameterized type to the
  * array's component type if necessary.
+ * 首先，创建长度等于源集合大小的请求目标类型的新数组。
+ * 然后将每个集合元素设置到数组中。
+ * 如有必要，将执行从集合的参数化类型到数组组件类型的元素转换。
  *
  * @author Keith Donald
  * @author Juergen Hoeller

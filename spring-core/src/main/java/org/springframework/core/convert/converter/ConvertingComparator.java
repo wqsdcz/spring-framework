@@ -25,9 +25,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.comparator.Comparators;
 
 /**
- * 在比较值之前进行转换的 {@link Comparator}。
+ * 可以将【比较对象】先进行类型转换，然后使用【转换后的对象】进行比较的 {@link Comparator}。
  *
- * <p>指定的 {@link Converter} 将用于在将每个值传递到底层 {@code Comparator} 之前进行转换。
+ * <p>在每个值传递到底层 {@code Comparator} 之前，指定的 {@link Converter} 会先对其进行类型转换。
  *
  * @author Phillip Webb
  * @since 3.2
@@ -55,8 +55,8 @@ public class ConvertingComparator<S, T> implements Comparator<S> {
 	 * @param converter 转换器
 	 */
 	public ConvertingComparator(Comparator<T> comparator, Converter<S, T> converter) {
-		Assert.notNull(comparator, "Comparator must not be null");
-		Assert.notNull(converter, "Converter must not be null");
+		Assert.notNull(comparator, "Comparator 不可为 null");
+		Assert.notNull(converter, "Converter 不可为 null");
 		this.comparator = comparator;
 		this.converter = converter;
 	}

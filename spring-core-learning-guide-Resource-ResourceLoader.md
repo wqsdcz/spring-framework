@@ -241,7 +241,7 @@ if (resource.exists()) {
 ### 4.4 其他资源类型
 
 | 资源类型 | 用途 | 示例 |
-|---------|------|------|
+|:--------|------|:-----|
 | `ByteArrayResource` | 字节数组 | `new ByteArrayResource("content".getBytes())` |
 | `InputStreamResource` | 输入流 | `new InputStreamResource(inputStream)` |
 | `VfsResource` | JBoss VFS | 用于JBoss/WildFly环境 |
@@ -304,16 +304,16 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 ```
 输入: location
-    ↓
-1. 检查 ProtocolResolver（自定义协议）
-    ↓ 如果返回null
-2. 检查是否以 "classpath:" 开头
-    ↓ 是 → 返回 ClassPathResource
-    ↓ 否
-3. 尝试解析为 URL
-    ↓ 成功 → 返回 UrlResource
-    ↓ 失败（MalformedURLException）
-4. 回退为 ClassPathResource
+    	↓
+	1. 检查 ProtocolResolver（自定义协议）
+  	    ↓ 如果返回null
+	2. 检查是否以 "classpath:" 开头
+	    ↓ 是 → 返回 ClassPathResource
+ 	    ↓ 否
+	3. 尝试解析为 URL
+	    ↓ 成功 → 返回 UrlResource
+	    ↓ 失败（MalformedURLException）
+	4. 回退为 ClassPathResource
 ```
 
 ### 5.3 自定义协议解析器

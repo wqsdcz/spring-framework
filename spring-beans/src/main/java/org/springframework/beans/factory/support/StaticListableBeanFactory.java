@@ -45,19 +45,16 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Static {@link org.springframework.beans.factory.BeanFactory} implementation
- * which allows one to register existing singleton instances programmatically.
+ * 静态 {@link org.springframework.beans.factory.BeanFactory} 实现，允许以编程方式注册现有的单例实例。
  *
- * <p>Does not have support for prototype beans or aliases.
- *
- * <p>Serves as an example for a simple implementation of the
- * {@link org.springframework.beans.factory.ListableBeanFactory} interface,
- * managing existing bean instances rather than creating new ones based on bean
- * definitions, and not implementing any extended SPI interfaces (such as
- * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}).
- *
- * <p>For a full-fledged factory based on bean definitions, have a look at
- * {@link DefaultListableBeanFactory}.
+ * <p>
+ *     不支持原型 bean 或别名。
+ * <p>
+ *     作为 {@link org.springframework.beans.factory.ListableBeanFactory} 接口的简单实现示例，
+ *     管理现有的 bean 实例而不是基于 bean 定义创建新实例，并且不实现任何扩展的 SPI 接口
+ *     （例如{@link org.springframework.beans.factory.config.ConfigurableBeanFactory}）。
+ * <p>
+ *     对于基于 bean 定义的完整功能工厂，请参见{@link DefaultListableBeanFactory}。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -67,26 +64,25 @@ import org.springframework.util.StringUtils;
  */
 public class StaticListableBeanFactory implements ListableBeanFactory {
 
-	/** Map from bean name to bean instance. */
+	/** 从 bean 名称到 bean 实例的映射。 */
 	private final Map<String, Object> beans;
 
 
 	/**
-	 * Create a regular {@code StaticListableBeanFactory}, to be populated
-	 * with singleton bean instances through {@link #addBean} calls.
+	 * 创建一个常规的 {@code StaticListableBeanFactory}，通过 {@link #addBean} 调用来填充单例 bean 实例。
 	 */
 	public StaticListableBeanFactory() {
 		this.beans = new LinkedHashMap<>();
 	}
 
 	/**
-	 * Create a {@code StaticListableBeanFactory} wrapping the given {@code Map}.
-	 * <p>Note that the given {@code Map} may be pre-populated with beans;
-	 * or new, still allowing for beans to be registered via {@link #addBean};
-	 * or {@link java.util.Collections#emptyMap()} for a dummy factory which
-	 * enforces operating against an empty set of beans.
-	 * @param beans a {@code Map} for holding this factory's beans, with the
-	 * bean name as key and the corresponding singleton object as value
+	 * 创建一个包装给定 {@code Map} 的 {@code StaticListableBeanFactory}。
+	 * <p>
+	 *     请注意，给定的 {@code Map} 可能已预先填充了 bean；
+	 *     或者是新的，仍然允许通过 {@link #addBean} 注册 bean；
+	 *     或者是 {@link java.util.Collections#emptyMap()} 用于强制对空 bean 集合进行操作的虚拟工厂。
+	 *
+	 * @param beans 用于保存此工厂 bean 的 {@code Map}，键为 bean 名称，值为对应的单例对象
 	 * @since 4.3
 	 */
 	public StaticListableBeanFactory(Map<String, Object> beans) {
@@ -96,10 +92,10 @@ public class StaticListableBeanFactory implements ListableBeanFactory {
 
 
 	/**
-	 * Add a new singleton bean.
-	 * <p>Will overwrite any existing instance for the given name.
-	 * @param name the name of the bean
-	 * @param bean the bean instance
+	 * 添加一个新的单例 bean。
+	 * <p>将会覆盖给定名称的任何现有实例。
+	 * @param name bean 的名称
+	 * @param bean bean 实例
 	 */
 	public void addBean(String name, Object bean) {
 		this.beans.put(name, bean);
@@ -107,7 +103,7 @@ public class StaticListableBeanFactory implements ListableBeanFactory {
 
 
 	//---------------------------------------------------------------------
-	// Implementation of BeanFactory interface
+	// BeanFactory接口的实现
 	//---------------------------------------------------------------------
 
 	@Override
@@ -257,7 +253,7 @@ public class StaticListableBeanFactory implements ListableBeanFactory {
 
 
 	//---------------------------------------------------------------------
-	// Implementation of ListableBeanFactory interface
+	// ListableBeanFactory接口的实现
 	//---------------------------------------------------------------------
 
 	@Override

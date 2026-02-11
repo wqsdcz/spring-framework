@@ -19,10 +19,11 @@ package org.springframework.beans.factory;
 import org.springframework.lang.Nullable;
 
 /**
- * 由可以成为层次结构一部分的bean工厂实现的子接口。
+ * 层次bean工厂接口，扩展{@link BeanFactory}。
+ * 如果一个bean工厂实现了此接口，则表示该工厂是层次结构中的子工厂。
  *
  * <p>
- *     允许以可配置方式设置父级的bean工厂对应的{@code setParentBeanFactory}方法，可以在ConfigurableBeanFactory接口中找到。
+ *     允许以可配置方式设置父级的bean工厂（对应的{@code setParentBeanFactory}方法），可以在ConfigurableBeanFactory接口中找到。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -32,13 +33,13 @@ import org.springframework.lang.Nullable;
 public interface HierarchicalBeanFactory extends BeanFactory {
 
 	/**
-	 * 返回父级bean工厂，如果没有则返回{@code null}。
+	 * 获取父级bean工厂，如果没有，则返回{@code null}。
 	 */
 	@Nullable
 	BeanFactory getParentBeanFactory();
 
 	/**
-	 * 返回本地bean工厂是否包含给定名称的bean，忽略在祖先上下文中定义的bean。
+	 * 判断本地bean工厂是否包含给定名称的bean，忽略在祖先上下文中定义的bean。
 	 * <p>
 	 *     这是{@code containsBean}的替代方法，忽略来自祖先bean工厂的同名bean。
 	 *

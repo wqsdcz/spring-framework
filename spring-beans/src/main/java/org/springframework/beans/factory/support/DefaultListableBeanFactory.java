@@ -94,23 +94,20 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Spring's default implementation of the {@link ConfigurableListableBeanFactory}
- * and {@link BeanDefinitionRegistry} interfaces: a full-fledged bean factory
- * based on bean definition metadata, extensible through post-processors.
+ * Spring 对 {@link ConfigurableListableBeanFactory} 和 {@link BeanDefinitionRegistry} 接口的默认实现：
+ * 一个基于 bean 定义元数据的成熟 bean 工厂，可通过后处理器进行扩展。
  *
- * <p>Typical usage is registering all bean definitions first (possibly read
- * from a bean definition file), before accessing beans. Bean lookup by name
- * is therefore an inexpensive operation in a local bean definition table,
- * operating on pre-resolved bean definition metadata objects.
+ * <p>
+ *     典型用法是首先注册所有 bean 定义（可能从 bean 定义文件中读取），然后再访问 bean。
+ *     因此，通过名称查找 bean 在本地 bean 定义表中是一项低成本的操作，该操作基于预先解析的 bean 定义元数据对象进行。
  *
- * <p>Note that readers for specific bean definition formats are typically
- * implemented separately rather than as bean factory subclasses: see for example
- * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
+ * <p>
+ *     请注意，特定 bean 定义格式的读取器通常是单独实现的，而不是作为 bean 工厂的子类实现：
+ *     例如，请参见 {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}。
  *
- * <p>For an alternative implementation of the
- * {@link org.springframework.beans.factory.ListableBeanFactory} interface,
- * have a look at {@link StaticListableBeanFactory}, which manages existing
- * bean instances rather than creating new ones based on bean definitions.
+ * <p>
+ *     对于 {@link org.springframework.beans.factory.ListableBeanFactory} 接口的替代实现，
+ *     请查看 {@link StaticListableBeanFactory}，它管理现有的 bean 实例，而不是根据 bean 定义创建新的实例。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -120,7 +117,7 @@ import org.springframework.util.StringUtils;
  * @author Phillip Webb
  * @author Stephane Nicoll
  * @author Sebastien Deleuze
- * @since 16 April 2001
+ * @since 2001年4月16日
  * @see #registerBeanDefinition
  * @see #addBeanPostProcessor
  * @see #getBean
@@ -131,14 +128,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
 
 	/**
-	 * System property that instructs Spring to enforce strict locking during bean creation,
-	 * rather than the mix of strict and lenient locking that 6.2 applies by default. Setting
-	 * this flag to "true" restores 6.1.x style locking in the entire pre-instantiation phase.
-	 * <p>By default, the factory infers strict locking from the encountered thread names:
-	 * If additional threads have names that match the thread prefix of the main bootstrap thread,
-	 * they are considered external (multiple external bootstrap threads calling into the factory)
-	 * and therefore have strict locking applied to them. This inference can be turned off through
-	 * explicitly setting this flag to "false" rather than leaving it unspecified.
+	 * 系统属性，指示 Spring 在 bean 创建期间强制执行严格的锁定，而不是 6.2 版本默认应用的严格和宽松锁定的混合模式。
+	 * 将此标志设置为 "true" 可在预实例化阶段恢复 6.1.x 风格的锁定。
+	 * <p>
+	 *     默认情况下，工厂会根据遇到的线程名称推断严格的锁定：
+	 *     如果额外的线程名称与主线程引导线程的线程前缀匹配，则认为它们是外部线程（多个外部引导线程调用工厂），因此会对它们应用严格的锁定。
+	 *     可以通过显式将此标志设置为 "false" 来关闭此推断，而不是将其保留为未指定状态。
+	 *
 	 * @since 6.2.6
 	 * @see #preInstantiateSingletons()
 	 */
@@ -159,23 +155,23 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 
-	/** Map from serialized id to factory instance. */
+	/** 从序列化ID到工厂实例的映射。 */
 	private static final Map<String, Reference<DefaultListableBeanFactory>> serializableFactories =
 			new ConcurrentHashMap<>(8);
 
-	/** Whether strict locking is enforced or relaxed in this factory. */
+	/** 此工厂中是否强制执行严格锁定或宽松锁定。 */
 	@Nullable
 	private final Boolean strictLocking = SpringProperties.checkFlag(STRICT_LOCKING_PROPERTY_NAME);
 
-	/** Optional id for this factory, for serialization purposes. */
+	/** 此工厂的可选 ID，用于序列化目的。 */
 	@Nullable
 	private String serializationId;
 
-	/** Whether to allow re-registration of a different definition with the same name. */
+	/** 是否允许使用相同名称重新注册不同的定义。 */
 	@Nullable
 	private Boolean allowBeanDefinitionOverriding;
 
-	/** Whether to allow eager class loading even for lazy-init beans. */
+	/** 是否允许对懒加载的 bean 进行饥饿类加载。 */
 	private boolean allowEagerClassLoading = true;
 
 	@Nullable
@@ -332,7 +328,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return the dependency comparator for this BeanFactory (may be {@code null}).
+	 * 返回此 BeanFactory 的依赖项比较器（可能为 {@code null}）。
 	 * @since 4.0
 	 */
 	@Nullable
@@ -341,9 +337,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Set a custom autowire candidate resolver for this BeanFactory to use
-	 * when deciding whether a bean definition should be considered as a
-	 * candidate for autowiring.
+	 * 为此 BeanFactory 设置一个自定义的自动装配候选解析器，用于决定某个 bean 定义是否应被视为自动装配的候选者。
 	 */
 	public void setAutowireCandidateResolver(AutowireCandidateResolver autowireCandidateResolver) {
 		Assert.notNull(autowireCandidateResolver, "AutowireCandidateResolver must not be null");
@@ -354,7 +348,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return the autowire candidate resolver for this BeanFactory (never {@code null}).
+	 * 返回此 BeanFactory 的自动装配候选解析器（永不为 {@code null}）。
 	 */
 	public AutowireCandidateResolver getAutowireCandidateResolver() {
 		return this.autowireCandidateResolver;
@@ -378,7 +372,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Implementation of remaining BeanFactory methods
+	// BeanFactory 剩余方法的实现
 	//---------------------------------------------------------------------
 
 	@Override
@@ -410,7 +404,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Implementation of ListableBeanFactory interface
+	// ListableBeanFactory 接口的实现
 	//---------------------------------------------------------------------
 
 	@Override
@@ -721,11 +715,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Check whether the specified bean would need to be eagerly initialized
-	 * in order to determine its type.
-	 * @param factoryBeanName a factory-bean reference that the bean definition
-	 * defines a factory method for
-	 * @return whether eager initialization is necessary
+	 * 检查指定的 bean 是否需要急切初始化以确定其类型。
+	 * @param factoryBeanName bean 定义为其定义工厂方法的工厂 bean 引用
+	 * @return 是否需要急切初始化
 	 */
 	private boolean requiresEagerInitForType(@Nullable String factoryBeanName) {
 		return (factoryBeanName != null && isFactoryBean(factoryBeanName) && !containsSingleton(factoryBeanName));
@@ -888,7 +880,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Implementation of ConfigurableListableBeanFactory interface
+	// ConfigurableListableBeanFactory 接口的实现
 	//---------------------------------------------------------------------
 
 	@Override
@@ -911,12 +903,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine whether the specified bean definition qualifies as an autowire candidate,
-	 * to be injected into other beans which declare a dependency of matching type.
-	 * @param beanName the name of the bean definition to check
-	 * @param descriptor the descriptor of the dependency to resolve
-	 * @param resolver the AutowireCandidateResolver to use for the actual resolution algorithm
-	 * @return whether the bean should be considered as autowire candidate
+	 * 确定指定的 bean 定义是否符合自动装配候选者的条件，以便注入到声明了匹配类型依赖的其他 bean 中。
+	 * @param beanName 要检查的 bean 定义的名称
+	 * @param descriptor 要解析的依赖项描述符
+	 * @param resolver 用于实际解析算法的 AutowireCandidateResolver
+	 * @return 该 bean 是否应被视为自动装配候选者
 	 */
 	protected boolean isAutowireCandidate(
 			String beanName, DependencyDescriptor descriptor, AutowireCandidateResolver resolver)
@@ -945,13 +936,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine whether the specified bean definition qualifies as an autowire candidate,
-	 * to be injected into other beans which declare a dependency of matching type.
-	 * @param beanName the name of the bean definition to check
-	 * @param mbd the merged bean definition to check
-	 * @param descriptor the descriptor of the dependency to resolve
-	 * @param resolver the AutowireCandidateResolver to use for the actual resolution algorithm
-	 * @return whether the bean should be considered as autowire candidate
+	 * 确定指定的 bean 定义是否符合自动装配候选者的条件，以便注入到声明了匹配类型依赖的其他 bean 中。
+	 * @param beanName 要检查的 bean 定义的名称
+	 * @param mbd 要检查的合并后的 bean 定义
+	 * @param descriptor 要解析的依赖项描述符
+	 * @param resolver 用于实际解析算法的 AutowireCandidateResolver
+	 * @return 该 bean 是否应被视为自动装配候选者
 	 */
 	protected boolean isAutowireCandidate(String beanName, RootBeanDefinition mbd,
 			DependencyDescriptor descriptor, AutowireCandidateResolver resolver) {
@@ -1014,8 +1004,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Considers all beans as eligible for metadata caching
-	 * if the factory's configuration has been marked as frozen.
+	 * 如果工厂的配置已被标记为冻结，则认为所有 bean 都符合元数据缓存的条件。
 	 * @see #freezeConfiguration()
 	 */
 	@Override
@@ -1237,7 +1226,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Implementation of BeanDefinitionRegistry interface
+	// BeanDefinitionRegistry 接口的实现
 	//---------------------------------------------------------------------
 
 	@Override
@@ -1391,13 +1380,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Reset all bean definition caches for the given bean,
-	 * including the caches of beans that are derived from it.
-	 * <p>Called after an existing bean definition has been replaced or removed,
-	 * triggering {@link #clearMergedBeanDefinition}, {@link #destroySingleton}
-	 * and {@link MergedBeanDefinitionPostProcessor#resetBeanDefinition} on the
-	 * given bean and on all bean definitions that have the given bean as parent.
-	 * @param beanName the name of the bean to reset
+	 * 重置给定 bean 的所有 bean 定义缓存，包括从该 bean 派生的 bean 的缓存。
+	 * <p>
+	 *     在现有 bean 定义被替换或移除后调用，
+	 *     触发 {@link #clearMergedBeanDefinition}、{@link #destroySingleton} 以及 {@link MergedBeanDefinitionPostProcessor#resetBeanDefinition}，
+	 *     作用于给定 bean 以及所有以该 bean 为父级的 bean 定义。
+	 *
+	 * @param beanName 要重置的 bean 的名称
 	 * @see #registerBeanDefinition
 	 * @see #removeBeanDefinition
 	 */
@@ -1431,8 +1420,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * This implementation returns {@code true} if bean definition overriding
-	 * is generally allowed.
+	 * 如果通常允许覆盖 bean 定义，则此实现返回 {@code true}。
 	 * @see #setAllowBeanDefinitionOverriding
 	 */
 	@Override
@@ -1441,7 +1429,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Only allows alias overriding if bean definition overriding is allowed.
+	 * 仅在允许 bean 定义覆盖时才允许别名覆盖。
 	 * @see #setAllowBeanDefinitionOverriding
 	 */
 	@Override
@@ -1450,7 +1438,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Also checks for an alias overriding a bean definition of the same name.
+	 * 同时检查别名是否覆盖了同名的 bean 定义。
 	 */
 	@Override
 	protected void checkForAliasCircle(String name, String alias) {
@@ -1506,10 +1494,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Update the factory's internal set of manual singleton names.
-	 * @param action the modification action
-	 * @param condition a precondition for the modification action
-	 * (if this condition does not apply, the action can be skipped)
+	 * 更新工厂内部的手动单例名称集合。
+	 * @param action 修改操作
+	 * @param condition 修改操作的前置条件（如果此条件不满足，则可以跳过该操作）
 	 */
 	private void updateManualSingletonNames(Consumer<Set<String>> action, Predicate<Set<String>> condition) {
 		if (hasBeanCreationStarted()) {
@@ -1531,7 +1518,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Remove any assumptions about by-type mappings.
+	 * 移除关于按类型映射的所有假设。
 	 */
 	private void clearByTypeCache() {
 		this.allBeanNamesByType.clear();
@@ -1540,7 +1527,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Dependency resolution functionality
+	// 依赖解析功能
 	//---------------------------------------------------------------------
 
 	@Override
@@ -1951,15 +1938,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Find bean instances that match the required type.
-	 * Called during autowiring for the specified bean.
-	 * @param beanName the name of the bean that is about to be wired
-	 * @param requiredType the actual type of bean to look for
-	 * (may be an array component type or collection element type)
-	 * @param descriptor the descriptor of the dependency to resolve
-	 * @return a Map of candidate names and candidate instances that match
-	 * the required type (never {@code null})
-	 * @throws BeansException in case of errors
+	 * 查找与所需类型匹配的 bean 实例。
+	 * 在为指定 bean 进行自动装配时调用。
+	 * @param beanName 即将被装配的 bean 的名称
+	 * @param requiredType 要查找的实际 bean 类型（可能是数组组件类型或集合元素类型）
+	 * @param descriptor 要解析的依赖项描述符
+	 * @return 匹配所需类型的候选项名称和候选项实例的映射（永不为 {@code null}）
+	 * @throws BeansException 出错时抛出
 	 * @see #autowireByType
 	 * @see #autowireConstructor
 	 */
@@ -2012,8 +1997,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Add an entry to the candidate map: a bean instance if available or just the resolved
-	 * type, preventing early bean initialization ahead of primary candidate selection.
+	 * 向候选项映射中添加条目：
+	 * 如果可用则添加 bean 实例，否则仅添加已解析的类型，以防止在选择主要候选项之前过早初始化 bean。
 	 */
 	private void addCandidateEntry(Map<String, Object> candidates, String candidateName,
 			DependencyDescriptor descriptor, Class<?> requiredType) {
@@ -2035,12 +2020,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine the autowire candidate in the given set of beans.
-	 * <p>Looks for {@code @Primary} and {@code @Priority} (in that order).
-	 * @param candidates a Map of candidate names and candidate instances
-	 * that match the required type, as returned by {@link #findAutowireCandidates}
-	 * @param descriptor the target dependency to match against
-	 * @return the name of the autowire candidate, or {@code null} if none found
+	 * 确定给定 bean 集合中的自动装配候选项。
+	 * <p>
+	 *     按顺序查找 {@code @Primary} 和 {@code @Priority} 注解。
+	 *
+	 * @param candidates 候选名称和候选实例的映射，这些候选项与所需类型匹配，由 {@link #findAutowireCandidates} 返回
+	 * @param descriptor 要匹配的目标依赖项
+	 * @return 自动装配候选项的名称，如果未找到则返回 {@code null}
 	 */
 	@Nullable
 	protected String determineAutowireCandidate(Map<String, Object> candidates, DependencyDescriptor descriptor) {
@@ -2090,11 +2076,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine the primary candidate in the given set of beans.
-	 * @param candidates a Map of candidate names and candidate instances
-	 * (or candidate classes if not created yet) that match the required type
-	 * @param requiredType the target dependency type to match against
-	 * @return the name of the primary candidate, or {@code null} if none found
+	 * 确定给定 bean 集合中的主要候选项。
+	 * @param candidates 候选名称和候选实例（如果尚未创建，则为候选类）的映射，这些候选项与所需类型匹配
+	 * @param requiredType 要匹配的目标依赖类型
+	 * @return 主要候选项的名称，如果未找到则返回 {@code null}
 	 * @see #isPrimary(String, Object)
 	 */
 	@Nullable
@@ -2137,17 +2122,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine the candidate with the highest priority in the given set of beans.
-	 * <p>Based on {@code @jakarta.annotation.Priority}. As defined by the related
-	 * {@link org.springframework.core.Ordered} interface, the lowest value has
-	 * the highest priority.
-	 * @param candidates a Map of candidate names and candidate instances
-	 * (or candidate classes if not created yet) that match the required type
-	 * @param requiredType the target dependency type to match against
-	 * @return the name of the candidate with the highest priority,
-	 * or {@code null} if none found
-	 * @throws NoUniqueBeanDefinitionException if multiple beans are detected with
-	 * the same highest priority value
+	 * 确定给定 bean 集合中具有最高优先级的候选项。
+	 * <p>
+	 *     基于 {@code @jakarta.annotation.Priority} 注解。
+	 *     根据相关的 {@link org.springframework.core.Ordered} 接口定义，值越小优先级越高。
+	 *
+	 * @param candidates 候选名称和候选实例（如果尚未创建，则为候选类）的映射，这些候选项与所需类型匹配
+	 * @param requiredType 要匹配的目标依赖类型
+	 * @return 具有最高优先级的候选项名称，如果未找到则返回 {@code null}
+	 * @throws NoUniqueBeanDefinitionException 如果检测到多个具有相同最高优先级值的 bean
 	 * @see #getPriority(Object)
 	 */
 	@Nullable
@@ -2189,11 +2172,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return whether the bean definition for the given bean name has been
-	 * marked as a primary bean.
-	 * @param beanName the name of the bean
-	 * @param beanInstance the corresponding bean instance (can be {@code null})
-	 * @return whether the given bean qualifies as primary
+	 * 返回给定 bean 名称的 bean 定义是否已被标记为主 bean。
+	 * @param beanName bean 的名称
+	 * @param beanInstance 相应的 bean 实例（可以为 {@code null}）
+	 * @return 给定的 bean 是否符合主 bean 的条件
 	 */
 	protected boolean isPrimary(String beanName, Object beanInstance) {
 		String transformedBeanName = transformedBeanName(beanName);
@@ -2205,9 +2187,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return whether the bean definition for the given bean name has been
-	 * marked as a fallback bean.
-	 * @param beanName the name of the bean
+	 * 返回给定 bean 名称的 bean 定义是否已被标记为回退 bean。
+	 * @param beanName bean 的名称
 	 * @since 6.2
 	 */
 	private boolean isFallback(String beanName) {
@@ -2220,16 +2201,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return the priority assigned for the given bean instance by
-	 * the {@code jakarta.annotation.Priority} annotation.
-	 * <p>The default implementation delegates to the specified
-	 * {@link #setDependencyComparator dependency comparator}, checking its
-	 * {@link OrderComparator#getPriority method} if it is an extension of
-	 * Spring's common {@link OrderComparator} - typically, an
-	 * {@link org.springframework.core.annotation.AnnotationAwareOrderComparator}.
-	 * If no such comparator is present, this implementation returns {@code null}.
-	 * @param beanInstance the bean instance to check (can be {@code null})
-	 * @return the priority assigned to that bean or {@code null} if none is set
+	 * 返回由 {@code jakarta.annotation.Priority} 注解为给定 bean 实例分配的优先级。
+	 * <p>
+	 *     默认实现委托给指定的 {@link #setDependencyComparator 依赖比较器}，
+	 *     检查其 {@link OrderComparator#getPriority 方法}
+	 *     （如果它是 Spring 常用 {@link OrderComparator} 的扩展 —— 通常是{@link org.springframework.core.annotation.AnnotationAwareOrderComparator}）。
+	 *     如果不存在这样的比较器，则此实现返回 {@code null}。
+	 *
+	 * @param beanInstance 要检查的 bean 实例（可以为 {@code null}）
+	 * @return 分配给该 bean 的优先级，如果未设置则返回 {@code null}
 	 */
 	@Nullable
 	protected Integer getPriority(Object beanInstance) {
@@ -2241,10 +2221,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Return a unique "default-candidate" among remaining non-default candidates.
-	 * @param candidates a Map of candidate names and candidate instances
-	 * (or candidate classes if not created yet) that match the required type
-	 * @return the name of the default candidate, or {@code null} if none found
+	 * 在剩余的非默认候选项中返回唯一的“默认候选项”。
+	 * @param candidates 候选名称和候选实例的映射（如果尚未创建，则为候选类），这些候选项与所需类型匹配
+	 * @return 默认候选项的名称，如果未找到则返回 {@code null}
 	 * @since 6.2.4
 	 * @see AbstractBeanDefinition#isDefaultCandidate()
 	 */
@@ -2263,8 +2242,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine whether the given dependency name matches the bean name or the aliases
-	 * stored in this bean definition.
+	 * 确定给定的依赖名称是否与 bean 名称或存储在此 bean 定义中的别名匹配。
 	 */
 	protected boolean matchesBeanName(String beanName, @Nullable String dependencyName) {
 		return (dependencyName != null &&
@@ -2272,9 +2250,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine whether the given beanName/candidateName pair indicates a self reference,
-	 * i.e. whether the candidate points back to the original bean or to a factory method
-	 * on the original bean.
+	 * 确定给定的 beanName/candidateName 对是否表示自引用，即候选者是否指向原始 bean 或原始 bean 上的工厂方法。
 	 */
 	@Contract("null, _ -> false; _, null -> false;")
 	private boolean isSelfReference(@Nullable String beanName, @Nullable String candidateName) {
@@ -2284,8 +2260,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Determine whether there is a primary bean registered for the given dependency type,
-	 * not matching the given bean name.
+	 * 确定是否存在与给定依赖类型匹配的主 bean，但不匹配给定的 bean 名称。
 	 */
 	private boolean hasPrimaryConflict(String beanName, Class<?> dependencyType) {
 		for (Map.Entry<String, Class<?>> candidate : this.primaryBeanNamesWithType.entrySet()) {
@@ -2302,8 +2277,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Raise a NoSuchBeanDefinitionException or BeanNotOfRequiredTypeException
-	 * for an unresolvable dependency.
+	 * 为无法解析的依赖项抛出 NoSuchBeanDefinitionException 或 BeanNotOfRequiredTypeException。
 	 */
 	private void raiseNoMatchingBeanFound(
 			Class<?> type, ResolvableType resolvableType, DependencyDescriptor descriptor) throws BeansException {
@@ -2316,8 +2290,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Raise a BeanNotOfRequiredTypeException for an unresolvable dependency, if applicable,
-	 * i.e. if the target type of the bean would match but an exposed proxy doesn't.
+	 * 如果适用，为无法解析的依赖项抛出 BeanNotOfRequiredTypeException，即如果 bean 的目标类型匹配但暴露的代理不匹配时。
 	 */
 	private void checkBeanNotOfRequiredType(Class<?> type, DependencyDescriptor descriptor) {
 		for (String beanName : this.beanDefinitionNames) {
@@ -2346,7 +2319,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Create an {@link Optional} wrapper for the specified dependency.
+	 * 为指定的依赖项创建一个 {@link Optional} 包装器。
 	 */
 	private Optional<?> createOptionalDependency(
 			DependencyDescriptor descriptor, @Nullable String beanName, final Object... args) {
@@ -2389,7 +2362,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	//---------------------------------------------------------------------
-	// Serialization support
+	// 序列化支持
 	//---------------------------------------------------------------------
 
 	@Serial
@@ -2410,8 +2383,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * Minimal id reference to the factory.
-	 * Resolved to the actual factory instance on deserialization.
+	 * 工厂的最小 ID 引用。
+	 * 在反序列化时解析为实际的工厂实例。
 	 */
 	private static class SerializedBeanFactoryReference implements Serializable {
 
@@ -2438,7 +2411,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * A dependency descriptor marker for nested elements.
+	 * 用于嵌套元素的依赖描述符标记。
 	 */
 	private static class NestedDependencyDescriptor extends DependencyDescriptor {
 
@@ -2455,7 +2428,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * A dependency descriptor for a multi-element declaration with nested elements.
+	 * 用于多元素声明且包含嵌套元素的依赖描述符。
 	 */
 	private static class MultiElementDescriptor extends NestedDependencyDescriptor {
 
@@ -2466,7 +2439,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * A dependency descriptor marker for stream access to multiple elements.
+	 * 用于流式访问多个元素的依赖描述符标记。
 	 */
 	private static class StreamDependencyDescriptor extends DependencyDescriptor {
 
@@ -2486,9 +2459,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private interface BeanObjectProvider<T> extends ObjectProvider<T>, Serializable {
 	}
 
-
 	/**
-	 * Serializable ObjectFactory/ObjectProvider for lazy resolution of a dependency.
+	 * 可序列化的 ObjectFactory/ObjectProvider，用于延迟解析依赖项。
 	 */
 	private class DependencyObjectProvider implements BeanObjectProvider<Object> {
 
@@ -2682,9 +2654,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * Separate inner class for avoiding a hard dependency on the {@code jakarta.inject} API.
-	 * Actual {@code jakarta.inject.Provider} implementation is nested here in order to make it
-	 * invisible for Graal's introspection of DefaultListableBeanFactory's nested classes.
+	 * 单独的内部类，用于避免对 {@code jakarta.inject} API 的硬依赖。
+	 * 实际的 {@code jakarta.inject.Provider} 实现在此处嵌套，以使其对 Graal 的 DefaultListableBeanFactory 嵌套类内省不可见。
 	 */
 	private class Jsr330Factory implements Serializable {
 
@@ -2708,13 +2679,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/**
-	 * An {@link org.springframework.core.OrderComparator.OrderSourceProvider} implementation
-	 * that is aware of the bean metadata of the instances to sort.
-	 * <p>Lookup for the method factory of an instance to sort, if any, and let the
-	 * comparator retrieve the {@link org.springframework.core.annotation.Order}
-	 * value defined on it.
-	 * <p>As of 6.1.2, this class takes the {@link AbstractBeanDefinition#ORDER_ATTRIBUTE}
-	 * attribute into account.
+	 * 一个 {@link org.springframework.core.OrderComparator.OrderSourceProvider} 实现，能够感知待排序实例的 bean 元数据。
+	 * <p>
+	 *     查找待排序实例的方法工厂（如果存在），并让比较器检索其上定义的 {@link org.springframework.core.annotation.Order} 值。
+	 * <p>
+	 *     从 6.1.2 版本开始，此类会考虑 {@link AbstractBeanDefinition#ORDER_ATTRIBUTE} 属性。
 	 */
 	private class FactoryAwareOrderSourceProvider implements OrderComparator.OrderSourceProvider {
 

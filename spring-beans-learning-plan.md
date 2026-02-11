@@ -17,7 +17,7 @@
 
 ## 概述
 
-Spring-Beans模块是Spring框架的核心，提供了依赖注入（DI）和控制反转（IoC）的基础实现。本学习计划将带你从基础概念到高级特性，系统掌握Spring Beans的工作原理。
+Spring-Beans模块是Spring框架的核心，提供了 **依赖注入（DI）**和 **控制反转（IoC）**的基础实现。本学习计划将带你从基础概念到高级特性，系统掌握Spring Beans的工作原理。
 
 **预计学习时间**：4-6周
 **源码位置**：`spring-beans/src/main/java/org/springframework/beans/`

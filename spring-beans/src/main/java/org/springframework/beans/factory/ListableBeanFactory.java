@@ -29,8 +29,8 @@ import org.springframework.lang.Nullable;
  * 预加载所有 bean 定义的 BeanFactory 实现（例如基于 XML 的工厂）可以实现此接口。
  *
  * <p>
- *     如果这是一个 {@link HierarchicalBeanFactory}，返回值将<i>不会</i>考虑任何 BeanFactory 层次结构，而只会关联到当前工厂中定义的 bean。
- *     使用 {@link BeanFactoryUtils} 辅助类也可以考虑祖先工厂中的 bean。
+ *     即使这是一个 {@link HierarchicalBeanFactory}，本接口的返回值将<i>不会</i>考虑任何 BeanFactory 层次结构，而是仅与当前工厂中定义的 bean 相关。
+ *     若要考虑祖先工厂中的 bean，可以使用 {@link BeanFactoryUtils} 辅助类。
  *
  * <p>
  *     此接口中的方法只会尊重此工厂的 bean 定义。

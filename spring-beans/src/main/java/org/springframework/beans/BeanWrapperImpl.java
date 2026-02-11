@@ -29,21 +29,18 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Default {@link BeanWrapper} implementation that should be sufficient
- * for all typical use cases. Caches introspection results for efficiency.
+ * 默认的 {@link BeanWrapper} 实现，应足以满足所有典型用例。
+ * 缓存内省结果以提高效率。
  *
- * <p>Note: Auto-registers default property editors from the
- * {@code org.springframework.beans.propertyeditors} package, which apply
- * in addition to the JDK's standard PropertyEditors. Applications can call
- * the {@link #registerCustomEditor(Class, java.beans.PropertyEditor)} method
- * to register an editor for a particular instance (i.e. they are not shared
- * across the application). See the base class
- * {@link PropertyEditorRegistrySupport} for details.
+ * <p>注意：自动注册来自 {@code org.springframework.beans.propertyeditors} 包的默认属性编辑器，
+ * 这些编辑器在 JDK 标准 PropertyEditors 之外应用。应用程序可以调用
+ * {@link #registerCustomEditor(Class, java.beans.PropertyEditor)} 方法
+ * 为特定实例注册编辑器（即它们不在整个应用程序中共享）。
+ * 有关详细信息，请参阅基类 {@link PropertyEditorRegistrySupport}。
  *
- * <p><b>NOTE: As of Spring 2.5, this is - for almost all purposes - an
- * internal class.</b> It is just public in order to allow for access from
- * other framework packages. For standard application access purposes, use the
- * {@link PropertyAccessorFactory#forBeanPropertyAccess} factory method instead.
+ * <p><b>注意：自 Spring 2.5 起，这几乎在所有用途上都是内部类。</b>
+ * 它之所以是公共的，只是为了允许从其他框架包访问。
+ * 对于标准应用程序访问，请改用 {@link PropertyAccessorFactory#forBeanPropertyAccess} 工厂方法。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -61,16 +58,15 @@ import org.springframework.util.ReflectionUtils;
 public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements BeanWrapper {
 
 	/**
-	 * Cached introspections results for this object, to prevent encountering
-	 * the cost of JavaBeans introspection every time.
+	 * 此对象的缓存内省结果，以避免每次都遇到 JavaBeans 内省的成本。
 	 */
 	@Nullable
 	private CachedIntrospectionResults cachedIntrospectionResults;
 
 
 	/**
-	 * Create a new empty BeanWrapperImpl. Wrapped instance needs to be set afterwards.
-	 * Registers default editors.
+	 * 创建新的空 BeanWrapperImpl。之后需要设置被包装实例。
+	 * 注册默认编辑器。
 	 * @see #setWrappedInstance
 	 */
 	public BeanWrapperImpl() {
@@ -78,9 +74,9 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	}
 
 	/**
-	 * Create a new empty BeanWrapperImpl. Wrapped instance needs to be set afterwards.
-	 * @param registerDefaultEditors whether to register default editors
-	 * (can be suppressed if the BeanWrapper won't need any type conversion)
+	 * 创建新的空 BeanWrapperImpl。之后需要设置被包装实例。
+	 * @param registerDefaultEditors 是否注册默认编辑器
+	 * （如果 BeanWrapper 不需要任何类型转换，可以抑制）
 	 * @see #setWrappedInstance
 	 */
 	public BeanWrapperImpl(boolean registerDefaultEditors) {
@@ -88,16 +84,16 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	}
 
 	/**
-	 * Create a new BeanWrapperImpl for the given object.
-	 * @param object the object wrapped by this BeanWrapper
+	 * 为给定对象创建新的 BeanWrapperImpl。
+	 * @param object 此 BeanWrapper 包装的对象
 	 */
 	public BeanWrapperImpl(Object object) {
 		super(object);
 	}
 
 	/**
-	 * Create a new BeanWrapperImpl, wrapping a new instance of the specified class.
-	 * @param clazz class to instantiate and wrap
+	 * 创建新的 BeanWrapperImpl，包装指定类的新实例。
+	 * @param clazz 要实例化和包装的类
 	 */
 	public BeanWrapperImpl(Class<?> clazz) {
 		super(clazz);

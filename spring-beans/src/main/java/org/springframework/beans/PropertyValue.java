@@ -23,14 +23,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Object to hold information and value for an individual bean property.
- * Using an object here, rather than just storing all properties in
- * a map keyed by property name, allows for more flexibility, and the
- * ability to handle indexed properties etc in an optimized way.
+ * 用于保存单个 bean 属性的信息和值的对象。
+ * 在这里使用对象，而不是仅将所有属性存储在
+ * 以属性名为键的 map 中，允许更大的灵活性，
+ * 以及以优化方式处理索引属性等的能力。
  *
- * <p>Note that the value doesn't need to be the final required type:
- * A {@link BeanWrapper} implementation should handle any necessary conversion,
- * as this object doesn't know anything about the objects it will be applied to.
+ * <p>注意，值不需要是最终所需的类型：
+ * {@link BeanWrapper} 实现应处理任何必要的转换，
+ * 因为此对象不知道它将应用到的对象。
  *
  * @author Rod Johnson
  * @author Rob Harrop
@@ -64,9 +64,9 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 
 
 	/**
-	 * Create a new PropertyValue instance.
-	 * @param name the name of the property (never {@code null})
-	 * @param value the value of the property (possibly before type conversion)
+	 * 创建新的 PropertyValue 实例。
+	 * @param name 属性的名称（永远不会是 {@code null}）
+	 * @param value 属性的值（可能在类型转换之前）
 	 */
 	public PropertyValue(String name, @Nullable Object value) {
 		Assert.notNull(name, "Name must not be null");
@@ -75,8 +75,8 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 	}
 
 	/**
-	 * Copy constructor.
-	 * @param original the PropertyValue to copy (never {@code null})
+	 * 复制构造器。
+	 * @param original 要复制的 PropertyValue（永远不会是 {@code null}）
 	 */
 	public PropertyValue(PropertyValue original) {
 		Assert.notNull(original, "Original must not be null");

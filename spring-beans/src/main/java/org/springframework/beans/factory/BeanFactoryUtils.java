@@ -149,15 +149,25 @@ public abstract class BeanFactoryUtils {
 	}
 
 	/**
+	 * 获取给定类型的所有bean名称，包括在祖先
+	 * 工厂中定义的。在bean定义被覆盖的情况下将返回唯一名称。
 	 * Get all bean names for the given type, including those defined in ancestor
 	 * factories. Will return unique names in case of overridden bean definitions.
-	 * <p>Does consider objects created by FactoryBeans, which means that FactoryBeans
+	 * <p>确实考虑由FactoryBeans创建的对象，这意味着FactoryBeans
+	 * 将被初始化。如果FactoryBean创建的对象不匹配，
+	 * 原始FactoryBean本身将与类型匹配。
+	 * Does consider objects created by FactoryBeans, which means that FactoryBeans
 	 * will get initialized. If the object created by the FactoryBean doesn't match,
 	 * the raw FactoryBean itself will be matched against the type.
-	 * <p>This version of {@code beanNamesForTypeIncludingAncestors} automatically
+	 * <p>此版本的{@code beanNamesForTypeIncludingAncestors}自动
+	 * 包括原型和FactoryBeans。
+	 * This version of {@code beanNamesForTypeIncludingAncestors} automatically
 	 * includes prototypes and FactoryBeans.
+	 * @param lbf bean工厂
 	 * @param lbf the bean factory
+	 * @param type bean必须匹配的类型（作为{@code ResolvableType}）
 	 * @param type the type that beans must match (as a {@code ResolvableType})
+	 * @return 匹配的bean名称数组，如果没有则返回空数组
 	 * @return the array of matching bean names, or an empty array if none
 	 * @since 4.2
 	 * @see ListableBeanFactory#getBeanNamesForType(ResolvableType)

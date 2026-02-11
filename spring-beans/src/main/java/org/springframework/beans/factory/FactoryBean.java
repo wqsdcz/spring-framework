@@ -96,20 +96,33 @@ public interface FactoryBean<T> {
 	T getObject() throws Exception;
 
 	/**
+	 * 返回此FactoryBean创建的对象类型，
+	 * 如果事先不知道则返回{@code null}。
 	 * Return the type of object that this FactoryBean creates,
 	 * or {@code null} if not known in advance.
-	 * <p>This allows one to check for specific types of beans without
+	 * <p>这允许在不实例化对象的情况下检查特定类型的bean，
+	 * 例如在自动装配时。
+	 * This allows one to check for specific types of beans without
 	 * instantiating objects, for example on autowiring.
-	 * <p>In the case of implementations that create a singleton object,
-	 * this method should try to avoid singleton creation as far as possible;
-	 * it should rather estimate the type in advance.
+	 * <p>对于创建单例对象的实现，
+	 * 此方法应尽量避免单例创建；
+	 * 它应该提前估计类型。
 	 * For prototypes, returning a meaningful type here is advisable too.
-	 * <p>This method can be called <i>before</i> this FactoryBean has
+	 * 对于原型，建议在此处返回有意义的类型。
+	 * <p>此方法可以在<i>之前</i>调用此FactoryBean
+	 * 完全初始化。它不得依赖于在
+	 * 初始化期间创建的状态；当然，如果可用，它仍然可以使用此类状态。
+	 * This method can be called <i>before</i> this FactoryBean has
 	 * been fully initialized. It must not rely on state created during
 	 * initialization; of course, it can still use such state if available.
-	 * <p><b>NOTE:</b> Autowiring will simply ignore FactoryBeans that return
+	 * <p><b>注意：</b>自动装配将简单地忽略在此处返回
+	 * {@code null}的FactoryBean。因此，强烈建议正确实现
+	 * 此方法，使用FactoryBean的当前状态。
+	 * <b>NOTE:</b> Autowiring will simply ignore FactoryBeans that return
 	 * {@code null} here. Therefore, it is highly recommended to implement
 	 * this method properly, using the current state of the FactoryBean.
+	 * @return 此FactoryBean创建的对象类型，
+	 * 如果在调用时不知道则返回{@code null}
 	 * @return the type of object that this FactoryBean creates,
 	 * or {@code null} if not known at the time of the call
 	 * @see ListableBeanFactory#getBeansOfType
@@ -118,26 +131,39 @@ public interface FactoryBean<T> {
 	Class<?> getObjectType();
 
 	/**
+	 * 此工厂管理的对象是单例吗？也就是说，
+	 * {@link #getObject()}是否会总是返回相同的对象
+	 * （可以缓存的引用）？
 	 * Is the object managed by this factory a singleton? That is,
 	 * will {@link #getObject()} always return the same object
 	 * (a reference that can be cached)?
-	 * <p><b>NOTE:</b> If a FactoryBean indicates that it holds a singleton
+	 * <p><b>注意：</b>如果FactoryBean指示它持有单例
+	 * 对象，则从{@code getObject()}返回的对象可能会被
+	 * 拥有的BeanFactory缓存。因此，除非FactoryBean总是暴露相同的引用，
+	 * 否则不要返回{@code true}。
+	 * <b>NOTE:</b> If a FactoryBean indicates that it holds a singleton
 	 * object, the object returned from {@code getObject()} might get cached
 	 * by the owning BeanFactory. Hence, do not return {@code true}
 	 * unless the FactoryBean always exposes the same reference.
-	 * <p>The singleton status of the FactoryBean itself will generally
+	 * <p>FactoryBean本身的单例状态通常
+	 * 由拥有的BeanFactory提供；通常，它必须
+	 * 在那里定义为单例。
+	 * The singleton status of the FactoryBean itself will generally
 	 * be provided by the owning BeanFactory; usually, it has to be
 	 * defined as singleton there.
-	 * <p><b>NOTE:</b> This method returning {@code false} does not
-	 * necessarily indicate that returned objects are independent instances.
-	 * An implementation of the extended {@link SmartFactoryBean} interface
-	 * may explicitly indicate independent instances through its
-	 * {@link SmartFactoryBean#isPrototype()} method. Plain {@link FactoryBean}
-	 * implementations which do not implement this extended interface are
-	 * simply assumed to always return independent instances if the
-	 * {@code isSingleton()} implementation returns {@code false}.
-	 * <p>The default implementation returns {@code true}, since a
+	 * <p><b>注意：</b>此方法返回{@code false}不一定
+	 * 表示返回的对象是独立实例。
+	 * 扩展的{@link SmartFactoryBean}接口的实现
+	 * 可以通过其
+	 * {@link SmartFactoryBean#isPrototype()}方法明确指示独立实例。
+	 * Plain {@link FactoryBean}实现如果不实现此扩展接口，则
+	 * 简单地假定如果
+	 * {@code isSingleton()}实现返回{@code false}，则总是返回独立实例。
+	 * <p>默认实现返回{@code true}，因为
+	 * {@code FactoryBean}通常管理单例实例。
+	 * The default implementation returns {@code true}, since a
 	 * {@code FactoryBean} typically manages a singleton instance.
+	 * @return 暴露的对象是否是单例
 	 * @return whether the exposed object is a singleton
 	 * @see #getObject()
 	 * @see SmartFactoryBean#isPrototype()

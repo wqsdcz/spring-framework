@@ -162,10 +162,15 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
+	 * 返回由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
 	 * Return an instance (possibly shared or independent) of the object
 	 * managed by this factory.
+	 * @return bean的一个实例，如果不可用或
+	 * 不唯一（即找到多个候选但没有标记为primary的）则返回{@code null}
 	 * @return an instance of the bean, or {@code null} if not available or
 	 * not unique (i.e. multiple candidates found with none marked as primary)
+	 * @throws BeansException 如果创建时出现错误
 	 * @throws BeansException in case of creation errors
 	 * @see #getObject()
 	 */
@@ -180,13 +185,20 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
+	 * 返回由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
 	 * Return an instance (possibly shared or independent) of the object
 	 * managed by this factory.
+	 * @param defaultSupplier 在工厂中没有唯一候选时提供默认对象的回调
 	 * @param defaultSupplier a callback for supplying a default object
 	 * if no unique candidate is present in the factory
+	 * @return bean的一个实例，或提供的默认对象
+	 * 如果没有这样的bean可用或如果在工厂中不唯一
+	 * （即找到多个候选但没有标记为primary的）
 	 * @return an instance of the bean, or the supplied default object
 	 * if no such bean is available or if it is not unique in the factory
 	 * (i.e. multiple candidates found with none marked as primary)
+	 * @throws BeansException 如果创建时出现错误
 	 * @throws BeansException in case of creation errors
 	 * @since 5.0
 	 * @see #getIfUnique()
@@ -197,10 +209,15 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
+	 * 如果唯一，消费由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
 	 * Consume an instance (possibly shared or independent) of the object
 	 * managed by this factory, if unique.
+	 * @param dependencyConsumer 处理目标对象的回调
+	 * 如果唯一（否则不调用）
 	 * @param dependencyConsumer a callback for processing the target object
 	 * if unique (not called otherwise)
+	 * @throws BeansException 如果创建时出现错误
 	 * @throws BeansException in case of creation errors
 	 * @since 5.0
 	 * @see #getIfUnique()
@@ -292,11 +309,17 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
+	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
+	 * 没有特定的排序保证（但通常是注册顺序）。
 	 * Return a custom-filtered {@link Stream} over all matching object instances,
 	 * without specific ordering guarantees (but typically in registration order).
+	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
+	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
 	 * @param customFilter a custom type filter for selecting beans among the raw
 	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
 	 * any default filtering)
+	 * @param includeNonSingletons 是否也包括原型或作用域bean
+	 * 或仅包括单例（也适用于FactoryBeans）
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
 	 * @since 6.2.5
@@ -311,11 +334,17 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
+	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
+	 * 根据工厂的通用顺序比较器预排序。
 	 * Return a custom-filtered {@link Stream} over all matching object instances,
 	 * pre-ordered according to the factory's common order comparator.
+	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
+	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
 	 * @param customFilter a custom type filter for selecting beans among the raw
 	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
 	 * any default filtering)
+	 * @param includeNonSingletons 是否也包括原型或作用域bean
+	 * 或仅包括单例（也适用于FactoryBeans）
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
 	 * @since 6.2.5

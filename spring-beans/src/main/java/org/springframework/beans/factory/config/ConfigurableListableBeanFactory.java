@@ -24,16 +24,13 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.lang.Nullable;
 
 /**
- * Configuration interface to be implemented by most listable bean factories.
- * In addition to {@link ConfigurableBeanFactory}, it provides facilities to
- * analyze and modify bean definitions, and to pre-instantiate singletons.
+ * 大多数可列出的bean工厂需要实现的配置接口。
+ * 除了{@link ConfigurableBeanFactory}之外，它还提供了分析和修改bean定义，以及预实例化单例对象的功能。
  *
- * <p>This subinterface of {@link org.springframework.beans.factory.BeanFactory}
- * is not meant to be used in normal application code: Stick to
- * {@link org.springframework.beans.factory.BeanFactory} or
- * {@link org.springframework.beans.factory.ListableBeanFactory} for typical
- * use cases. This interface is just meant to allow for framework-internal
- * plug'n'play even when needing access to bean factory configuration methods.
+ * <p>
+ *     这个{@link org.springframework.beans.factory.BeanFactory}的子接口并不打算在普通应用程序代码中使用：
+ *     在典型用例中，请坚持使用{@link org.springframework.beans.factory.BeanFactory}或{@link org.springframework.beans.factory.ListableBeanFactory}。
+ *     此接口仅用于允许框架内部即使需要访问bean工厂配置方法时也能进行插拔式操作。
  *
  * @author Juergen Hoeller
  * @since 03.11.2003
@@ -43,77 +40,77 @@ public interface ConfigurableListableBeanFactory
 		extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory {
 
 	/**
-	 * Ignore the given dependency type for autowiring:
-	 * for example, String. Default is none.
-	 * @param type the dependency type to ignore
+	 * 忽略指定的依赖类型，使其不参与自动装配：
+	 * 例如，String 类型。默认情况下不忽略任何类型。
+	 * @param type 要忽略的依赖类型
 	 */
 	void ignoreDependencyType(Class<?> type);
 
 	/**
-	 * Ignore the given dependency interface for autowiring.
-	 * <p>This will typically be used by application contexts to register
-	 * dependencies that are resolved in other ways, like BeanFactory through
-	 * BeanFactoryAware or ApplicationContext through ApplicationContextAware.
-	 * <p>By default, only the BeanFactoryAware interface is ignored.
-	 * For further types to ignore, invoke this method for each type.
-	 * @param ifc the dependency interface to ignore
+	 * 忽略指定的依赖接口，使其不参与自动装配。
+	 * <p>
+	 *     这通常由应用程序上下文用来注册以其他方式解析的依赖项，
+	 *     例如通过 BeanFactoryAware 解析 BeanFactory，或通过 ApplicationContextAware 解析 ApplicationContext。
+	 * <p>
+	 *     默认情况下，仅忽略 BeanFactoryAware 接口。
+	 *     对于要忽略的其他类型，请为每种类型调用此方法。
+	 *
+	 * @param ifc 要忽略的依赖接口
 	 * @see org.springframework.beans.factory.BeanFactoryAware
 	 * @see org.springframework.context.ApplicationContextAware
 	 */
 	void ignoreDependencyInterface(Class<?> ifc);
 
 	/**
-	 * Register a special dependency type with corresponding autowired value.
-	 * <p>This is intended for factory/context references that are supposed
-	 * to be autowirable but are not defined as beans in the factory:
-	 * for example, a dependency of type ApplicationContext resolved to the
-	 * ApplicationContext instance that the bean is living in.
-	 * <p>Note: There are no such default types registered in a plain BeanFactory,
-	 * not even for the BeanFactory interface itself.
-	 * @param dependencyType the dependency type to register. This will typically
-	 * be a base interface such as BeanFactory, with extensions of it resolved
-	 * as well if declared as an autowiring dependency (for example, ListableBeanFactory),
-	 * as long as the given value actually implements the extended interface.
-	 * @param autowiredValue the corresponding autowired value. This may also be an
-	 * implementation of the {@link org.springframework.beans.factory.ObjectFactory}
-	 * interface, which allows for lazy resolution of the actual target value.
+	 * 注册具有相应自动装配值的特殊依赖类型。
+	 * <p>
+	 *     这适用于那些本应可自动装配但未在工厂中定义为 bean 的工厂/上下文引用：
+	 *     例如，类型为 ApplicationContext 的依赖项解析为 bean 所在的 ApplicationContext 实例。
+	 * <p>
+	 *     注意：在普通的 BeanFactory 中没有注册此类默认类型，甚至 BeanFactory 接口本身也没有。
+	 *
+	 * @param dependencyType 要注册的依赖类型。
+	 *                       这通常是像 BeanFactory 这样的基础接口，如果声明为自动装配依赖项，
+	 *                       其扩展接口也会被解析（例如 ListableBeanFactory），只要给定的值实际实现了扩展接口。
+	 * @param autowiredValue 相应的自动装配值。
+	 *                       这也可能是 {@link org.springframework.beans.factory.ObjectFactory} 接口的实现，允许延迟解析实际的目标值。
 	 */
 	void registerResolvableDependency(Class<?> dependencyType, @Nullable Object autowiredValue);
 
 	/**
-	 * Determine whether the specified bean qualifies as an autowire candidate,
-	 * to be injected into other beans which declare a dependency of matching type.
-	 * <p>This method checks ancestor factories as well.
-	 * @param beanName the name of the bean to check
-	 * @param descriptor the descriptor of the dependency to resolve
-	 * @return whether the bean should be considered as autowire candidate
-	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
+	 * 确定指定的bean是否符合自动装配候选条件，以便注入到声明了匹配类型依赖的其他bean中。
+	 * <p>
+	 *     此方法还会检查祖先工厂。
+	 *
+	 * @param beanName 要检查的bean的名称
+	 * @param descriptor 要解析的依赖项的描述符
+	 * @return 该bean是否应被视为自动装配候选
+	 * @throws NoSuchBeanDefinitionException 如果不存在具有给定名称的bean
 	 */
 	boolean isAutowireCandidate(String beanName, DependencyDescriptor descriptor)
 			throws NoSuchBeanDefinitionException;
 
 	/**
-	 * Return the registered BeanDefinition for the specified bean, allowing access
-	 * to its property values and constructor argument value (which can be
-	 * modified during bean factory post-processing).
-	 * <p>A returned BeanDefinition object should not be a copy but the original
-	 * definition object as registered in the factory. This means that it should
-	 * be castable to a more specific implementation type, if necessary.
-	 * <p><b>NOTE:</b> This method does <i>not</i> consider ancestor factories.
-	 * It is only meant for accessing local bean definitions of this factory.
-	 * @param beanName the name of the bean
-	 * @return the registered BeanDefinition
-	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
-	 * defined in this factory
+	 * 返回指定 bean 的已注册 BeanDefinition，允许访问其属性值和构造函数参数值（这些值可以在 bean 工厂后处理期间被修改）。
+	 * <p>
+	 *     返回的 BeanDefinition 对象不应是副本，而应该是工厂中注册的原始定义对象。
+	 *     这意味着在必要时应该可以将其转换为更具体的实现类型。
+	 * <p>
+	 *     <b>注意：</b>此方法<i>不</i>考虑祖先工厂。
+	 *     它仅用于访问此工厂的本地 bean 定义。
+	 *
+	 * @param beanName bean 的名称
+	 * @return 已注册的 BeanDefinition
+	 * @throws NoSuchBeanDefinitionException 如果此工厂中没有定义具有给定名称的 bean
 	 */
 	BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException;
 
 	/**
-	 * Return a unified view over all bean names managed by this factory.
-	 * <p>Includes bean definition names as well as names of manually registered
-	 * singleton instances, with bean definition names consistently coming first,
-	 * analogous to how type/annotation specific retrieval of bean names works.
-	 * @return the composite iterator for the bean names view
+	 * 返回此工厂管理的所有 bean 名称的统一视图。
+	 * <p>
+	 *     包括 bean 定义名称以及手动注册的单例实例名称，bean 定义名称始终排在前面，类似于按类型/注解特定检索 bean 名称的方式。
+	 *
+	 * @return bean 名称视图的复合迭代器
 	 * @since 4.1.2
 	 * @see #containsBeanDefinition
 	 * @see #registerSingleton
@@ -123,11 +120,11 @@ public interface ConfigurableListableBeanFactory
 	Iterator<String> getBeanNamesIterator();
 
 	/**
-	 * Clear the merged bean definition cache, removing entries for beans
-	 * which are not considered eligible for full metadata caching yet.
-	 * <p>Typically triggered after changes to the original bean definitions,
-	 * for example, after applying a {@link BeanFactoryPostProcessor}. Note that metadata
-	 * for beans which have already been created at this point will be kept around.
+	 * 清除合并的 bean 定义缓存，移除尚未被认为有资格进行完整元数据缓存的 bean 条目。
+	 * <p>
+	 *     通常在原始 bean 定义发生更改后触发，例如，在应用 {@link BeanFactoryPostProcessor} 之后。
+	 *     请注意，此时已经创建的 bean 的元数据将被保留。
+	 *
 	 * @since 4.2
 	 * @see #getBeanDefinition
 	 * @see #getMergedBeanDefinition
@@ -135,28 +132,28 @@ public interface ConfigurableListableBeanFactory
 	void clearMetadataCache();
 
 	/**
-	 * Freeze all bean definitions, signalling that the registered bean definitions
-	 * will not be modified or post-processed any further.
-	 * <p>This allows the factory to aggressively cache bean definition metadata
-	 * going forward, after clearing the initial temporary metadata cache.
+	 * 冻结所有 bean 定义，表示已注册的 bean 定义将不再被修改或进一步后处理。
+	 * <p>
+	 *     这允许工厂在清除初始临时元数据缓存后，积极地缓存 bean 定义元数据。
+	 *
 	 * @see #clearMetadataCache()
 	 * @see #isConfigurationFrozen()
 	 */
 	void freezeConfiguration();
 
 	/**
-	 * Return whether this factory's bean definitions are frozen,
-	 * i.e. are not supposed to be modified or post-processed any further.
-	 * @return {@code true} if the factory's configuration is considered frozen
+	 * 返回此工厂的 bean 定义是否已被冻结，即是否不应再被修改或进一步后处理。
+	 *
+	 * @return 如果工厂的配置被认为是冻结的，则返回 {@code true}
 	 * @see #freezeConfiguration()
 	 */
 	boolean isConfigurationFrozen();
 
 	/**
-	 * Mark current thread as main bootstrap thread for singleton instantiation,
-	 * with lenient bootstrap locking applying for background threads.
-	 * <p>Any such marker is to be removed at the end of the managed bootstrap in
-	 * {@link #preInstantiateSingletons()}.
+	 * 将当前线程标记为单例实例化的主引导线程，后台线程应用宽松的引导锁定。
+	 * <p>
+	 *     任何此类标记都应在受管引导结束时移除，即在 {@link #preInstantiateSingletons()} 中。
+	 *
 	 * @since 6.2.12
 	 * @see #setBootstrapExecutor
 	 * @see #preInstantiateSingletons()
@@ -165,12 +162,12 @@ public interface ConfigurableListableBeanFactory
 	}
 
 	/**
-	 * Ensure that all non-lazy-init singletons are instantiated, also considering
-	 * {@link org.springframework.beans.factory.FactoryBean FactoryBeans}.
-	 * Typically invoked at the end of factory setup, if desired.
-	 * @throws BeansException if one of the singleton beans could not be created.
-	 * Note: This may have left the factory with some beans already initialized!
-	 * Call {@link #destroySingletons()} for full cleanup in this case.
+	 * 确保所有非懒加载的单例都被实例化，同时考虑{@link org.springframework.beans.factory.FactoryBean FactoryBeans}。
+	 * 通常在工厂设置结束时调用（如果需要的话）。
+	 *
+	 * @throws BeansException 如果某个单例 bean 无法创建。
+	 * 						  注意：这种情况下工厂中可能已经有一些 bean 被初始化了！
+	 *   					  在这种情况下调用 {@link #destroySingletons()} 进行完全清理。
 	 * @see #prepareSingletonBootstrap()
 	 * @see #destroySingletons()
 	 */

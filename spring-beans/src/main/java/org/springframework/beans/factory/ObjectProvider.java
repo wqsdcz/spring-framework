@@ -27,51 +27,49 @@ import org.springframework.core.OrderComparator;
 import org.springframework.lang.Nullable;
 
 /**
- * A variant of {@link ObjectFactory} designed specifically for injection points,
- * allowing for programmatic optionality and lenient not-unique handling.
+ * 专门为注入点设计的{@link ObjectFactory}变体，
+ * 允许程序化可选性和宽松的不唯一处理。
  *
- * <p>In a {@link BeanFactory} environment, every {@code ObjectProvider} obtained
- * from the factory will be bound to its {@code BeanFactory} for a specific bean
- * type, matching all provider calls against factory-registered bean definitions.
- * Note that all such calls dynamically operate on the underlying factory state,
- * freshly resolving the requested target object on every call.
+ * <p>在{@link BeanFactory}环境中，从工厂获取的每个{@code ObjectProvider}
+ * 都将绑定到其{@code BeanFactory}以获取特定bean类型，
+ * 将所有提供者调用与工厂注册的bean定义进行匹配。
+ * 注意，所有这些调用都对底层工厂状态进行动态操作，
+ * 在每次调用时重新解析请求的目标对象。
  *
- * <p>As of 5.1, this interface extends {@link Iterable} and provides {@link Stream}
- * support. It can be therefore be used in {@code for} loops, provides {@link #forEach}
- * iteration and allows for collection-style {@link #stream} access.
+ * <p>从5.1开始，此接口扩展了{@link Iterable}并提供了{@link Stream}
+ * 支持。因此它可以在{@code for}循环中使用，提供{@link #forEach}
+ * 迭代，并允许集合风格的{@link #stream}访问。
  *
- * <p>As of 6.2, this interface declares default implementations for all methods.
- * This makes it easier to implement in a custom fashion, for example, for unit tests.
- * For typical purposes, implement {@link #stream()} to enable all other methods.
- * Alternatively, you may implement the specific methods that your callers expect,
- * for example, just {@link #getObject()} or {@link #getIfAvailable()}.
+ * <p>从6.2开始，此接口为所有方法声明了默认实现。
+ * 这使得以自定义方式实现更容易，例如，用于单元测试。
+ * 对于典型用途，实现{@link #stream()}以启用所有其他方法。
+ * 或者，你可以实现调用者期望的特定方法，
+ * 例如，仅{@link #getObject()}或{@link #getIfAvailable()}。
  *
- * <p>Note that {@link #getObject()} never returns {@code null} - it will throw a
- * {@link NoSuchBeanDefinitionException} instead -, whereas {@link #getIfAvailable()}
- * will return {@code null} if no matching bean is present at all. However, both
- * methods will throw a {@link NoUniqueBeanDefinitionException} if more than one
- * matching bean is found without a clear unique winner (see below). Last but not
- * least, {@link #getIfUnique()} will return {@code null} both when no matching bean
- * is found and when more than one matching bean is found without a unique winner.
+ * <p>注意，{@link #getObject()}永远不会返回{@code null} - 而是会抛出
+ * {@link NoSuchBeanDefinitionException} -，而{@link #getIfAvailable()}
+ * 如果完全没有匹配的bean，则返回{@code null}。但是，如果找到多个匹配的bean
+ * 而没有明确的唯一获胜者（见下文），两种方法都会抛出{@link NoUniqueBeanDefinitionException}。
+ * 最后，{@link #getIfUnique()}将在找不到匹配bean以及找到多个匹配bean
+ * 而没有唯一获胜者时都返回{@code null}。
  *
- * <p>Uniqueness is generally up to the container's candidate resolution algorithm
- * but always honors the "primary" flag (with only one of the candidate beans marked
- * as primary) and the "fallback" flag (with only one of the candidate beans not
- * marked as fallback). The default-candidate flag is consistently taken into
- * account as well, even for non-annotation-based injection points, with a single
- * default candidate winning in case of no clear primary/fallback indication.
+ * <p>唯一性通常取决于容器的候选解析算法，
+ * 但始终遵守"primary"标志（只有一个候选bean标记为primary）
+ * 和"fallback"标志（只有一个候选bean未标记为fallback）。
+ * 默认候选标志也始终被考虑，即使对于非基于注解的注入点，
+ * 在没有明确primary/fallback指示的情况下，单个默认候选获胜。
  *
  * @author Juergen Hoeller
  * @since 4.3
- * @param <T> the object type
+ * @param <T> 对象类型
  * @see BeanFactory#getBeanProvider
  * @see org.springframework.beans.factory.annotation.Autowired
  */
 public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 
 	/**
-	 * A predicate for unfiltered type matches, including non-default candidates
-	 * but still excluding non-autowire candidates when used on injection points.
+	 * 用于未过滤类型匹配的谓词，包括非默认候选，
+	 * 但在用于注入点时仍排除非自动装配候选。
 	 * @since 6.2.3
 	 * @see #stream(Predicate)
 	 * @see #orderedStream(Predicate)
@@ -95,13 +93,13 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
-	 * <p>Allows for specifying explicit construction arguments, along the
-	 * lines of {@link BeanFactory#getBean(String, Object...)}.
-	 * @param args arguments to use when creating a corresponding instance
-	 * @return an instance of the bean
-	 * @throws BeansException in case of creation errors
+	 * 返回由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
+	 * <p>允许指定显式构造参数，类似于
+	 * {@link BeanFactory#getBean(String, Object...)}。
+	 * @param args 创建相应实例时要使用的参数
+	 * @return bean的一个实例
+	 * @throws BeansException 如果创建时出现错误
 	 * @see #getObject()
 	 */
 	default T getObject(Object... args) throws BeansException {
@@ -110,10 +108,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
-	 * @return an instance of the bean, or {@code null} if not available
-	 * @throws BeansException in case of creation errors
+	 * 返回由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
+	 * @return bean的一个实例，如果不可用则返回{@code null}
+	 * @throws BeansException 如果创建时出现错误
 	 * @see #getObject()
 	 */
 	@Nullable
@@ -130,13 +128,12 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
-	 * @param defaultSupplier a callback for supplying a default object
-	 * if none is present in the factory
-	 * @return an instance of the bean, or the supplied default object
-	 * if no such bean is available
-	 * @throws BeansException in case of creation errors
+	 * 返回由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
+	 * @param defaultSupplier 如果工厂中没有则提供默认对象的回调
+	 * @return bean的一个实例，或提供的默认对象
+	 * 如果没有这样的bean可用
+	 * @throws BeansException 如果创建时出现错误
 	 * @since 5.0
 	 * @see #getIfAvailable()
 	 */
@@ -146,11 +143,11 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Consume an instance (possibly shared or independent) of the object
-	 * managed by this factory, if available.
-	 * @param dependencyConsumer a callback for processing the target object
-	 * if available (not called otherwise)
-	 * @throws BeansException in case of creation errors
+	 * 如果可用，消费由此工厂管理的对象的实例
+	 * （可能是共享的或独立的）。
+	 * @param dependencyConsumer 处理目标对象的回调
+	 * 如果可用（否则不调用）
+	 * @throws BeansException 如果创建时出现错误
 	 * @since 5.0
 	 * @see #getIfAvailable()
 	 */
@@ -164,14 +161,9 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * 返回由此工厂管理的对象的实例
 	 * （可能是共享的或独立的）。
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
 	 * @return bean的一个实例，如果不可用或
 	 * 不唯一（即找到多个候选但没有标记为primary的）则返回{@code null}
-	 * @return an instance of the bean, or {@code null} if not available or
-	 * not unique (i.e. multiple candidates found with none marked as primary)
 	 * @throws BeansException 如果创建时出现错误
-	 * @throws BeansException in case of creation errors
 	 * @see #getObject()
 	 */
 	@Nullable
@@ -187,19 +179,11 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * 返回由此工厂管理的对象的实例
 	 * （可能是共享的或独立的）。
-	 * Return an instance (possibly shared or independent) of the object
-	 * managed by this factory.
 	 * @param defaultSupplier 在工厂中没有唯一候选时提供默认对象的回调
-	 * @param defaultSupplier a callback for supplying a default object
-	 * if no unique candidate is present in the factory
 	 * @return bean的一个实例，或提供的默认对象
 	 * 如果没有这样的bean可用或如果在工厂中不唯一
 	 * （即找到多个候选但没有标记为primary的）
-	 * @return an instance of the bean, or the supplied default object
-	 * if no such bean is available or if it is not unique in the factory
-	 * (i.e. multiple candidates found with none marked as primary)
 	 * @throws BeansException 如果创建时出现错误
-	 * @throws BeansException in case of creation errors
 	 * @since 5.0
 	 * @see #getIfUnique()
 	 */
@@ -211,14 +195,9 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * 如果唯一，消费由此工厂管理的对象的实例
 	 * （可能是共享的或独立的）。
-	 * Consume an instance (possibly shared or independent) of the object
-	 * managed by this factory, if unique.
 	 * @param dependencyConsumer 处理目标对象的回调
 	 * 如果唯一（否则不调用）
-	 * @param dependencyConsumer a callback for processing the target object
-	 * if unique (not called otherwise)
 	 * @throws BeansException 如果创建时出现错误
-	 * @throws BeansException in case of creation errors
 	 * @since 5.0
 	 * @see #getIfUnique()
 	 */
@@ -230,8 +209,8 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return an {@link Iterator} over all matching object instances,
-	 * without specific ordering guarantees (but typically in registration order).
+	 * 返回所有匹配对象实例的{@link Iterator}，
+	 * 没有特定的排序保证（但通常是注册顺序）。
 	 * @since 5.1
 	 * @see #stream()
 	 */
@@ -241,12 +220,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return a sequential {@link Stream} over all matching object instances,
-	 * without specific ordering guarantees (but typically in registration order).
-	 * <p>Note: The result may be filtered by default according to qualifiers on the
-	 * injection point versus target beans and the general autowire candidate status
-	 * of matching beans. For custom filtering against type-matching candidates, use
-	 * {@link #stream(Predicate)} instead (potentially with {@link #UNFILTERED}).
+	 * 返回所有匹配对象实例的顺序{@link Stream}，
+	 * 没有特定的排序保证（但通常是注册顺序）。
+	 * <p>注意：默认情况下，结果可能会根据注入点与目标bean的限定符以及匹配bean的一般自动装配候选状态进行过滤。
+	 * 对于针对类型匹配候选的自定义过滤，请改用{@link #stream(Predicate)}（可能使用{@link #UNFILTERED}）。
 	 * @since 5.1
 	 * @see #iterator()
 	 * @see #orderedStream()
@@ -257,21 +234,18 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return a sequential {@link Stream} over all matching object instances,
-	 * pre-ordered according to the factory's common order comparator.
-	 * <p>In a standard Spring application context, this will be ordered
-	 * according to {@link org.springframework.core.Ordered} conventions,
-	 * and in case of annotation-based configuration also considering the
-	 * {@link org.springframework.core.annotation.Order} annotation,
-	 * analogous to multi-element injection points of list/array type.
-	 * <p>The default method applies an {@link OrderComparator} to the
-	 * {@link #stream()} method. You may override this to apply an
-	 * {@link org.springframework.core.annotation.AnnotationAwareOrderComparator}
-	 * if necessary.
-	 * <p>Note: The result may be filtered by default according to qualifiers on the
-	 * injection point versus target beans and the general autowire candidate status
-	 * of matching beans. For custom filtering against type-matching candidates, use
-	 * {@link #stream(Predicate)} instead (potentially with {@link #UNFILTERED}).
+	 * 返回所有匹配对象实例的顺序{@link Stream}，
+	 * 根据工厂的通用顺序比较器预排序。
+	 * <p>在标准Spring应用程序上下文中，这将根据
+	 * {@link org.springframework.core.Ordered}约定进行排序，
+	 * 并且在基于注解的配置情况下还考虑
+	 * {@link org.springframework.core.annotation.Order}注解，
+	 * 类似于list/array类型的多元素注入点。
+	 * <p>默认方法将{@link OrderComparator}应用于
+	 * {@link #stream()}方法。如果需要，你可以覆盖此方法以应用
+	 * {@link org.springframework.core.annotation.AnnotationAwareOrderComparator}。
+	 * <p>注意：默认情况下，结果可能会根据注入点与目标bean的限定符以及匹配bean的一般自动装配候选状态进行过滤。
+	 * 对于针对类型匹配候选的自定义过滤，请改用{@link #stream(Predicate)}（可能使用{@link #UNFILTERED}）。
 	 * @since 5.1
 	 * @see #stream()
 	 * @see org.springframework.core.OrderComparator
@@ -281,11 +255,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return a custom-filtered {@link Stream} over all matching object instances,
-	 * without specific ordering guarantees (but typically in registration order).
-	 * @param customFilter a custom type filter for selecting beans among the raw
-	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
-	 * any default filtering)
+	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
+	 * 没有特定的排序保证（但通常是注册顺序）。
+	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
+	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
 	 * @since 6.2.3
 	 * @see #stream()
 	 * @see #orderedStream(Predicate)
@@ -295,11 +268,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	}
 
 	/**
-	 * Return a custom-filtered {@link Stream} over all matching object instances,
-	 * pre-ordered according to the factory's common order comparator.
-	 * @param customFilter a custom type filter for selecting beans among the raw
-	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
-	 * any default filtering)
+	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
+	 * 根据工厂的通用顺序比较器预排序。
+	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
+	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
 	 * @since 6.2.3
 	 * @see #orderedStream()
 	 * @see #stream(Predicate)
@@ -311,17 +283,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
 	 * 没有特定的排序保证（但通常是注册顺序）。
-	 * Return a custom-filtered {@link Stream} over all matching object instances,
-	 * without specific ordering guarantees (but typically in registration order).
 	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
 	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
-	 * @param customFilter a custom type filter for selecting beans among the raw
-	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
-	 * any default filtering)
 	 * @param includeNonSingletons 是否也包括原型或作用域bean
 	 * 或仅包括单例（也适用于FactoryBeans）
-	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
 	 * @since 6.2.5
 	 * @see #stream(Predicate)
 	 * @see #orderedStream(Predicate, boolean)
@@ -336,17 +301,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * 返回所有匹配对象实例的自定义过滤{@link Stream}，
 	 * 根据工厂的通用顺序比较器预排序。
-	 * Return a custom-filtered {@link Stream} over all matching object instances,
-	 * pre-ordered according to the factory's common order comparator.
 	 * @param customFilter 用于在原始bean类型匹配中选择bean的自定义类型过滤器
 	 * （或{@link #UNFILTERED}用于所有原始类型匹配而无需任何默认过滤）
-	 * @param customFilter a custom type filter for selecting beans among the raw
-	 * bean type matches (or {@link #UNFILTERED} for all raw type matches without
-	 * any default filtering)
 	 * @param includeNonSingletons 是否也包括原型或作用域bean
 	 * 或仅包括单例（也适用于FactoryBeans）
-	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
 	 * @since 6.2.5
 	 * @see #orderedStream()
 	 * @see #stream(Predicate)

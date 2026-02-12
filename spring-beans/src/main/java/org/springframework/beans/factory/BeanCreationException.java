@@ -26,8 +26,7 @@ import org.springframework.core.NestedRuntimeException;
 import org.springframework.lang.Nullable;
 
 /**
- * Exception thrown when a BeanFactory encounters an error when
- * attempting to create a bean from a bean definition.
+ * 当BeanFactory在尝试从bean定义创建bean时遇到错误时抛出的异常。
  *
  * @author Juergen Hoeller
  */
@@ -45,8 +44,8 @@ public class BeanCreationException extends FatalBeanException {
 
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param msg the detail message
+	 * 创建一个新的BeanCreationException。
+	 * @param msg 详细消息
 	 */
 	public BeanCreationException(String msg) {
 		super(msg);
@@ -55,9 +54,9 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param msg the detail message
-	 * @param cause the root cause
+	 * 创建一个新的BeanCreationException。
+	 * @param msg 详细消息
+	 * @param cause 根本原因
 	 */
 	public BeanCreationException(String msg, Throwable cause) {
 		super(msg, cause);
@@ -66,9 +65,9 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param beanName the name of the bean requested
-	 * @param msg the detail message
+	 * 创建一个新的BeanCreationException。
+	 * @param beanName 请求的bean名称
+	 * @param msg 详细消息
 	 */
 	public BeanCreationException(String beanName, String msg) {
 		super("Error creating bean with name '" + beanName + "': " + msg);
@@ -77,10 +76,10 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param beanName the name of the bean requested
-	 * @param msg the detail message
-	 * @param cause the root cause
+	 * 创建一个新的BeanCreationException。
+	 * @param beanName 请求的bean名称
+	 * @param msg 详细消息
+	 * @param cause 根本原因
 	 */
 	public BeanCreationException(String beanName, String msg, Throwable cause) {
 		this(beanName, msg);
@@ -88,11 +87,10 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param resourceDescription description of the resource
-	 * that the bean definition came from
-	 * @param beanName the name of the bean requested
-	 * @param msg the detail message
+	 * 创建一个新的BeanCreationException。
+	 * @param resourceDescription bean定义来源的资源描述
+	 * @param beanName 请求的bean名称
+	 * @param msg 详细消息
 	 */
 	public BeanCreationException(@Nullable String resourceDescription, @Nullable String beanName, @Nullable String msg) {
 		super("Error creating bean with name '" + beanName + "'" +
@@ -103,12 +101,11 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Create a new BeanCreationException.
-	 * @param resourceDescription description of the resource
-	 * that the bean definition came from
-	 * @param beanName the name of the bean requested
-	 * @param msg the detail message
-	 * @param cause the root cause
+	 * 创建一个新的BeanCreationException。
+	 * @param resourceDescription bean定义来源的资源描述
+	 * @param beanName 请求的bean名称
+	 * @param msg 详细消息
+	 * @param cause 根本原因
 	 */
 	public BeanCreationException(@Nullable String resourceDescription, String beanName, @Nullable String msg, Throwable cause) {
 		this(resourceDescription, beanName, msg);
@@ -117,8 +114,7 @@ public class BeanCreationException extends FatalBeanException {
 
 
 	/**
-	 * Return the description of the resource that the bean
-	 * definition came from, if any.
+	 * 返回bean定义来源的资源描述（如果有）。
 	 */
 	@Nullable
 	public String getResourceDescription() {
@@ -126,7 +122,7 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Return the name of the bean requested, if any.
+	 * 返回请求的bean名称（如果有）。
 	 */
 	@Nullable
 	public String getBeanName() {
@@ -134,10 +130,9 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Add a related cause to this bean creation exception,
-	 * not being a direct cause of the failure but having occurred
-	 * earlier in the creation of the same bean instance.
-	 * @param ex the related cause to add
+	 * 向此bean创建异常添加相关原因，
+	 * 它不是失败的直接原因，但在创建同一bean实例时早些时候发生。
+	 * @param ex 要添加的相关原因
 	 */
 	public void addRelatedCause(Throwable ex) {
 		if (this.relatedCauses == null) {
@@ -147,8 +142,8 @@ public class BeanCreationException extends FatalBeanException {
 	}
 
 	/**
-	 * Return the related causes, if any.
-	 * @return the array of related causes, or {@code null} if none
+	 * 返回相关原因（如果有）。
+	 * @return 相关原因数组，如果没有则返回{@code null}
 	 */
 	@Nullable
 	public Throwable[] getRelatedCauses() {

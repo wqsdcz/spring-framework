@@ -21,9 +21,8 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
- * Exception thrown when a {@code BeanFactory} is asked for a bean instance for which it
- * cannot find a definition. This may point to a non-existing bean, a non-unique bean,
- * or a manually registered singleton instance without an associated bean definition.
+ * 当{@code BeanFactory}被要求提供一个bean实例，但找不到定义时抛出的异常。
+ * 这可能指向不存在的bean、非唯一的bean，或没有关联bean定义的手动注册单例实例。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -43,8 +42,8 @@ public class NoSuchBeanDefinitionException extends BeansException {
 
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param name the name of the missing bean
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param name 缺失的bean名称
 	 */
 	public NoSuchBeanDefinitionException(String name) {
 		super("No bean named '" + name + "' available");
@@ -53,9 +52,9 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param name the name of the missing bean
-	 * @param message detailed message describing the problem
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param name 缺失的bean名称
+	 * @param message 描述问题的详细消息
 	 */
 	public NoSuchBeanDefinitionException(String name, String message) {
 		super("No bean named '" + name + "' available: " + message);
@@ -64,25 +63,25 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param type required type of the missing bean
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param type 缺失的bean所需类型
 	 */
 	public NoSuchBeanDefinitionException(Class<?> type) {
 		this(ResolvableType.forClass(type));
 	}
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param type required type of the missing bean
-	 * @param message detailed message describing the problem
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param type 缺失的bean所需类型
+	 * @param message 描述问题的详细消息
 	 */
 	public NoSuchBeanDefinitionException(Class<?> type, String message) {
 		this(ResolvableType.forClass(type), message);
 	}
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param type full type declaration of the missing bean
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param type 缺失的bean的完整类型声明
 	 * @since 4.3.4
 	 */
 	public NoSuchBeanDefinitionException(ResolvableType type) {
@@ -92,9 +91,9 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Create a new {@code NoSuchBeanDefinitionException}.
-	 * @param type full type declaration of the missing bean
-	 * @param message detailed message describing the problem
+	 * 创建一个新的{@code NoSuchBeanDefinitionException}。
+	 * @param type 缺失的bean的完整类型声明
+	 * @param message 描述问题的详细消息
 	 * @since 4.3.4
 	 */
 	public NoSuchBeanDefinitionException(ResolvableType type, String message) {
@@ -105,7 +104,7 @@ public class NoSuchBeanDefinitionException extends BeansException {
 
 
 	/**
-	 * Return the name of the missing bean, if it was a lookup <em>by name</em> that failed.
+	 * 返回缺失的bean名称，如果是按<em>名称</em>查找失败的话。
 	 */
 	@Nullable
 	public String getBeanName() {
@@ -113,8 +112,7 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Return the required type of the missing bean, if it was a lookup <em>by type</em>
-	 * that failed.
+	 * 返回缺失的bean所需类型，如果是按<em>类型</em>查找失败的话。
 	 */
 	@Nullable
 	public Class<?> getBeanType() {
@@ -122,8 +120,7 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Return the required {@link ResolvableType} of the missing bean, if it was a lookup
-	 * <em>by type</em> that failed.
+	 * 返回缺失的bean所需的{@link ResolvableType}，如果是按<em>类型</em>查找失败的话。
 	 * @since 4.3.4
 	 */
 	@Nullable
@@ -132,8 +129,8 @@ public class NoSuchBeanDefinitionException extends BeansException {
 	}
 
 	/**
-	 * Return the number of beans found when only one matching bean was expected.
-	 * For a regular NoSuchBeanDefinitionException, this will always be 0.
+	 * 返回当期望只有一个匹配bean时找到的bean数量。
+	 * 对于常规的NoSuchBeanDefinitionException，这将始终为0。
 	 * @see NoUniqueBeanDefinitionException
 	 */
 	public int getNumberOfBeansFound() {

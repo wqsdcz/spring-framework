@@ -19,13 +19,12 @@ package org.springframework.beans.factory;
 /**
  * 由希望在销毁时释放资源的bean实现的接口。
  * {@link BeanFactory}将在销毁作用域bean时对单个bean调用destroy方法。
- * {@link org.springframework.context.ApplicationContext}应该
- * 在关闭时处理其所有单例，由应用程序生命周期驱动。
+ * {@link org.springframework.context.ApplicationContext}应该在关闭时处理其所有单例，由应用程序生命周期驱动。
  *
- * <p>Spring管理的bean也可以实现Java的{@link AutoCloseable}接口
- * 达到相同目的。实现接口的替代方案是指定
- * 自定义销毁方法，例如在XML bean定义中。有关所有
- * bean生命周期方法的列表，请参见{@link BeanFactory BeanFactory javadocs}。
+ * <p>
+ *     Spring管理的bean也可以实现Java的{@link AutoCloseable}接口达到相同目的。
+ *     实现接口的替代方案是指定自定义销毁方法，例如在XML bean定义中。
+ *     有关所有bean生命周期方法的列表，请参见{@link BeanFactory BeanFactory javadocs}。
  *
  * @author Juergen Hoeller
  * @since 12.08.2003
@@ -38,8 +37,7 @@ public interface DisposableBean {
 
 	/**
 	 * 由包含的{@code BeanFactory}在销毁bean时调用。
-	 * @throws Exception 如果关闭时出现错误。异常会被记录
-	 * 但不会重新抛出，以允许其他bean也能释放其资源。
+	 * @throws Exception 如果关闭时出现错误。异常会被记录，但不会重新抛出，以允许其他bean也能释放其资源。
 	 */
 	void destroy() throws Exception;
 

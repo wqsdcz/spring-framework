@@ -17,12 +17,12 @@
 package org.springframework.beans.factory;
 
 /**
- * 由需要在{@link BeanFactory}设置完所有属性后做出反应的bean实现的接口：
+ * 由需要，在{@link BeanFactory}为Bean实例设置完所有属性后，做出反应的bean实现的接口：
  * 例如，执行自定义初始化，或仅仅检查所有必需属性是否已设置。
  *
- * <p>实现{@code InitializingBean}的替代方案是指定自定义
- * 初始化方法，例如在XML bean定义中。有关所有bean
- * 生命周期方法的列表，请参见{@link BeanFactory BeanFactory javadocs}。
+ * <p>
+ *     实现{@code InitializingBean}的替代方案是指定自定义初始化方法，例如在XML bean定义中。
+ *     有关所有bean生命周期方法的列表，请参见{@link BeanFactory BeanFactory javadocs}。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -33,12 +33,11 @@ package org.springframework.beans.factory;
 public interface InitializingBean {
 
 	/**
-	 * 在包含的{@code BeanFactory}设置了所有bean属性并满足
-	 * {@link BeanFactoryAware}、{@code ApplicationContextAware}等之后由其调用。
-	 * <p>此方法允许bean实例对其整体配置进行验证
-	 * 并在设置完所有bean属性后进行最终初始化。
-	 * @throws Exception 如果配置错误（例如未能设置必要属性）
-	 * 或因任何其他原因初始化失败
+	 * 在包含的{@code BeanFactory}设置了所有bean属性并满足{@link BeanFactoryAware}、{@code ApplicationContextAware}等之后由其调用。
+	 * <p>
+	 *     此方法允许bean实例对其整体配置进行验证，并在设置完所有bean属性后进行最终初始化。
+	 *
+	 * @throws Exception 如果配置错误（例如未能设置必要属性）或因任何其他原因初始化失败
 	 */
 	void afterPropertiesSet() throws Exception;
 

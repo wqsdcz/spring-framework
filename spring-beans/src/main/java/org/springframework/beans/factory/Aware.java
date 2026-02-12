@@ -17,12 +17,14 @@
 package org.springframework.beans.factory;
 
 /**
- * 一个标记超级接口，指示bean有资格通过回调式方法由Spring容器通知特定框架对象。
- * 实际的方法签名由各个子接口确定，但通常应只包含一个接受单个参数的void返回方法。
+ * 一个标记超级接口，指示bean有资格由Spring容器通过回调式方法以参数形式传入特定框架对象的方式让Bean感知到特定框架对象。
+ * 实际的回调方法的方法签名由各个子接口确定，但通常应只包含一个接受单个参数的void返回方法。
  *
- * <p>注意，仅实现{@link Aware}不提供默认功能。
- * 相反，处理必须显式完成，例如在{@link org.springframework.beans.factory.config.BeanPostProcessor}中。
- * 有关处理特定{@code *Aware}接口回调的示例，请参见 {@link org.springframework.context.support.ApplicationContextAwareProcessor}。
+ * <p>
+ *     注意，仅实现{@link Aware}不提供默认功能。
+ *     需要为{@link Aware}子接口，提供对应的显示处理逻辑。
+ *     例如：可以为{@link Aware}子接口提供对应的{@link org.springframework.beans.factory.config.BeanPostProcessor}子类。
+ *     有关处理特定{@code *Aware}接口回调的示例，请参见 {@link org.springframework.context.support.ApplicationContextAwareProcessor}。
  *
  * @author Chris Beams
  * @author Juergen Hoeller

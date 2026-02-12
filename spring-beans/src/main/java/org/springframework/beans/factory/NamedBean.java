@@ -17,9 +17,11 @@
 package org.springframework.beans.factory;
 
 /**
- * {@link BeanNameAware}的对应接口。返回对象的bean名称。
+ * {@link BeanNameAware}的对应接口。
+ * 返回对象的bean名称。
  *
- * <p>可以引入此接口以避免在使用Spring IoC和Spring AOP的对象中对bean名称的脆弱依赖。
+ * <p>
+ *     可以引入此接口以避免在使用 Spring IoC 和 Spring AOP 的对象中对bean名称的脆弱依赖。
  *
  * @author Rod Johnson
  * @since 2.0

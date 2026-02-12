@@ -17,14 +17,15 @@
 package org.springframework.beans.factory;
 
 /**
- * 允许bean感知bean {@link ClassLoader 类加载器}的回调；
+ * 指示bean有资格由Spring容器通过回调式方法以参数形式传入 {@link ClassLoader bean的类加载器} 的方式
+ * 让bean感知到 {@link ClassLoader bean的类加载器}。
  * 即，当前bean工厂用于加载bean类的类加载器。
  *
- * <p>这主要用于由框架类实现，这些类必须通过名称获取应用程序类，
- * 尽管它们本身可能是从共享类加载器加载的。
+ * <p>
+ *     这主要用于由框架类实现，这些类必须通过名称获取应用程序类，
+ *     尽管它们本身可能是从共享类加载器加载的。
  *
- * <p>有关所有bean生命周期方法的列表，请参见
- * {@link BeanFactory BeanFactory javadocs}。
+ * <p>有关所有bean生命周期方法的列表，请参见 {@link BeanFactory BeanFactory javadocs}。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -36,11 +37,10 @@ package org.springframework.beans.factory;
 public interface BeanClassLoaderAware extends Aware {
 
 	/**
-	 * 向bean实例提供bean {@link ClassLoader 类加载器}的回调。
-	 * <p>在正常bean属性填充<i>之后</i>、初始化回调（如
-	 * {@link InitializingBean InitializingBean}的
-	 * {@link InitializingBean#afterPropertiesSet()}
-	 * 方法或自定义init-method）<i>之前</i>调用。
+	 * 向bean实例提供 {@link ClassLoader bean的类加载器} 的回调。
+	 * <p>
+	 *     在正常bean属性填充之后、初始化回调（如{@link InitializingBean#afterPropertiesSet()}或自定义init-method）之前调用。
+	 *
 	 * @param classLoader 所属的类加载器
 	 */
 	void setBeanClassLoader(ClassLoader classLoader);

@@ -64,16 +64,14 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * 角色提示，表明 {@code BeanDefinition} 是某些较大配置的支持部分，
 	 * 通常是外部的 {@link org.springframework.beans.factory.parsing.ComponentDefinition}。
-	 * {@code SUPPORT} bean 在更仔细查看特定的
-	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition} 时被认为足够重要，
+	 * {@code SUPPORT} bean 在更仔细查看特定的{@link org.springframework.beans.factory.parsing.ComponentDefinition} 时被认为足够重要，
 	 * 但在查看应用程序的整体配置时不考虑。
 	 */
 	int ROLE_SUPPORT = 1;
 
 	/**
-	 * 角色提示，表明 {@code BeanDefinition} 提供完全的后台角色，
-	 * 对最终用户没有相关性。当注册完全属于
-	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition} 内部工作的 bean 时使用此提示。
+	 * 角色提示，表明 {@code BeanDefinition} 提供完全的后台角色，对最终用户没有相关性。
+	 * 当注册完全属于{@link org.springframework.beans.factory.parsing.ComponentDefinition} 内部工作的 bean 时使用此提示。
 	 */
 	int ROLE_INFRASTRUCTURE = 2;
 
@@ -93,8 +91,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * 指定此 bean 定义的 bean 类名。
-	 * <p>类名可以在 bean 工厂后处理期间修改，
-	 * 通常用解析后的变体替换原始类名。
+	 * <p>
+	 *     类名可以在 bean 工厂后处理期间修改，通常用解析后的变体替换原始类名。
 	 * @see #setParentName
 	 * @see #setFactoryBeanName
 	 * @see #setFactoryMethodName
@@ -292,8 +290,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getDestroyMethodName();
 
 	/**
-	 * 设置此 {@code BeanDefinition} 的角色提示。角色提示
-	 * 为框架以及工具提供了特定 {@code BeanDefinition} 的角色和重要性的指示。
+	 * 设置此 {@code BeanDefinition} 的角色提示。
+	 * 角色提示为框架以及工具提供了特定 {@code BeanDefinition} 的角色和重要性的指示。
 	 * @since 5.1
 	 * @see #ROLE_APPLICATION
 	 * @see #ROLE_SUPPORT
@@ -302,8 +300,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	void setRole(int role);
 
 	/**
-	 * 获取此 {@code BeanDefinition} 的角色提示。角色提示
-	 * 为框架以及工具提供了特定 {@code BeanDefinition} 的角色和重要性的指示。
+	 * 获取此 {@code BeanDefinition} 的角色提示。
+	 * 角色提示为框架以及工具提供了特定 {@code BeanDefinition} 的角色和重要性的指示。
 	 * @see #ROLE_APPLICATION
 	 * @see #ROLE_SUPPORT
 	 * @see #ROLE_INFRASTRUCTURE
@@ -327,8 +325,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * 基于 bean 类或其他特定元数据返回此 bean 定义的可解析类型。
-	 * <p>这通常在运行时合并的 bean 定义上完全解析，
-	 * 但在配置时定义实例上不一定如此。
+	 * <p>这通常在运行时合并的 bean 定义上完全解析，但在配置时定义实例上不一定如此。
 	 * @return 可解析类型（可能是 {@link ResolvableType#NONE}）
 	 * @since 5.2
 	 * @see ConfigurableBeanFactory#getMergedBeanDefinition
@@ -355,8 +352,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	boolean isAbstract();
 
 	/**
-	 * 返回此 bean 定义来源的资源描述
-	 *（用于在出现错误时显示上下文）。
+	 * 返回此 bean 定义来源的资源描述（用于在出现错误时显示上下文）。
 	 */
 	@Nullable
 	String getResourceDescription();

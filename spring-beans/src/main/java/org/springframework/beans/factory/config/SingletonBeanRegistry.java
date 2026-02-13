@@ -21,12 +21,10 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 /**
- * Interface that defines a registry for shared bean instances.
- * Can be implemented by {@link org.springframework.beans.factory.BeanFactory}
- * implementations in order to expose their singleton management facility
- * in a uniform manner.
+ * 定义共享 bean 实例注册表的接口。
+ * 可由 {@link org.springframework.beans.factory.BeanFactory} 实现类来实现，以便以统一的方式暴露其单例管理功能。
  *
- * <p>The {@link ConfigurableBeanFactory} interface extends this interface.
+ * <p>{@link ConfigurableBeanFactory} 接口扩展了此接口。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -37,22 +35,17 @@ import org.springframework.lang.Nullable;
 public interface SingletonBeanRegistry {
 
 	/**
-	 * Register the given existing object as singleton in the bean registry,
-	 * under the given bean name.
-	 * <p>The given instance is supposed to be fully initialized; the registry
-	 * will not perform any initialization callbacks (in particular, it won't
-	 * call InitializingBean's {@code afterPropertiesSet} method).
-	 * The given instance will not receive any destruction callbacks
-	 * (like DisposableBean's {@code destroy} method) either.
-	 * <p>When running within a full BeanFactory: <b>Register a bean definition
-	 * instead of an existing instance if your bean is supposed to receive
-	 * initialization and/or destruction callbacks.</b>
-	 * <p>Typically invoked during registry configuration, but can also be used
-	 * for runtime registration of singletons. As a consequence, a registry
-	 * implementation should synchronize singleton access; it will have to do
-	 * this anyway if it supports a BeanFactory's lazy initialization of singletons.
-	 * @param beanName the name of the bean
-	 * @param singletonObject the existing singleton object
+	 * 在 bean 注册表中将给定的现有对象注册为单例，使用指定的 bean 名称。
+	 * <p>给定的实例应该是完全初始化的；注册表不会执行任何初始化回调
+	 *（特别是不会调用 InitializingBean 的 {@code afterPropertiesSet} 方法）。
+	 * 给定的实例也不会接收到任何销毁回调（例如 DisposableBean 的 {@code destroy} 方法）。
+	 * <p>在完整的 BeanFactory 中运行时：<b>如果你的 bean 需要接收初始化和/或销毁回调，
+	 * 请注册 bean 定义而不是现有实例。</b>
+	 * <p>通常在注册表配置期间调用，但也可以用于运行时单例注册。
+	 * 因此，注册表实现应该同步单例访问；如果它支持 BeanFactory 的单例懒加载，
+	 * 它无论如何都必须这样做。
+	 * @param beanName bean 的名称
+	 * @param singletonObject 现有的单例对象
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
 	 * @see org.springframework.beans.factory.DisposableBean#destroy
 	 * @see org.springframework.beans.factory.support.BeanDefinitionRegistry#registerBeanDefinition

@@ -78,62 +78,62 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private static final int SUPPRESSED_EXCEPTIONS_LIMIT = 100;
 
 
-	/** Common lock for singleton creation. */
+	/** 【单例创建过程】使用的【公共锁】。 */
 	final Lock singletonLock = new ReentrantLock();
 
-	/** Cache of singleton objects: bean name to bean instance. */
+	/** 单例对象的缓存: bean名称 到 bean实例。 */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
-	/** Creation-time registry of singleton factories: bean name to ObjectFactory. */
+	/** 在创建期间，单例工厂的注册表：bean名称 到 ObjectFactory实例。 */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new ConcurrentHashMap<>(16);
 
-	/** Custom callbacks for singleton creation/registration. */
+	/** 单例在创建/注册过程中执行的自定义回调。 */
 	private final Map<String, Consumer<Object>> singletonCallbacks = new ConcurrentHashMap<>(16);
 
-	/** Cache of early singleton objects: bean name to bean instance. */
+	/** 提前实例化的单例对象的缓存: bean名称 到 bean实例。 */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
-	/** Set of registered singletons, containing the bean names in registration order. */
+	/** 已注册的单例集合，按注册顺序包含 bean 名称。 */
 	private final Set<String> registeredSingletons = Collections.synchronizedSet(new LinkedHashSet<>(256));
 
-	/** Names of beans that are currently in creation. */
+	/** 当前正在创建中的 bean 名称。 */
 	private final Set<String> singletonsCurrentlyInCreation = ConcurrentHashMap.newKeySet(16);
 
-	/** Names of beans currently excluded from in creation checks. */
+	/** 当前排除在创建检查之外的 bean 名称。 */
 	private final Set<String> inCreationCheckExclusions = ConcurrentHashMap.newKeySet(16);
 
-	/** Specific lock for lenient creation tracking. */
+	/** 专门用于宽松创建跟踪的锁。 */
 	private final Lock lenientCreationLock = new ReentrantLock();
 
-	/** Specific lock condition for lenient creation tracking. */
+	/** 专门用于宽松创建跟踪的锁条件。 */
 	private final Condition lenientCreationFinished = this.lenientCreationLock.newCondition();
 
-	/** Names of beans that are currently in lenient creation. */
+	/** 当前处于宽松创建模式的 bean 名称。 */
 	private final Set<String> singletonsInLenientCreation = new HashSet<>();
 
-	/** Map from one creation thread waiting on a lenient creation thread. */
+	/** 从一个创建线程映射到等待宽松创建线程的映射。 */
 	private final Map<Thread, Thread> lenientWaitingThreads = new HashMap<>();
 
-	/** Map from bean name to actual creation thread for currently created beans. */
+	/** 从 bean 名称到当前正在创建的 bean 的实际创建线程的映射。 */
 	private final Map<String, Thread> currentCreationThreads = new ConcurrentHashMap<>();
 
-	/** Flag that indicates whether we're currently within destroySingletons. */
+	/** 标志位，指示当前是否正在进行 destroySingletons 操作。 */
 	private volatile boolean singletonsCurrentlyInDestruction = false;
 
-	/** Collection of suppressed Exceptions, available for associating related causes. */
+	/** 收集被抑制的异常，可用于关联相关原因。 */
 	@Nullable
 	private Set<Exception> suppressedExceptions;
 
-	/** Disposable bean instances: bean name to disposable instance. */
+	/** 可销毁的 bean 实例：bean 名称到可销毁实例的映射。 */
 	private final Map<String, DisposableBean> disposableBeans = new LinkedHashMap<>();
 
-	/** Map between containing bean names: bean name to Set of bean names that the bean contains. */
+	/** 包含bean名称之间的映射：bean名称到该bean所包含的bean名称集合。 */
 	private final Map<String, Set<String>> containedBeanMap = new ConcurrentHashMap<>(16);
 
-	/** Map between dependent bean names: bean name to Set of dependent bean names. */
+	/** 映射依赖bean名称的关系：bean名称到依赖于该bean的bean名称集合。 */
 	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64);
 
-	/** Map between depending bean names: bean name to Set of bean names for the bean's dependencies. */
+	/** 映射被依赖bean名称的关系：bean名称到该bean所依赖的bean名称集合。 */
 	private final Map<String, Set<String>> dependenciesForBeanMap = new ConcurrentHashMap<>(64);
 
 
@@ -151,6 +151,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
+	 * 1、如果存在同名的bean，则抛出IllegalStateException异常。
+	 * 2、如果不存在同名的bean，则：
+	 * 		（1）将【beanName -> bean对象】注册到【单例注册表】中。
+	 * 		（2）将【beanName -> ObjectFactory】从【负责懒加载的单例工厂注册表】中移除。
+	 * 		（3）将【beanName -> bean对象】从【负责提前暴露的单例注册表】中移除。（即已实例化，但未填充属性）
+	 * 		（4）将【beanName】注册到 【已注册单例的beanName的注册表中】。
+	 * 		（5）获取并执行【beanName】对应的【单例在创建/注册过程中执行的自定义回调】。
 	 * Add the given singleton object to the singleton registry.
 	 * <p>To be called for exposure of freshly registered/created singletons.
 	 * @param beanName the name of the bean
@@ -173,10 +180,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Add the given singleton factory for building the specified singleton
-	 * if necessary.
-	 * <p>To be called for early exposure purposes, for example, to be able to
-	 * resolve circular references.
+	 * 1、将【beanName -> 对象工厂】注册到【负责懒加载的单例工厂注册表】中。
+	 * 2、将【beanName -> bean对象】从【负责提前暴露的单例注册表】中移除。
+	 * 3、将【beanName】注册到 【已注册单例的beanName的注册表中】。
+	 *
 	 * @param beanName the name of the bean
 	 * @param singletonFactory the factory for the singleton object
 	 */
@@ -199,12 +206,18 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Return the (raw) singleton object registered under the given name.
-	 * <p>Checks already instantiated singletons and also allows for an early
-	 * reference to a currently created singleton (resolving a circular reference).
-	 * @param beanName the name of the bean to look for
-	 * @param allowEarlyReference whether early references should be created or not
-	 * @return the registered singleton object, or {@code null} if none found
+	 * 1、如果单例注册表中找到bean，则直接返回获取到的bean；
+	 * 2、如果单例注册表中未找到bean，且bean处于正在创建中，则返回null；
+	 * 3、如果单例注册表中未找到bean，且bean不处于创建中，且单例提前注册表中找到bean，则直接返回获取到的bean；
+	 * 4、如果单例注册表中未找到bean，且bean不处于创建中，且单例提前注册表中未找到bean，且不许提前创建引用，则返回null；
+	 * 5、如果单例注册表中未找到bean，且bean不处于创建中，且单例提前注册表中未找到bean，且允许提前创建引用，且未查询到了ObjectFactory对象，则返回null；
+	 * 6、如果单例注册表中未找到bean，且bean不处于创建中，且单例提前注册表中未找到bean，且允许提前创建引用，且查询到了ObjectFactory对象，
+	 *    则将ObjectFactory对象从延迟列表中移除，将ObjectFactory对象创建的bean添加到单例提前注册表中，并返回该bean；
+	 * 返回以给定名称注册的（原始）单例对象。
+	 * <p>检查已实例化的单例，并允许对当前正在创建的单例进行早期引用（解决循环引用问题）。
+	 * @param beanName 要查找的 bean 名称
+	 * @param allowEarlyReference 是否应提前创建bean的引用
+	 * @return 注册的单例对象，如果未找到则返回 {@code null}
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
@@ -246,27 +259,26 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Return the (raw) singleton object registered under the given name,
-	 * creating and registering a new one if none registered yet.
-	 * @param beanName the name of the bean
-	 * @param singletonFactory the ObjectFactory to lazily create the singleton
-	 * with, if necessary
-	 * @return the registered singleton object
+	 * 返回以给定名称注册的（原始）单例对象，
+	 * 如果尚未注册，则创建并注册一个新的单例对象。
+	 * @param beanName bean 的名称
+	 * @param singletonFactory 用于延迟创建单例的 ObjectFactory（如有必要）
+	 * @return 已注册的单例对象
 	 */
 	@SuppressWarnings("NullAway")
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");
 
 		Thread currentThread = Thread.currentThread();
-		Boolean lockFlag = isCurrentThreadAllowedToHoldSingletonLock();
-		boolean acquireLock = !Boolean.FALSE.equals(lockFlag);
-		boolean locked = (acquireLock && this.singletonLock.tryLock());
+		Boolean lockFlag = isCurrentThreadAllowedToHoldSingletonLock(); // 获取当前线程是否允许获取单例锁
+		boolean acquireLock = !Boolean.FALSE.equals(lockFlag);	// 判断当前线程是否允许获取单例锁
+		boolean locked = (acquireLock && this.singletonLock.tryLock()); // 尝试获取单例锁
 
 		try {
 			Object singletonObject = this.singletonObjects.get(beanName);
-			if (singletonObject == null) {
-				if (acquireLock && !locked) {
-					if (Boolean.TRUE.equals(lockFlag)) {
+			if (singletonObject == null) { // 没有获取到单例对象
+				if (acquireLock && !locked) { // 当前线程允许获取，但没获取单例锁
+					if (Boolean.TRUE.equals(lockFlag)) { // lockFlag 为 true；
 						// Another thread is busy in a singleton factory callback, potentially blocked.
 						// Fallback as of 6.2: process given singleton bean outside of singleton lock.
 						// Thread-safe exposure is still guaranteed, there is just a risk of collisions
@@ -286,7 +298,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 							this.lenientCreationLock.unlock();
 						}
 					}
-					else {
+					else { // lockFlag 为 null；
 						// No specific locking indication (outside a coordinated bootstrap) and
 						// singleton lock currently held by some other creation method -> wait.
 						this.singletonLock.lock();
@@ -444,35 +456,39 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Determine whether the current thread is allowed to hold the singleton lock.
-	 * <p>By default, all threads are forced to hold a full lock through {@code null}.
-	 * {@link DefaultListableBeanFactory} overrides this to specifically handle its
-	 * threads during the pre-instantiation phase: {@code true} for the main thread,
-	 * {@code false} for managed background threads, and configuration-dependent
-	 * behavior for unmanaged threads.
-	 * @return {@code true} if the current thread is explicitly allowed to hold the
-	 * lock but also accepts lenient fallback behavior, {@code false} if it is
-	 * explicitly not allowed to hold the lock and therefore forced to use lenient
-	 * fallback behavior, or {@code null} if there is no specific indication
-	 * (traditional behavior: forced to always hold a full lock)
+	 * 确定当前线程是否被允许持有单例锁。
+	 * <p>
+	 *     默认情况下，所有线程都通过返回 {@code null} 被强制持有完整的锁。
+	 *     {@link DefaultListableBeanFactory} 会覆盖此方法，以便在预实例化阶段专门处理其线程：
+	 *     主线程返回 {@code true}，受管理的后台线程返回 {@code false}，对于非受管的线程则根据配置决定行为。
+	 *
+	 * @return {@code true} 表示当前线程明确被允许持有锁，但也接受宽松的回退行为；
+	 *         {@code false} 表示当前线程明确不被允许持有锁，因此被迫使用宽松的回退行为；
+	 *         或者 {@code null} 表示没有特定指示（传统行为：始终强制持有完整锁）
 	 * @since 6.2
 	 */
 	@Nullable
 	protected Boolean isCurrentThreadAllowedToHoldSingletonLock() {
+		// 默认情况下，所有线程都被强制持有完整的锁（通过返回 null）。
+		// 子类可以覆盖此方法以根据线程类型返回不同的策略：
+		// - 返回 true：允许当前线程持有锁，但也接受宽松的回退行为。
+		// - 返回 false：明确禁止当前线程持有锁，因此强制使用宽松的回退行为。
+		// - 返回 null：无特定指示（传统行为：始终强制持有完整锁）。
 		return null;
 	}
 
 	/**
-	 * Register an exception that happened to get suppressed during the creation of a
-	 * singleton bean instance, for example, a temporary circular reference resolution problem.
-	 * <p>The default implementation preserves any given exception in this registry's
-	 * collection of suppressed exceptions, up to a limit of 100 exceptions, adding
-	 * them as related causes to an eventual top-level {@link BeanCreationException}.
-	 * @param ex the Exception to register
+	 * 注册在创建单例 bean 实例期间被抑制的异常，例如临时的循环引用解析问题。
+	 * <p>
+	 *     默认实现会在该注册表的抑制异常集合中保留任何给定的异常，最多保留 100 个异常，
+	 *     并将其作为最终顶级 {@link BeanCreationException} 的相关原因添加。
+	 * @param ex 要注册的异常
 	 * @see BeanCreationException#getRelatedCauses()
 	 */
 	protected void onSuppressedException(Exception ex) {
+		// 检查抑制异常集合是否存在且未达到上限
 		if (this.suppressedExceptions != null && this.suppressedExceptions.size() < SUPPRESSED_EXCEPTIONS_LIMIT) {
+			// 将异常添加到抑制异常集合中
 			this.suppressedExceptions.add(ex);
 		}
 	}
@@ -483,9 +499,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param beanName the name of the bean
 	 */
 	protected void removeSingleton(String beanName) {
+		// 从单例对象缓存中移除指定的bean
 		this.singletonObjects.remove(beanName);
+		// 从单例工厂缓存中移除指定的bean
 		this.singletonFactories.remove(beanName);
+		// 从提前暴露的单例对象缓存中移除指定的bean
 		this.earlySingletonObjects.remove(beanName);
+		// 从已注册的单例集合中移除指定的bean名称
 		this.registeredSingletons.remove(beanName);
 	}
 
@@ -546,9 +566,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Callback after singleton creation.
-	 * <p>The default implementation marks the singleton as not in creation anymore.
-	 * @param beanName the name of the singleton that has been created
+	 * 单例创建后的回调。
+	 * <p>默认实现将单例标记为不再处于创建状态。
+	 * @param beanName 已创建的单例的名称
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void afterSingletonCreation(String beanName) {

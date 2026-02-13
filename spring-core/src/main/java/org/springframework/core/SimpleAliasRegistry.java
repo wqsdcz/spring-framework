@@ -30,11 +30,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 
 /**
- * Simple implementation of the {@link AliasRegistry} interface.
+ * 简单的{@link AliasRegistry} 接口实现类。
+ * <p> 用作{@link org.springframework.beans.factory.support.BeanDefinitionRegistry}实现类的基类。
  *
- * <p>Serves as base class for
- * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
- * implementations.
  *
  * @author Juergen Hoeller
  * @author Qimiao Chen
@@ -46,13 +44,24 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	/** Logger available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Map from alias to canonical name. */
+	/** 从别名到规范名称的映射。 */
 	private final Map<String, String> aliasMap = new ConcurrentHashMap<>(16);
 
-	/** List of alias names, in registration order. */
+	/** 别名列表，按注册顺序排列。 */
 	private final List<String> aliasNames = new ArrayList<>(16);
 
 
+	/**
+	 * 1、如果alias == name，则注销掉旧别名映射关系（意味着这是一个注销操作）。
+	 * 2、如果alias != name，且别名已经注册，且registeredName == name，则无需注册直接返回（意味着这是一个重复操作）。
+	 * 3、如果alias != name，且别名已经注册，且registeredName != name，且不允许覆盖旧别名映射关系，则抛出IllegalStateException异常。
+	 * 4、如果alias != name，且别名已经注册，且registeredName != name，且允许覆盖旧别名映射关系，且不存在循环引用，则注册新的别名映射关系。
+	 * 5、如果alias != name，且别名已经注册，且registeredName != name，且允许覆盖旧别名映射关系，且存在循环引用，则抛出IllegalStateException异常。
+	 * 5、如果alias != name，且别名未经注册，且存在循环引用，则抛出IllegalStateException异常。
+	 * 6、如果alias != name，且别名未经注册，且不存在循环引用，则注册新的别名映射关系。
+	 * @param name the canonical name
+	 * @param alias the alias to be registered
+	 */
 	@Override
 	public void registerAlias(String name, String alias) {
 		Assert.hasText(name, "'name' must not be empty");
@@ -92,8 +101,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
-	 * Determine whether alias overriding is allowed.
-	 * <p>Default is {@code true}.
+	 * 确定是否允许覆盖旧的已注册的别名映射关系。
+	 * <p>默认为{@code true}。
 	 */
 	protected boolean allowAliasOverriding() {
 		return true;
@@ -137,6 +146,13 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
+	 * 递归地检索给定name 的所有别名。
+	 * 返回 result 列表包含：
+	 * 1、给定name的别名。
+	 * 2、给定name的别名的别名。
+	 * 3、给定name的别名的别名的别名。
+	 * 4、依此类推
+	 * 这些都被称为别名;
 	 * Transitively retrieve all aliases for the given name.
 	 * @param name the target name to find aliases for
 	 * @param result the resulting aliases list

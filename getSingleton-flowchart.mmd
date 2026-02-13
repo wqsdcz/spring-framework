@@ -1,0 +1,103 @@
+flowchart TD
+    Start([开始]) --> GetLockFlag[获取线程锁标志<br/>isCurrentThreadAllowedToHoldSingletonLock()]
+    GetLockFlag --> TryLock[尝试获取单例锁<br/>singletonLock.tryLock()]
+    TryLock --> GetSingleton[从 singletonObjects<br/>获取单例]
+
+    GetSingleton --> ExistsCheck{单例已存在?}
+    ExistsCheck -->|是| ReturnExists[返回已存在的单例]
+    ReturnExists --> End1([结束])
+    ExistsCheck -->|否| CheckLenient{需要获取锁但未获取到<br/>且锁标志为 true?}
+
+    CheckLenient -->|是| EnterLenient[进入宽松创建模式<br/>singletonsInLenientCreation.add]
+    EnterLenient --> LogLenient[记录日志]
+    LogLenient --> CheckDestroy
+
+    CheckLenient -->|否| CheckWaitLock{需要获取锁<br/>但未获取到?}
+    CheckWaitLock -->|是| BlockLock[阻塞等待获取锁<br/>singletonLock.lock()]
+    BlockLock --> RecheckSingleton[再次检查单例是否存在]
+    RecheckSingleton --> ExistsAgain{单例已存在?}
+    ExistsAgain -->|是| ReturnExists2[返回已存在的单例]
+    ReturnExists2 --> End2([结束])
+    ExistsAgain -->|否| CheckDestroy[检查是否正在销毁单例]
+
+    CheckWaitLock -->|否| CheckDestroy
+
+    CheckDestroy --> Destroying{正在销毁单例?}
+    Destroying -->|是| ThrowDestroy[抛出 BeanCreationNotAllowedException]
+    ThrowDestroy --> End3([结束])
+    Destroying -->|否| BeforeCreation[标记 Bean 正在创建中<br/>beforeSingletonCreation(beanName)]
+
+    BeforeCreation --> CreationException{捕获<br/>BeanCurrentlyInCreationException?}
+    CreationException -->|是| EnterCircular[进入循环依赖处理逻辑]
+
+    EnterCircular --> CircularLoop{单例仍为 null?}
+    CircularLoop -->|是| GetThread[获取创建该 Bean 的线程]
+    GetThread --> SameThread{是同一线程或<br/>存在依赖等待链?}
+    SameThread -->|是| ThrowCircular[真正的循环依赖!<br/>抛出异常]
+    ThrowCircular --> End4([结束])
+    SameThread -->|否| InLenient{在宽松创建模式?}
+    InLenient -->|否| ExitLoop[退出等待循环]
+    ExitLoop --> CheckAfterLoop
+
+    InLenient -->|是| RecordWait[记录等待线程关系]
+    RecordWait --> Await[等待宽松创建完成信号<br/>lenientCreationFinished.await()]
+    Await --> CleanWait[清理等待线程记录]
+    CleanWait --> CircularLoop
+
+    CircularLoop -->|否| CheckAfterLoop[检查单例是否存在]
+    CheckAfterLoop --> ExistsAfter{单例已存在?}
+    ExistsAfter -->|是| ReturnAfter[返回单例]
+    ReturnAfter --> End5([结束])
+    ExistsAfter -->|否| CheckLocked{未持有锁?}
+    CheckLocked -->|是| AcquireLock[获取单例锁]
+    AcquireLock --> RecheckAfter[再次检查单例]
+    RecheckAfter --> ExistsFinal{单例已存在?}
+    ExistsFinal -->|是| ReturnFinal[返回单例]
+    ReturnFinal --> End6([结束])
+    ExistsFinal -->|否| BeforeAgain[再次标记正在创建中]
+    CheckLocked -->|否| BeforeAgain
+    BeforeAgain --> InitSuppressed
+
+    CreationException -->|否| InitSuppressed[初始化抑制异常集合]
+
+    InitSuppressed --> RecordThread[记录当前创建线程<br/>currentCreationThreads.put]
+    RecordThread --> TryCreate[执行工厂方法创建 Bean<br/>singletonFactory.getObject()]
+
+    TryCreate --> CreateException{捕获异常?}
+    CreateException -->|IllegalStateException| CheckImplicit[检查单例是否已隐式创建]
+    CheckImplicit --> ImplicitExists{已创建?}
+    ImplicitExists -->|是| UseExisting[使用已存在的单例]
+    ImplicitExists -->|否| ReThrow[重新抛出异常]
+    ReThrow --> End7([结束])
+
+    CreateException -->|BeanCreationException| AddSuppressed[添加相关抑制异常]
+    AddSuppressed --> ReThrowBean[重新抛出]
+    ReThrowBean --> End8([结束])
+
+    CreateException -->|无异常| MarkCreated[标记创建完成<br/>afterSingletonCreation(beanName)]
+    UseExisting --> MarkCreated
+
+    MarkCreated --> NewSingleton{是新创建的单例?}
+    NewSingleton -->|是| AddSingleton[注册到单例缓存<br/>addSingleton(beanName, object)]
+    AddSingleton --> ReleaseLock
+    NewSingleton -->|否| ReleaseLock[释放单例锁（如果持有）]
+
+    ReleaseLock --> CleanLenient[清理宽松创建状态<br/>singletonsInLenientCreation.remove]
+    CleanLenient --> CleanWaitThreads[清理等待线程记录]
+    CleanWaitThreads --> SignalAll[通知所有等待线程<br/>lenientCreationFinished.signalAll()]
+    SignalAll --> ReturnObject[返回单例对象]
+    ReturnObject --> End9([结束])
+
+    style Start fill:#e1f5e1
+    style End1 fill:#ffe1e1
+    style End2 fill:#ffe1e1
+    style End3 fill:#ffe1e1
+    style End4 fill:#ffe1e1
+    style End5 fill:#ffe1e1
+    style End6 fill:#ffe1e1
+    style End7 fill:#ffe1e1
+    style End8 fill:#ffe1e1
+    style End9 fill:#ffe1e1
+    style AddSingleton fill:#fff4e1
+    style ThrowCircular fill:#ffe1e1
+    style ThrowDestroy fill:#ffe1e1

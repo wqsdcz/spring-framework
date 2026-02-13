@@ -1174,6 +1174,148 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	}
 
 	/**
+	 * Validate bean class accessibility according to configuration.
+	 * 根据配置验证Bean类的可访问性。
+	 * @param beanClass the resolved bean class
+	 * @param mbd the merged bean definition
+	 * @param beanName the name of the bean
+	 * @throws BeanCreationException if class is not accessible
+	 */
+	private void validateBeanClassAccessibility(Class<?> beanClass, RootBeanDefinition mbd, String beanName) {
+		if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
+			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
+					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
+		}
+	}
+
+	/**
+	 * Check if instance supplier can be used for bean creation.
+	 * 检查是否可以使用实例供应器来创建Bean。
+	 * @param args constructor arguments
+	 * @param mbd the merged bean definition
+	 * @return true if instance supplier should be used
+	 */
+	private boolean canUseInstanceSupplier(@Nullable Object[] args, RootBeanDefinition mbd) {
+		return args == null && mbd.getInstanceSupplier() != null;
+	}
+
+	/**
+	 * Check if factory method is defined in bean definition.
+	 * 检查Bean定义中是否定义了工厂方法。
+	 * @param mbd the merged bean definition
+	 * @return true if factory method exists
+	 */
+	private boolean hasFactoryMethod(RootBeanDefinition mbd) {
+		return mbd.getFactoryMethodName() != null;
+	}
+
+	/**
+	 * State class for constructor resolution caching.
+	 * 构造函数解析缓存的状态类。
+	 */
+	private static class ConstructorResolutionState {
+		private final boolean resolved;
+		private final boolean autowireNecessary;
+
+		public ConstructorResolutionState(boolean resolved, boolean autowireNecessary) {
+			this.resolved = resolved;
+			this.autowireNecessary = autowireNecessary;
+		}
+
+		public boolean isResolved() {
+			return resolved;
+		}
+
+		public boolean isAutowireNecessary() {
+			return autowireNecessary;
+		}
+	}
+
+	/**
+	 * Get cached constructor resolution state from bean definition.
+	 * 从Bean定义中获取缓存的构造函数解析状态。
+	 * @param mbd the merged bean definition
+	 * @param args constructor arguments
+	 * @return constructor resolution state
+	 */
+	private ConstructorResolutionState getCachedConstructorResolutionState(RootBeanDefinition mbd, @Nullable Object[] args) {
+		if (args != null) {
+			return new ConstructorResolutionState(false, false);
+		}
+
+		synchronized (mbd.constructorArgumentLock) {
+			if (mbd.resolvedConstructorOrFactoryMethod != null) {
+				return new ConstructorResolutionState(true, mbd.constructorArgumentsResolved);
+			}
+		}
+		return new ConstructorResolutionState(false, false);
+	}
+
+	/**
+	 * Create instance from previously resolved constructor.
+	 * 从先前解析的构造函数创建实例。
+	 * @param beanName the name of the bean
+	 * @param mbd the merged bean definition
+	 * @param resolutionState the constructor resolution state
+	 * @return BeanWrapper for the new instance
+	 */
+	private BeanWrapper createInstanceFromResolvedConstructor(String beanName, RootBeanDefinition mbd,
+			ConstructorResolutionState resolutionState) {
+		if (resolutionState.isAutowireNecessary()) {
+			return autowireConstructor(beanName, mbd, null, null);
+		} else {
+			return instantiateBean(beanName, mbd);
+		}
+	}
+
+	/**
+	 * Create instance with constructor autowiring logic.
+	 * 使用构造函数自动装配逻辑创建实例。
+	 * @param beanName the name of the bean
+	 * @param mbd the merged bean definition
+	 * @param beanClass the resolved bean class
+	 * @param args constructor arguments
+	 * @return BeanWrapper for the new instance
+	 */
+	private BeanWrapper createInstanceWithConstructorAutowiring(String beanName, RootBeanDefinition mbd,
+			Class<?> beanClass, @Nullable Object[] args) {
+		
+		// Priority 1: Constructors determined by BeanPostProcessors
+		// 优先级1：由BeanPostProcessors确定的构造函数
+		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
+		if (shouldUseConstructorAutowiring(ctors, mbd, args)) {
+			return autowireConstructor(beanName, mbd, ctors, args);
+		}
+
+		// Priority 2: Preferred constructors
+		// 优先级2：首选构造函数
+		ctors = mbd.getPreferredConstructors();
+		if (ctors != null) {
+			return autowireConstructor(beanName, mbd, ctors, null);
+		}
+
+		// Default: Use no-arg constructor
+		// 默认：使用无参构造函数
+		return instantiateBean(beanName, mbd);
+	}
+
+	/**
+	 * Determine whether constructor autowiring should be used.
+	 * 确定是否应该使用构造函数自动装配。
+	 * @param ctors candidate constructors
+	 * @param mbd the merged bean definition
+	 * @param args constructor arguments
+	 * @return true if constructor autowiring should be applied
+	 */
+	private boolean shouldUseConstructorAutowiring(@Nullable Constructor<?>[] ctors, RootBeanDefinition mbd,
+			@Nullable Object[] args) {
+		return ctors != null ||
+				mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
+				mbd.hasConstructorArgumentValues() ||
+				!ObjectUtils.isEmpty(args);
+	}
+
+	/**
 	 * Create a new instance for the specified bean, using an appropriate instantiation strategy:
 	 * factory method, constructor autowiring, or simple instantiation.
 	 * @param beanName the name of the bean
@@ -1186,60 +1328,33 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @see #instantiateBean
 	 */
 	protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
-		// Make sure bean class is actually resolved at this point.
+		// Step 1: Resolve and validate bean class
+		// 步骤1：解析并验证Bean类
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
+		validateBeanClassAccessibility(beanClass, mbd, beanName);
 
-		if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
-			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
-					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
+		// Step 2: Handle instance supplier if present
+		// 步骤2：处理实例供应器（如果存在）
+		if (canUseInstanceSupplier(args, mbd)) {
+			return obtainFromSupplier(mbd.getInstanceSupplier(), beanName, mbd);
 		}
 
-		if (args == null) {
-			Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
-			if (instanceSupplier != null) {
-				return obtainFromSupplier(instanceSupplier, beanName, mbd);
-			}
-		}
-
-		if (mbd.getFactoryMethodName() != null) {
+		// Step 3: Handle factory method instantiation
+		// 步骤3：处理工厂方法实例化
+		if (hasFactoryMethod(mbd)) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
-		// Shortcut when re-creating the same bean...
-		boolean resolved = false;
-		boolean autowireNecessary = false;
-		if (args == null) {
-			synchronized (mbd.constructorArgumentLock) {
-				if (mbd.resolvedConstructorOrFactoryMethod != null) {
-					resolved = true;
-					autowireNecessary = mbd.constructorArgumentsResolved;
-				}
-			}
-		}
-		if (resolved) {
-			if (autowireNecessary) {
-				return autowireConstructor(beanName, mbd, null, null);
-			}
-			else {
-				return instantiateBean(beanName, mbd);
-			}
+		// Step 4: Handle cached constructor resolution
+		// 步骤4：处理缓存的构造函数解析
+		ConstructorResolutionState resolutionState = getCachedConstructorResolutionState(mbd, args);
+		if (resolutionState.isResolved()) {
+			return createInstanceFromResolvedConstructor(beanName, mbd, resolutionState);
 		}
 
-		// Candidate constructors for autowiring?
-		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
-		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
-				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
-			return autowireConstructor(beanName, mbd, ctors, args);
-		}
-
-		// Preferred constructors for default construction?
-		ctors = mbd.getPreferredConstructors();
-		if (ctors != null) {
-			return autowireConstructor(beanName, mbd, ctors, null);
-		}
-
-		// No special handling: simply use no-arg constructor.
-		return instantiateBean(beanName, mbd);
+		// Step 5: Handle constructor autowiring
+		// 步骤5：处理构造函数自动装配
+		return createInstanceWithConstructorAutowiring(beanName, mbd, beanClass, args);
 	}
 
 	/**

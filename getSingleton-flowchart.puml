@@ -1,0 +1,135 @@
+@startuml
+skinparam monochrome true
+skinparam defaultTextAlignment center
+skinparam wrapWidth 200
+
+start
+
+:获取线程锁标志
+<code>isCurrentThreadAllowedToHoldSingletonLock()</code>;
+
+:尝试获取单例锁
+<code>singletonLock.tryLock()</code>;
+
+:从 singletonObjects
+获取单例;
+
+if (单例已存在?) then (是)
+    :返回已存在的单例;
+    stop
+else (否)
+endif
+
+if (需要获取锁但未获取到
+且锁标志为 true?) then (是)
+    :进入宽松创建模式
+    <code>singletonsInLenientCreation.add</code>;
+    :记录日志;
+else (否)
+    if (需要获取锁但未获取到?) then (是)
+        :阻塞等待获取锁
+        <code>singletonLock.lock()</code>;
+        :再次检查单例是否存在;
+        if (单例已存在?) then (是)
+            :返回已存在的单例;
+            stop
+        endif
+    endif
+endif
+
+if (正在销毁单例?) then (是)
+    :抛出 BeanCreationNotAllowedException;
+    stop
+endif
+
+try
+    :标记 Bean 正在创建中
+    <code>beforeSingletonCreation(beanName)</code>;
+catch (BeanCurrentlyInCreationException)
+    :进入循环依赖处理逻辑;
+    while (单例仍为 null?) is (是)
+        :获取创建该 Bean 的线程;
+        if (是同一线程或
+存在依赖等待链?) then (是)
+            :真正的循环依赖!
+            抛出异常;
+            stop
+        endif
+        if (不在宽松创建模式?) then (否)
+            :退出等待循环;
+            break
+        endif
+        :记录等待线程关系;
+        :等待宽松创建完成信号
+        <code>lenientCreationFinished.await()</code>;
+        :清理等待线程记录;
+    endwhile (否)
+    if (单例已存在?) then (是)
+        :返回单例;
+        stop
+    endif
+    if (未持有锁?) then (是)
+        :获取单例锁;
+        :再次检查单例;
+        if (单例已存在?) then (是)
+            :返回单例;
+            stop
+        endif
+    endif
+    :再次标记正在创建中
+    <code>beforeSingletonCreation</code>;
+endtry
+
+:初始化抑制异常集合;
+
+:记录当前创建线程
+<code>currentCreationThreads.put</code>;
+
+try
+    :执行工厂方法创建 Bean
+    <code>singletonFactory.getObject()</code>;
+catch (IllegalStateException)
+    :检查单例是否已隐式创建;
+    if (已创建?) then (是)
+        :使用已存在的单例;
+    else (否)
+        :重新抛出异常;
+        stop
+    endif
+catch (BeanCreationException)
+    :添加相关抑制异常;
+    :重新抛出;
+    stop
+finally
+    :移除当前创建线程记录;
+endtry
+
+:标记创建完成
+<code>afterSingletonCreation(beanName)</code>;
+
+if (是新创建的单例?) then (是)
+    :注册到单例缓存
+    <code>addSingleton(beanName, object)</code>;
+    note right
+        1. 放入 singletonObjects
+        2. 从 singletonFactories 移除
+        3. 从 earlySingletonObjects 移除
+        4. 添加到 registeredSingletons
+    endnote
+endif
+
+:释放单例锁（如果持有）;
+
+:清理宽松创建状态
+<code>singletonsInLenientCreation.remove</code>;
+
+:清理等待线程记录;
+
+:通知所有等待线程
+<code>lenientCreationFinished.signalAll()</code>;
+
+:返回单例对象;
+
+stop
+
+@enduml

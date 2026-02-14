@@ -367,7 +367,7 @@ final class TypeMappedAnnotations implements MergedAnnotations {
 
 
 	/**
-	 * {@link AnnotationsProcessor} that finds a single {@link MergedAnnotation}.
+	 * {@link AnnotationsProcessor} 用于查找单个 {@link MergedAnnotation}。
 	 */
 	private class MergedAnnotationFinder<A extends Annotation>
 			implements AnnotationsProcessor<Object, MergedAnnotation<A>> {

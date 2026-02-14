@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation(project(":spring-core"))
+    implementation(project(":spring-beans"))
+    implementation(project(":spring-context"))
+}
+
+
+// 为测试代码添加源集
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
+
+tasks.register('runLearningTest', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'AnnotationLearningTest'
+}
+
+tasks.register('runSearchStrategyTest', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'SearchStrategyTest'
+}
+
+tasks.register('runAliasForTest', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'AliasForDeepTest'
+}
+
+tasks.register('runCompareTest', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'CompareWithJavaReflection'
+}
+
+tasks.register('runMappingDebugTest', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'MappingDebugTest'
+}
+
+tasks.register('runFamilyPrinter', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'AnnotationFamilyPrinter'
+}
+
+tasks.register('runAttributeAnalyzer', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'AttributeOverrideAnalyzer'
+}

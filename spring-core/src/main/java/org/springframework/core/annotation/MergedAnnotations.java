@@ -384,10 +384,9 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	}
 
 	/**
-	 * Create a new {@link MergedAnnotations} instance from the specified
-	 * annotations.
-	 * @param annotations the annotations to include
-	 * @return a {@code MergedAnnotations} instance containing the annotations
+	 * 从指定的注解创建一个新的 {@link MergedAnnotations} 实例。
+	 * @param annotations 要包含的注解
+	 * @return 包含注解的 {@code MergedAnnotations} 实例
 	 * @see #from(Object, Annotation...)
 	 */
 	static MergedAnnotations from(Annotation... annotations) {
@@ -425,17 +424,12 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	}
 
 	/**
-	 * Create a new {@link MergedAnnotations} instance from the specified
-	 * annotations.
-	 * @param source the source for the annotations. This source is used only
-	 * for information and logging. It does not need to <em>actually</em>
-	 * contain the specified annotations, and it will not be searched.
-	 * @param annotations the annotations to include
-	 * @param repeatableContainers the repeatable containers that may be used by
-	 * meta-annotations
-	 * @param annotationFilter an annotation filter used to restrict the
-	 * annotations considered
-	 * @return a {@code MergedAnnotations} instance containing the annotations
+	 * 从指定的注解创建一个新的 {@link MergedAnnotations} 实例。
+	 * @param source 注解的来源。此来源仅用于信息和日志记录。它不需要<em>实际</em>包含指定的注解，并且不会被搜索。
+	 * @param annotations 要包含的注解
+	 * @param repeatableContainers 可能由元注解使用的可重复容器
+	 * @param annotationFilter 用于限制所考虑注解的注解过滤器
+	 * @return 包含注解的 {@code MergedAnnotations} 实例
 	 */
 	static MergedAnnotations from(Object source, Annotation[] annotations,
 			RepeatableContainers repeatableContainers, AnnotationFilter annotationFilter) {
@@ -479,21 +473,15 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 
 
 	/**
-	 * Fluent API for configuring the search algorithm used in the
-	 * {@link MergedAnnotations} model and performing a search.
+	 * 用于配置 {@link MergedAnnotations} 模型中使用的搜索算法并执行搜索的流式 API。
 	 *
 	 * <ul>
-	 * <li>Configuration starts with an invocation of
-	 * {@link MergedAnnotations#search(SearchStrategy)}, specifying which
-	 * {@link SearchStrategy} to use.</li>
-	 * <li>Optional configuration can be provided via one of the {@code with*()}
-	 * methods.</li>
-	 * <li>The actual search is performed by invoking {@link #from(AnnotatedElement)}
-	 * with the source element from which the search should begin.</li>
+	 * <li>配置从调用 {@link MergedAnnotations#search(SearchStrategy)} 开始，指定要使用的 {@link SearchStrategy}。</li>
+	 * <li>可以通过 {@code with*()} 方法之一提供可选配置。</li>
+	 * <li>实际搜索通过调用 {@link #from(AnnotatedElement)} 执行，传入搜索应从其开始的源元素。</li>
 	 * </ul>
 	 *
-	 * <p>For example, the following performs a search on {@code MyClass} within
-	 * the entire type hierarchy of that class while ignoring repeatable annotations.
+	 * <p>例如，以下代码在 {@code MyClass} 的整个类型层次结构中执行搜索，同时忽略可重复注解。
 	 *
 	 * <pre class="code">
 	 * MergedAnnotations mergedAnnotations =
@@ -502,18 +490,17 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 *         .from(MyClass.class);
 	 * </pre>
 	 *
-	 * <p>If you wish to reuse search configuration to perform the same type of search
-	 * on multiple elements, you can save the {@code Search} instance as demonstrated
-	 * in the following example.
+	 * <p>如果您希望重用搜索配置以在多个元素上执行相同类型的搜索，
+	 * 可以保存 {@code Search} 实例，如以下示例所示。
 	 *
 	 * <pre class="code">
 	 * Search search = MergedAnnotations.search(SearchStrategy.TYPE_HIERARCHY)
 	 *                     .withRepeatableContainers(RepeatableContainers.none());
 	 *
 	 * MergedAnnotations mergedAnnotations = search.from(MyClass.class);
-	 * // do something with the MergedAnnotations for MyClass
+	 * // 对 MyClass 的 MergedAnnotations 执行某些操作
 	 * mergedAnnotations = search.from(AnotherClass.class);
-	 * // do something with the MergedAnnotations for AnotherClass
+	 * // 对 AnotherClass 的 MergedAnnotations 执行某些操作
 	 * </pre>
 	 *
 	 * @since 6.0
@@ -632,50 +619,58 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	}
 
 	/**
-	 * Search strategies supported by {@link MergedAnnotations#search(SearchStrategy)}
-	 * as well as {@link MergedAnnotations#from(AnnotatedElement, SearchStrategy)}
-	 * and variants of that method.
-	 *
-	 * <p>Each strategy creates a different set of aggregates that will be
-	 * combined to create the final {@link MergedAnnotations}.
+	 * 由 {@link MergedAnnotations#search(SearchStrategy)}
+	 * 以及 {@link MergedAnnotations#from(AnnotatedElement, SearchStrategy)} 和其变体方法支持的搜索策略。
+	 * <p>
+	 *     每种策略都会创建一组不同的聚合，这些聚合将被组合起来创建最终的 {@link MergedAnnotations}。
 	 */
 	enum SearchStrategy {
 
 		/**
-		 * Find only directly declared annotations, without considering
-		 * {@link Inherited @Inherited} annotations and without searching
-		 * superclasses or implemented interfaces.
+		 * 注解的可继承机制（注解的分类）：
+		 * 1、会被子类继承的注解：带{@link Inherited @Inherited}元注解的
+		 * 2、不会被子类继承的注解：不带{@link Inherited @Inherited}元注解的
+		 */
+
+		/**
+		 * 【直接声明的注解】
+		 * 只查找直接声明的注解，
+		 * 不考虑 {@link Inherited @Inherited} 注解，
+		 * 并且不搜索父类或实现的接口。
 		 */
 		DIRECT,
 
 		/**
-		 * Find all directly declared annotations as well as any
-		 * {@link Inherited @Inherited} superclass annotations.
-		 * <p>This strategy is only really useful when used with {@link Class}
-		 * types since the {@link Inherited @Inherited} annotation is ignored for
-		 * all other {@linkplain AnnotatedElement annotated elements}.
-		 * <p>This strategy does not search implemented interfaces.
+		 * 【直接声明的注解 + 从父类中继承的可继承的注解】
+		 * 查找所有直接声明的注解以及任何 {@link Inherited @Inherited} 超类注解。
+		 * <p>
+		 *     此策略仅在与 {@link Class} 类型一起使用时才真正有用，
+		 *     因为 {@link Inherited @Inherited} 注解会被忽略对于所有其他 {@linkplain AnnotatedElement 已注解的元素}。
+		 * <p>
+		 *     此策略不会搜索已实现的接口。
 		 */
 		INHERITED_ANNOTATIONS,
 
 		/**
-		 * Find all directly declared and superclass annotations.
-		 * <p>This strategy is similar to {@link #INHERITED_ANNOTATIONS} except
-		 * the annotations do not need to be meta-annotated with
-		 * {@link Inherited @Inherited}.
-		 * <p>This strategy does not search implemented interfaces.
+		 * 【直接声明的注解 + 从父类中继承的可继承的注解 + 从父类中继承的不可继承的注解】
+		 * 查找所有直接声明的注解以及超类注解。
+		 * <p>
+		 *     此策略与 {@link #INHERITED_ANNOTATIONS} 类似，
+		 *     不同之处在于注解不需要使用{@link Inherited @Inherited} 进行元注解。
+		 * <p>
+		 *     此策略不会搜索已实现的接口。
 		 */
 		SUPERCLASS,
 
 		/**
-		 * Perform a full search of the entire type hierarchy, including
-		 * superclasses and implemented interfaces.
-		 * <p>When combined with {@link Search#withEnclosingClasses(Predicate)},
-		 * {@linkplain Class#getEnclosingClass() enclosing classes} will also be
-		 * recursively searched if the supplied {@link Predicate} evaluates to
-		 * {@code true}.
-		 * <p>Superclass and enclosing class annotations do not need to be
-		 * meta-annotated with {@link Inherited @Inherited}.
+		 * 【直接声明的注解 + 从父类中继承的可继承的注解 + 从父类中继承的不可继承的注解 + 从父接口中继承的可继承的注解 + 从父接口中继承的不可继承的注解】
+		 * 对整个类型层次结构执行完整搜索，包括超类和已实现的接口。
+		 * <p>
+		 *     当与 {@link Search#withEnclosingClasses(Predicate)} 结合使用时，
+		 *     如果提供的 {@link Predicate} 计算结果为 {@code true}，
+		 *     {@linkplain Class#getEnclosingClass() 封闭类} 也将被递归搜索。
+		 * <p>
+		 *     超类和封闭类注解不需要使用 {@link Inherited @Inherited} 进行元注解。
 		 */
 		TYPE_HIERARCHY
 

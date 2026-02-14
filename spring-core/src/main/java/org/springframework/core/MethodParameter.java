@@ -72,14 +72,14 @@ public class MethodParameter {
 	private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
 
-	private final Executable executable;
+	private final Executable executable; // 方法或构造函数
 
-	private final int parameterIndex;
+	private final int parameterIndex; // 参数索引
 
 	@Nullable
-	private volatile Parameter parameter;
+	private volatile Parameter parameter; // 参数：-1 表示方法返回类型；0 表示第一个方法参数；1 表示第二个方法参数
 
-	private int nestingLevel;
+	private int nestingLevel; // 嵌套级别
 
 	/** Map from Integer level to Integer type index. */
 	@Nullable
@@ -87,29 +87,28 @@ public class MethodParameter {
 
 	/** The containing class. Could also be supplied by overriding {@link #getContainingClass()} */
 	@Nullable
-	private volatile Class<?> containingClass;
+	private volatile Class<?> containingClass; // 包含类
 
 	@Nullable
-	private volatile Class<?> parameterType;
+	private volatile Class<?> parameterType; // 参数类型
 
 	@Nullable
-	private volatile Type genericParameterType;
+	private volatile Type genericParameterType; // 参数的泛型类型
 
 	@Nullable
-	private volatile Annotation[] parameterAnnotations;
+	private volatile Annotation[] parameterAnnotations; // 参数的注解
 
 	@Nullable
-	private volatile ParameterNameDiscoverer parameterNameDiscoverer;
+	private volatile ParameterNameDiscoverer parameterNameDiscoverer; // 参数名称解析器
 
 	@Nullable
-	volatile String parameterName;
+	volatile String parameterName; // 参数名称
 
 	@Nullable
-	private volatile MethodParameter nestedMethodParameter;
+	private volatile MethodParameter nestedMethodParameter; // 嵌套的MethodParameter
 
 
 	/**
-	 * Create a new {@code MethodParameter} for the given method, with nesting level 1.
 	 * <p>为给定方法创建一个新的 {@code MethodParameter}，嵌套级别为1。
 	 * @param method 要指定的参数的方法
 	 * @param parameterIndex 参数的索引：-1 表示方法返回类型；0 表示第一个方法参数；1 表示第二个方法参数，等等。
@@ -119,15 +118,10 @@ public class MethodParameter {
 	}
 
 	/**
-	 * Create a new {@code MethodParameter} for the given method.
 	 * <p>为给定方法创建一个新的 {@code MethodParameter}。
-	 * @param method the Method to specify a parameter for  要指定参数的方法
-	 * @param parameterIndex the index of the parameter: -1 for the method
-	 * return type; 0 for the first method parameter; 1 for the second method
-	 * parameter, etc.   参数的索引：-1 表示方法返回类型；0 表示第一个方法参数；1 表示第二个方法参数，等等。
-	 * @param nestingLevel the nesting level of the target type
-	 * (typically 1; for example, in case of a List of Lists, 1 would indicate the
-	 * nested List, whereas 2 would indicate the element of the nested List)  目标类型的嵌套级别（通常为1；例如，在List of Lists的情况下，1表示嵌套的List，而2表示嵌套List的元素）
+	 * @param method 要指定参数的方法
+	 * @param parameterIndex 参数的索引：-1 表示方法返回类型；0 表示第一个方法参数；1 表示第二个方法参数，等等。
+	 * @param nestingLevel 目标类型的嵌套级别（通常为1；例如，在List of Lists的情况下，1表示嵌套的List，而2表示嵌套List的元素）
 	 */
 	public MethodParameter(Method method, int parameterIndex, int nestingLevel) {
 		Assert.notNull(method, "Method must not be null");
@@ -137,24 +131,19 @@ public class MethodParameter {
 	}
 
 	/**
-	 * Create a new MethodParameter for the given constructor, with nesting level 1.
 	 * <p>为给定构造函数创建一个新的MethodParameter，嵌套级别为1。
-	 * @param constructor the Constructor to specify a parameter for 要指定参数的构造函数
-	 * @param parameterIndex the index of the parameter 参数的索引
+	 * @param constructor 要指定参数的构造函数
+	 * @param parameterIndex 参数的索引
 	 */
 	public MethodParameter(Constructor<?> constructor, int parameterIndex) {
 		this(constructor, parameterIndex, 1);
 	}
 
 	/**
-	 * Create a new MethodParameter for the given constructor.
 	 * <p>为给定构造函数创建一个新的MethodParameter。
-	 * @param constructor the Constructor to specify a parameter for  要指定参数的构造函数
-	 * @param parameterIndex the index of the parameter 参数的索引
-	 * @param nestingLevel the nesting level of the target type
-	 * (typically 1; for example, in case of a List of Lists, 1 would indicate the
-	 * nested List, whereas 2 would indicate the element of the nested List)
-	 * 目标类型的嵌套级别（通常为1；例如，在List of Lists的情况下，1表示嵌套的List，而2表示嵌套List的元素）
+	 * @param constructor 要指定参数的构造函数
+	 * @param parameterIndex 参数的索引
+	 * @param nestingLevel 目标类型的嵌套级别（通常为1；例如，在List of Lists的情况下，1表示嵌套的List，而2表示嵌套List的元素）
 	 */
 	public MethodParameter(Constructor<?> constructor, int parameterIndex, int nestingLevel) {
 		Assert.notNull(constructor, "Constructor must not be null");
@@ -165,13 +154,11 @@ public class MethodParameter {
 
 
 	/**
-	 * Internal constructor used to create a {@link MethodParameter} with a
-	 * containing class already set.
 	 * <p>内部构造函数，用于创建一个已经设置了包含类的 {@link MethodParameter}。
 	 * 
-	 * @param executable the Executable to specify a parameter for  要指定参数的可执行对象
-	 * @param parameterIndex the index of the parameter  参数的索引
-	 * @param containingClass the containing class  包含类
+	 * @param executable 要指定参数的可执行对象
+	 * @param parameterIndex 参数的索引
+	 * @param containingClass 包含类
 	 * @since 5.2
 	 */
 	MethodParameter(Executable executable, int parameterIndex, @Nullable Class<?> containingClass) {
